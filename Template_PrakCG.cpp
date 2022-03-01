@@ -44,8 +44,8 @@ void setCamera()
 	// Maus abfragen
 	if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
 	{
-		cg_globState::cameraHelper[0] += mouse.moveX();
-		cg_globState::cameraHelper[1] += mouse.moveY();
+		cg_globState::cameraHelper[0] += mouse.moveX() * 3;
+		cg_globState::cameraHelper[1] += mouse.moveY() * 3;
 	}
 	if (cg_mouse::buttonState(GLUT_MIDDLE_BUTTON))
 	{
@@ -262,7 +262,7 @@ void loadObjects()
 	objects[TRUCK_TOP].setMaterial(0.9, 0.2, 0.3, 1.0, 0.5, 90.0, 0.0);
 
 	// TODO U12.1: Die Scheiben mit einem ALPHA kleiner 1.0 versehen
-	objects[TRUCK_GLASS].setMaterial(0.5, 0.5, 0.9, 1.0, 0.5, 120.0, 0.0);
+	objects[TRUCK_GLASS].setMaterial(0.5, 0.5, 0.9, 0.3, 0.5, 120.0, 0.0);
 	
 	objects[WHEEL_SINGLE].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 20.0, 0.0);
 	objects[WHEEL_DOUBLE].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 20.0, 0.0);
@@ -271,7 +271,7 @@ void loadObjects()
 	objects[TRAILER_CHASSIS].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 128.0, 0.0);
 	
 	// TODO U12.2: Den Container mit einem ALPHA kleiner 1.0 versehen
-	objects[TRAILER_CARGO].setMaterial(0.8, 0.8, 0.3, 1.0, 0.0, 64.0, 0.0);
+	objects[TRAILER_CARGO].setMaterial(0.8, 0.8, 0.3, 0.5, 0.0, 64.0, 0.0);
 
 	objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
 	objects[GROUND_OBJ2].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 128.0, 0.0);
@@ -371,14 +371,15 @@ public:
 			cg_globState globState;
 			if (globState.blendMode) {
 				// TODO U12.1: das OpenGL Blending aktivieren
-				// glEnable(...);
-				// glBlendFunc(...);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			}
 
+			//objects[TRUCK_GLASS].setMaterial(0,0,0.7,0.2,1,64,0);
 			objects[TRUCK_GLASS].draw();
 
 			// TODO U12:1 das Blending wieder deaktivieren
-			// glDisable(...);
+			glDisable(GL_BLEND);
 
 		glPopMatrix();
 	}
@@ -430,17 +431,18 @@ public:
 					// Blending aktivieren, siehe Aufgaben 1
 					cg_globState globState;
 					if (globState.blendMode) {
-						// glEnable(...);
-						// glBlendFunc(...);
+						glEnable(GL_BLEND);
+						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					}
+					//objects[TRAILER_CARGO].setMaterial(1,1,1,1,1,0,0);
 
 					// TODO U12.3: die Texturierung aktivieren und die Textur _texture binden,
 					// vorher den gewünschten Texturmodus einstellen, siehe Übung 11
 					if (globState.textureMode) {
-						// glEnable(...);
+						glEnable(GL_TEXTURE_2D);
 
-						// _texture->setEnvMode(...);
-						// _texture->bind();	
+						_texture->setEnvMode(GL_DECAL);
+						_texture->bind();	
 					}
 
 					// TODO U12:4: das CARGO-Objekt mittel Backface Culling korrekt darstellen
@@ -455,14 +457,14 @@ public:
 					glGetBooleanv(GL_CULL_FACE, &cullingIsEnabled);
 
 					// Culling aktivieren für Vorderseiten
-					// glEnable(...);
-					// glCullFace(...);
+					glEnable(GL_CULL_FACE);
+					glCullFace(GL_FRONT);
 
 					// die Rückseiten zeichnen
-					// _geometry->draw();  
+					_geometry->draw();  
 
 					// Culling umschalten auf Rückseiten
-					// glCullFace(...);
+					glCullFace(GL_BACK);
 					
 					// die Vorderseiten zeichnen
 					_geometry->draw();	
@@ -472,10 +474,10 @@ public:
 						glDisable(GL_CULL_FACE);
 
 					// TODO U12.3: die Texturierung deaktivieren
-					// glDisable(...);
+					glDisable(GL_TEXTURE_2D);
 
 					// TODO U12:2 das Blending wieder deaktivieren
-					// glDisable(...);
+					glDisable(GL_BLEND);
 				glPopMatrix();
 			} // Container
 
@@ -493,7 +495,7 @@ CTruck truck;
 
 // TODO U12.3: hier eine Textur wählen, Index 0 = container.bmp, index 1 = opengl.bmp
 CTrailer trailer1(&objects[TRAILER_CARGO], &textures[0]);
-CTrailer trailer2(&objects[TRAILER_CARGO], &textures[1]);
+CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
 
 void drawScene()
 {
@@ -538,9 +540,9 @@ void drawScene()
 	CVector vec_to_trailer2;
 
 	// TODO U12.2 Schritt2 - Distanzvektoren bestrimmen
-	// vec_to_truck = ...;
-	// vec_to_trailer1 = ...;
-	// vec_to_trailer2 = ...;
+	vec_to_truck = truck.getPos() - camPos;
+	vec_to_trailer1 = trailer1.getPos() - camPos;
+	vec_to_trailer2 = trailer2.getPos() - camPos;
 
 	// wir sortieren nun die Objekt-Indizes absteigend nach der Entfernung 
 	const int numObjects = 3;
@@ -573,21 +575,21 @@ void drawScene()
 
 	// TODO U12.2 Schritt3 - Zeichnen in der richtigen Reihenfolge
 	// zunächst das unsortierte Zeichnen entfernen
-	truck.draw();
+	/*truck.draw();
 	trailer1.draw();
-	trailer2.draw();
+	trailer2.draw();*/
 	
 	// TODO U12.3: stattdessen sortiert zeichnen
 	for (int i = 0; i < numObjects; i++) {
 		switch (objectIndexes[i]) {
 			case 0: // den Truck zeichnen 
-					// ...
+				truck.draw();
 				break;
 			case 1: // den Trailer1 zeichnen
-					// ...
+				trailer1.draw();
 				break;
 			case 2: // den Trailer 2 zeichnen
-					// ...
+				trailer2.draw();
 				break;
 		}
 	}
