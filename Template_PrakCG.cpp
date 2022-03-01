@@ -34,9 +34,14 @@ void initTextures();
 /////////////////////////////////////////////////////////////////////////////////
 //	Kamerafunktion
 /////////////////////////////////////////////////////////////////////////////////
+
+float tempPosition[] = { .0f, .0f };
+float tempRadius = .0f;
+
 void setCamera()
 {
 	cg_mouse mouse;
+	cg_key key;
 	// Ansichtstransformationen setzen,
 	// SetCamera() zum Beginn der Zeichenfunktion aufrufen
 	double x, y, z, The, Phi;
@@ -47,11 +52,28 @@ void setCamera()
 		cg_globState::cameraHelper[0] += mouse.moveX() * 3;
 		cg_globState::cameraHelper[1] += mouse.moveY() * 3;
 	}
-	if (cg_mouse::buttonState(GLUT_MIDDLE_BUTTON))
+
+
+	if (key.specialKeyState(GLUT_KEY_SHIFT_L))
 	{
-		radius += 0.1 * mouse.moveY();
+		if (tempPosition[0] == .0f && tempPosition[1] == .0f) {
+			if (tempPosition[1] - mouse.moveX() + tempPosition[0] - mouse.moveY() > 20) {
+			tempPosition[1] = mouse.moveX();
+			tempPosition[0] = mouse.moveY();
+			}
+		}
+
+		float d = sqrt(pow(tempPosition[0] - mouse.moveX(), 2) + pow(tempPosition[1] - mouse.moveY(), 2));
+		d *= (tempPosition[1] > mouse.moveY()) ? 1 : -1;
+		radius += 0.1 * d;
 		if (radius < 1.0) radius = 1.0;
 	}
+	else {
+		tempPosition[0] = .0f;
+		tempPosition[1] = .0f;
+
+	}
+
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
 	The = 0.2 * cg_globState::cameraHelper[1] / cg_globState::screenSize[1] * M_PI;
 	x = radius * cos(Phi) * cos(The);
@@ -255,7 +277,7 @@ void loadObjects()
 			// Hier das Objekt laden
 			// --> Aufruf von loadobject(file, false) für objects[i]
 			objects[i].load(file, true);
-		}
+}
 
 	// nun setzen wir die Materialeigenschaften für die Objekte
 	objects[TRUCK_CHROME].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 120.0, 0.0);
@@ -263,13 +285,13 @@ void loadObjects()
 
 	// TODO U12.1: Die Scheiben mit einem ALPHA kleiner 1.0 versehen
 	objects[TRUCK_GLASS].setMaterial(0.5, 0.5, 0.9, 0.3, 0.5, 120.0, 0.0);
-	
+
 	objects[WHEEL_SINGLE].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 20.0, 0.0);
 	objects[WHEEL_DOUBLE].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 20.0, 0.0);
 	objects[WHEEL_SCREWS].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 20.0, 0.0);
 	objects[AXIS].setMaterial(0.9, 0.3, 0.3, 1.0, 0.5, 80.0, 1.0);
 	objects[TRAILER_CHASSIS].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 128.0, 0.0);
-	
+
 	// TODO U12.2: Den Container mit einem ALPHA kleiner 1.0 versehen
 	objects[TRAILER_CARGO].setMaterial(0.8, 0.8, 0.3, 0.5, 0.0, 64.0, 0.0);
 
@@ -283,32 +305,32 @@ void drawAxis(bool doubleWheel) {
 
 	// Aufruf für linkes Rad
 	glPushMatrix();
-		glTranslatef(-0.9f, 0.0, 0.0);    // Versatz nach Links (-x)
-		objects[WHEEL_SCREWS].draw();
-		if (doubleWheel)
-			objects[WHEEL_DOUBLE].draw();
-		else objects[WHEEL_SINGLE].draw();
+	glTranslatef(-0.9f, 0.0, 0.0);    // Versatz nach Links (-x)
+	objects[WHEEL_SCREWS].draw();
+	if (doubleWheel)
+		objects[WHEEL_DOUBLE].draw();
+	else objects[WHEEL_SINGLE].draw();
 	glPopMatrix();
 
 	// Aufruf für rechts Rad
 	glPushMatrix();
-		glTranslatef(0.9, 0.0, 0.0);      // Versatz nach Rechts (+x)
-		glRotatef(180.0, 0.0, 1.0, 0.0);  // 180° Drehung um Hochachse (Y)
-		objects[WHEEL_SCREWS].draw();
-		if (doubleWheel)
-			objects[WHEEL_DOUBLE].draw();
-		else
-			objects[WHEEL_SINGLE].draw();
+	glTranslatef(0.9, 0.0, 0.0);      // Versatz nach Rechts (+x)
+	glRotatef(180.0, 0.0, 1.0, 0.0);  // 180° Drehung um Hochachse (Y)
+	objects[WHEEL_SCREWS].draw();
+	if (doubleWheel)
+		objects[WHEEL_DOUBLE].draw();
+	else
+		objects[WHEEL_SINGLE].draw();
 	glPopMatrix();
 };
 
 #pragma region VEHICLE
 // Superklasse für die Fahrzeuge
 class CVehicle {
-protected: 
+protected:
 	CVector _pos = CVector(0, 0, 0);	//  Position [m]
 	float _rot = 0;						//  Rotation [°]
-public: 
+public:
 	void setPos(CVector pos) { _pos = pos; }
 	void setPos(float posX, float posZ) { _pos = CVector(posX, 0, posZ); }
 	void setRot(float rot) { _rot = rot; }
@@ -341,45 +363,45 @@ public:
 		glPushMatrix();
 		// Den Truck laut seinen Animationsparametern positionieren und ausrichten
 		// pos[], rot
-			glTranslatef(_pos.x(), 0.5, _pos.z());
-			glRotatef(_rot, 0, 1, 0);
+		glTranslatef(_pos.x(), 0.5, _pos.z());
+		glRotatef(_rot, 0, 1, 0);
 
-			// Vorderachse
-			glPushMatrix();
-				glTranslatef(0, 0, 6.2);
-				drawAxis(false);
-			glPopMatrix();
+		// Vorderachse
+		glPushMatrix();
+		glTranslatef(0, 0, 6.2);
+		drawAxis(false);
+		glPopMatrix();
 
-			// Hinterachse 1
-			glPushMatrix();
-				glTranslatef(0, 0, 0.7);
-				drawAxis(true);
-			glPopMatrix();
+		// Hinterachse 1
+		glPushMatrix();
+		glTranslatef(0, 0, 0.7);
+		drawAxis(true);
+		glPopMatrix();
 
-			// Hinterachse 2
-			glPushMatrix();
-				glTranslatef(0, 0, -0.4);
-				drawAxis(true);
-			glPopMatrix();
+		// Hinterachse 2
+		glPushMatrix();
+		glTranslatef(0, 0, -0.4);
+		drawAxis(true);
+		glPopMatrix();
 
-			// Chassis
-			objects[TRUCK_TOP].draw();
-			objects[TRUCK_CHROME].draw();
+		// Chassis
+		objects[TRUCK_TOP].draw();
+		objects[TRUCK_CHROME].draw();
 
-			// Fensterscheiben
-				
-			cg_globState globState;
-			if (globState.blendMode) {
-				// TODO U12.1: das OpenGL Blending aktivieren
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			}
+		// Fensterscheiben
 
-			//objects[TRUCK_GLASS].setMaterial(0,0,0.7,0.2,1,64,0);
-			objects[TRUCK_GLASS].draw();
+		cg_globState globState;
+		if (globState.blendMode) {
+			// TODO U12.1: das OpenGL Blending aktivieren
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
 
-			// TODO U12:1 das Blending wieder deaktivieren
-			glDisable(GL_BLEND);
+		//objects[TRUCK_GLASS].setMaterial(0,0,0.7,0.2,1,64,0);
+		objects[TRUCK_GLASS].draw();
+
+		// TODO U12:1 das Blending wieder deaktivieren
+		glDisable(GL_BLEND);
 
 		glPopMatrix();
 	}
@@ -389,11 +411,11 @@ public:
 #pragma region TRAILER
 // Klasse für die Verwaltung eines Trailers
 class CTrailer : public CVehicle {
-private: 
+private:
 	cg_object3D* _geometry;
 	cg_image* _texture;
 
-public: 
+public:
 	CTrailer(cg_object3D* geometry, cg_image* texture) {
 		_geometry = geometry;
 		_texture = texture;
@@ -402,84 +424,84 @@ public:
 	// Trailer zeichnen
 	void draw(void) {
 		glPushMatrix();
-			// pos[], rot
-			glTranslatef(_pos.x(), 0.5, _pos.z());
-			glRotatef(_rot, 0, 1, 0);
+		// pos[], rot
+		glTranslatef(_pos.x(), 0.5, _pos.z());
+		glRotatef(_rot, 0, 1, 0);
 
-			{ // Fahrwerk und Rahmen 
-			// Achse 1
-				glPushMatrix();
-					glTranslatef(0, 0, -9.0);
-					drawAxis(true);
-				glPopMatrix();
+		{ // Fahrwerk und Rahmen 
+		// Achse 1
+			glPushMatrix();
+			glTranslatef(0, 0, -9.0);
+			drawAxis(true);
+			glPopMatrix();
 
-				// Achse 2
-				glPushMatrix();
-					glTranslatef(0, 0, -10.2);
-					drawAxis(true);
-				glPopMatrix();
+			// Achse 2
+			glPushMatrix();
+			glTranslatef(0, 0, -10.2);
+			drawAxis(true);
+			glPopMatrix();
 
-				// Rahmen + Aufbau
-				objects[TRAILER_CHASSIS].draw();
-			} // Fahrwerk und Rahmen
+			// Rahmen + Aufbau
+			objects[TRAILER_CHASSIS].draw();
+		} // Fahrwerk und Rahmen
 
-			{ // Container
-				glPushMatrix();
-					glTranslatef(0, 0.01, 0);
+		{ // Container
+			glPushMatrix();
+			glTranslatef(0, 0.01, 0);
 
-					// TODO U12.2: Den Container transparent zeichnen:
-					// Blending aktivieren, siehe Aufgaben 1
-					cg_globState globState;
-					if (globState.blendMode) {
-						glEnable(GL_BLEND);
-						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					}
-					//objects[TRAILER_CARGO].setMaterial(1,1,1,1,1,0,0);
+			// TODO U12.2: Den Container transparent zeichnen:
+			// Blending aktivieren, siehe Aufgaben 1
+			cg_globState globState;
+			if (globState.blendMode) {
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+			//objects[TRAILER_CARGO].setMaterial(1,1,1,1,1,0,0);
 
-					// TODO U12.3: die Texturierung aktivieren und die Textur _texture binden,
-					// vorher den gewünschten Texturmodus einstellen, siehe Übung 11
-					if (globState.textureMode) {
-						glEnable(GL_TEXTURE_2D);
+			// TODO U12.3: die Texturierung aktivieren und die Textur _texture binden,
+			// vorher den gewünschten Texturmodus einstellen, siehe Übung 11
+			if (globState.textureMode) {
+				glEnable(GL_TEXTURE_2D);
 
-						_texture->setEnvMode(GL_DECAL);
-						_texture->bind();	
-					}
+				_texture->setEnvMode(GL_DECAL);
+				_texture->bind();
+			}
 
-					// TODO U12:4: das CARGO-Objekt mittel Backface Culling korrekt darstellen
+			// TODO U12:4: das CARGO-Objekt mittel Backface Culling korrekt darstellen
 
-					// Der Quader ist ein konvexes Objekt. Damit lassen sich Fehler in der 
-					// transparenten Darstellung mittels BackFace Culling adressieren.
-					// Prinzip: zuerst die Rückseiten zeichnen, damit werden nur die weiter 
-					// entfernten Flächen gerastert, danach die Vorderseiten. 
+			// Der Quader ist ein konvexes Objekt. Damit lassen sich Fehler in der 
+			// transparenten Darstellung mittels BackFace Culling adressieren.
+			// Prinzip: zuerst die Rückseiten zeichnen, damit werden nur die weiter 
+			// entfernten Flächen gerastert, danach die Vorderseiten. 
 
-					// wir merken uns den aktuellen Zustand des Cullings
-					GLboolean cullingIsEnabled = false;
-					glGetBooleanv(GL_CULL_FACE, &cullingIsEnabled);
+			// wir merken uns den aktuellen Zustand des Cullings
+			GLboolean cullingIsEnabled = false;
+			glGetBooleanv(GL_CULL_FACE, &cullingIsEnabled);
 
-					// Culling aktivieren für Vorderseiten
-					glEnable(GL_CULL_FACE);
-					glCullFace(GL_FRONT);
+			// Culling aktivieren für Vorderseiten
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
 
-					// die Rückseiten zeichnen
-					_geometry->draw();  
+			// die Rückseiten zeichnen
+			_geometry->draw();
 
-					// Culling umschalten auf Rückseiten
-					glCullFace(GL_BACK);
-					
-					// die Vorderseiten zeichnen
-					_geometry->draw();	
+			// Culling umschalten auf Rückseiten
+			glCullFace(GL_BACK);
 
-					// das Backface-Cullung wieder deaktivieren, falls es aus war
-					if (!cullingIsEnabled)
-						glDisable(GL_CULL_FACE);
+			// die Vorderseiten zeichnen
+			_geometry->draw();
 
-					// TODO U12.3: die Texturierung deaktivieren
-					glDisable(GL_TEXTURE_2D);
+			// das Backface-Cullung wieder deaktivieren, falls es aus war
+			if (!cullingIsEnabled)
+				glDisable(GL_CULL_FACE);
 
-					// TODO U12:2 das Blending wieder deaktivieren
-					glDisable(GL_BLEND);
-				glPopMatrix();
-			} // Container
+			// TODO U12.3: die Texturierung deaktivieren
+			glDisable(GL_TEXTURE_2D);
+
+			// TODO U12:2 das Blending wieder deaktivieren
+			glDisable(GL_BLEND);
+			glPopMatrix();
+		} // Container
 
 		glPopMatrix();
 	};
@@ -530,7 +552,7 @@ void drawScene()
 	// 2. Kamera-Trailer1
 	// 3. Kamera-Trailer2
 	// dann Zeichnen der Fahrzeuge von "hinten" nach "vorn"
-	
+
 	// die Kameraposition
 	CVector camPos = CVector(cg_globState::cameraPos[0], 0, cg_globState::cameraPos[1]);
 
@@ -555,7 +577,7 @@ void drawScene()
 	distances[0] = vec_to_truck.len();
 	distances[1] = vec_to_trailer1.len();
 	distances[2] = vec_to_trailer2.len();
-	
+
 	// Indizes nach absteigenden Entfernungen sortieren, Algorthmus bubblesort
 	bool switched = false;
 	do
@@ -578,19 +600,19 @@ void drawScene()
 	/*truck.draw();
 	trailer1.draw();
 	trailer2.draw();*/
-	
+
 	// TODO U12.3: stattdessen sortiert zeichnen
 	for (int i = 0; i < numObjects; i++) {
 		switch (objectIndexes[i]) {
-			case 0: // den Truck zeichnen 
-				truck.draw();
-				break;
-			case 1: // den Trailer1 zeichnen
-				trailer1.draw();
-				break;
-			case 2: // den Trailer 2 zeichnen
-				trailer2.draw();
-				break;
+		case 0: // den Truck zeichnen 
+			truck.draw();
+			break;
+		case 1: // den Trailer1 zeichnen
+			trailer1.draw();
+			break;
+		case 2: // den Trailer 2 zeichnen
+			trailer2.draw();
+			break;
 		}
 	}
 

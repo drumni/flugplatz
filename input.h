@@ -35,7 +35,7 @@ public:
 	//	GLUT_KEY_PAGE_UP, GLUT_KEY_PAGE_DOWN
 	//	GLUT_KEY_HOME, GLUT_KEY_BEGIN, GLUT_KEY_END
 	//  GLUT_KEY_NUM_LOCK, GLUT_KEY_INSERT, GLUT_KEY_DELETE
-	//  GLUT_KEY_SHIFT_L, GLUT_KEY_SHIFT_R
+	  //GLUT_KEY_SHIFT_L, GLUT_KEY_SHIFT_R
 	//  GLUT_KEY_CTRL_L, GLUT_KEY_CTRL_R
 	//  GLUT_KEY_ALT_L, GLUT_KEY_ALT_R
 	// Rueckgabewerte: 0 = nicht gedueckt, 1 = gerade eben runtergedrueckt, 2 = gedrueckt gehalten
