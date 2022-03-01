@@ -49,8 +49,8 @@ void setCamera()
 	// Maus abfragen
 	if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
 	{
-		cg_globState::cameraHelper[0] += mouse.moveX() * 3;
-		cg_globState::cameraHelper[1] += mouse.moveY() * 3;
+		cg_globState::cameraHelper[0] += mouse.moveX() * 32/6;
+		cg_globState::cameraHelper[1] += mouse.moveY() * 9/3;
 	}
 
 
