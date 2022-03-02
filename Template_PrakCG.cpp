@@ -23,6 +23,7 @@
 #include "wavefront.h"
 #include "image.h"
 #include "vector.h"
+#include "geometry.h"
 #pragma endregion
 
 void setCamera();		// Kamera platzieren, siehe Maus-Callbacks
@@ -49,8 +50,8 @@ void setCamera()
 	// Maus abfragen
 	if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
 	{
-		cg_globState::cameraHelper[0] += mouse.moveX() * 32/6;
-		cg_globState::cameraHelper[1] += mouse.moveY() * 9/3;
+		cg_globState::cameraHelper[0] += mouse.moveX() * 16/6;
+		cg_globState::cameraHelper[1] += mouse.moveY() * 9/6;
 	}
 
 
@@ -237,25 +238,13 @@ void initTextures() {
 	}
 }
 
-#define num_objects 11	// wir haben 11 Wavefront Objekte
+#define num_objects 2	// wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/";	// ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = { "chrome.obj", "top.obj", "glass.obj", "wheel_single.obj", "wheel_double.obj", "wheel_screws.obj",
-											"axis.obj", "trailer.obj", "cargo_t.obj", "ground_concrete.obj", "ground_street.obj" };
+const char* objects_paths[num_objects] = { "ground_concrete.obj", "ground_street.obj" };
 
-cg_object3D objects[num_objects];
+    cg_object3D objects[num_objects];
 // Objektbezeichner für den Zugriff auf die Wavefront Objekte
 enum {
-	TRUCK_CHROME = 0,
-	TRUCK_TOP,
-	TRUCK_GLASS,
-	WHEEL_SINGLE,
-	WHEEL_DOUBLE,
-	WHEEL_SCREWS,
-	AXIS,
-
-	TRAILER_CHASSIS,
-	TRAILER_CARGO,
-
 	GROUND_OBJ1,
 	GROUND_OBJ2
 };
@@ -278,28 +267,14 @@ void loadObjects()
 			// --> Aufruf von loadobject(file, false) für objects[i]
 			objects[i].load(file, true);
 }
-
 	// nun setzen wir die Materialeigenschaften für die Objekte
-	objects[TRUCK_CHROME].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 120.0, 0.0);
-	objects[TRUCK_TOP].setMaterial(0.9, 0.2, 0.3, 1.0, 0.5, 90.0, 0.0);
-
-	// TODO U12.1: Die Scheiben mit einem ALPHA kleiner 1.0 versehen
-	objects[TRUCK_GLASS].setMaterial(0.5, 0.5, 0.9, 0.3, 0.5, 120.0, 0.0);
-
-	objects[WHEEL_SINGLE].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 20.0, 0.0);
-	objects[WHEEL_DOUBLE].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 20.0, 0.0);
-	objects[WHEEL_SCREWS].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 20.0, 0.0);
-	objects[AXIS].setMaterial(0.9, 0.3, 0.3, 1.0, 0.5, 80.0, 1.0);
-	objects[TRAILER_CHASSIS].setMaterial(0.8, 0.8, 0.8, 1.0, 1.0, 128.0, 0.0);
-
-	// TODO U12.2: Den Container mit einem ALPHA kleiner 1.0 versehen
-	objects[TRAILER_CARGO].setMaterial(0.8, 0.8, 0.3, 0.5, 0.0, 64.0, 0.0);
 
 	objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
 	objects[GROUND_OBJ2].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 128.0, 0.0);
+	
 }
 
-void drawAxis(bool doubleWheel) {
+/*void drawAxis(bool doubleWheel) {
 	// eine Achse
 	objects[AXIS].draw();
 
@@ -507,17 +482,24 @@ public:
 	};
 }; // CTrailer
 #pragma endregion // TRAILER
-
+*/
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // es folgt das Zeichnen der Fahrzeuge (hier ohne Animation) //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // globale Instanzen
-CTruck truck;
+//CTruck truck;
 
 // TODO U12.3: hier eine Textur wählen, Index 0 = container.bmp, index 1 = opengl.bmp
-CTrailer trailer1(&objects[TRAILER_CARGO], &textures[0]);
-CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
+//CTrailer trailer1(&objects[TRAILER_CARGO], &textures[0]);
+//CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
+
+void hubschrauber() {
+	glPushMatrix();
+	setColor(0, 0.75, 0.75);
+	myCube();
+	glPopMatrix();
+}
 
 void drawScene()
 {
@@ -540,7 +522,7 @@ void drawScene()
 	objects[GROUND_OBJ2].draw();
 
 	// Truck und Trailer positionieren
-	truck.setPos(-5, 5);
+	/*truck.setPos(-5, 5);
 	truck.setRot(90);
 	trailer1.setPos(-2, 0);
 	trailer1.setRot(25);
@@ -597,9 +579,9 @@ void drawScene()
 
 	// TODO U12.2 Schritt3 - Zeichnen in der richtigen Reihenfolge
 	// zunächst das unsortierte Zeichnen entfernen
-	/*truck.draw();
+	truck.draw();
 	trailer1.draw();
-	trailer2.draw();*/
+	trailer2.draw();
 
 	// TODO U12.3: stattdessen sortiert zeichnen
 	for (int i = 0; i < numObjects; i++) {
@@ -614,9 +596,12 @@ void drawScene()
 			trailer2.draw();
 			break;
 		}
-	}
+	}*/
 
 	// Texturierung und Blending global deaktivieren
+
+	hubschrauber();
+
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
