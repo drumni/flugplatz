@@ -494,10 +494,121 @@ public:
 //CTrailer trailer1(&objects[TRAILER_CARGO], &textures[0]);
 //CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
 
+void kufe() {
+    setColor(0.7,0.7,0.7);
+
+	//Hauptstange
+	glPushMatrix();
+	glScalef(3,0.1,0.1);
+	myCube();
+	glPopMatrix();
+
+
+	//Schräge vorn und hinten
+	glPushMatrix();
+	glTranslatef(1.5, 0, 0);
+	glRotatef(225,0,0,1);
+	glTranslatef(-0.15, -0.1, 0);
+	glScalef(0.3, 0.1, 0.1);
+	myCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.5, 0, 0);
+	glRotatef(315, 0, 0, 1);
+	glTranslatef(-0.15, 0, 0);
+	glScalef(0.3, 0.1, 0.1);
+	myCube();
+	glPopMatrix();
+
+
+	//Verbindung zum Hauptteil des Hubschraubers
+	glPushMatrix();
+	glTranslatef(0.65, 0, 0);
+	glRotatef(-45, 1, 0, 0);
+	glScalef(0.1, 0.5, 0.1);
+	myCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-0.65,0,0);
+	glRotatef(-45, 1, 0, 0);
+	glScalef(0.1, 0.5, 0.1);
+	myCube();
+	glPopMatrix();
+}
+
+void kufen() {
+	glPushMatrix();
+		glTranslatef(0, 0, 0.7);
+		kufe();
+		glTranslatef(0,0,-1.4);
+		glRotatef(180, 0, 1, 0);
+		kufe();
+	glPopMatrix();
+}
+
+void nase() {
+	glPushMatrix();
+	glTranslatef(2, 0.75, 0);
+	glScalef(0.4, 0.3, 0.4);
+	mySphere();
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(2.2, 0.75, 0);
+	glRotatef(-90, 0, 1, 0);
+	glScalef(0.3, 0.25, 0.3);
+	myCone(1, 2, 2);
+	glPopMatrix();
+
+	/*glPushMatrix();
+	glTranslatef(1.6, 0.75, 0);
+	glRotatef(90, 0, 1, 0);
+	glScalef(0.3, 0.25, 0.3);
+	myPartialDisk(0, 2, 0, 360);
+	glPopMatrix();*/
+
+}
+void rumpf() {
+	
+	nase();
+	
+
+	glPushMatrix();
+	glTranslatef(1.6, 0.75, 0);
+	glRotatef(-90, 0, 1, 0);
+	glScalef(4, 4, 8);
+	glScalef(0.3, 0.25, 0.3);
+	myCylinder();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.1, 0.75, 0.5);
+	glRotatef(-10, 1, 0, 0);
+	glScalef(1.8, 1, 0.1);
+	myCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.1, 0.75, -0.5);
+	glRotatef(180, 0, 1, 0);
+	glRotatef(-10, 1, 0, 0);
+	glScalef(1.8, 1, 0.1);
+	myCube();
+	glPopMatrix();
+}
+
 void hubschrauber() {
+	//Kufen zeichnen
 	glPushMatrix();
 	setColor(0, 0.75, 0.75);
-	myCube();
+	kufen();
+	glPopMatrix();
+
+	glPushMatrix();
+	rumpf();
 	glPopMatrix();
 }
 
