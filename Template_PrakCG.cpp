@@ -495,7 +495,6 @@ public:
 //CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
 
 void kufe() {
-    setColor(0.7,0.7,0.7);
 
 	//Hauptstange
 	glPushMatrix();
@@ -539,6 +538,7 @@ void kufe() {
 }
 
 void kufen() {
+	setColor(0.4, 0.4, 0.4);
 	glPushMatrix();
 		glTranslatef(0, 0, 0.7);
 		kufe();
@@ -549,13 +549,22 @@ void kufen() {
 }
 
 void nase() {
+	setColor(0.5, 0.5, 0.5);
 	glPushMatrix();
 	glTranslatef(2, 0.75, 0);
 	glScalef(0.4, 0.3, 0.4);
 	mySphere();
 	glPopMatrix();
 
+	glPushMatrix();
+	glTranslatef(2.1, 0.55, 0);
+	glRotatef(-10, 0, 0, 1);
+	glRotatef(90, 0, 1, 0);
+	glScalef(0.2, 0.2, 0.2);
+	myCylinder();
+	glPopMatrix();
 
+	setColor(0.7, 0.7, 0.3);
 	glPushMatrix();
 	glTranslatef(2.2, 0.75, 0);
 	glRotatef(-90, 0, 1, 0);
@@ -563,17 +572,17 @@ void nase() {
 	myCone(1, 2, 2);
 	glPopMatrix();
 
-	/*glPushMatrix();
+	glPushMatrix();
 	glTranslatef(1.6, 0.75, 0);
 	glRotatef(90, 0, 1, 0);
 	glScalef(0.3, 0.25, 0.3);
 	myPartialDisk(0, 2, 0, 360);
-	glPopMatrix();*/
+	glPopMatrix();
 }
 void rumpf() {
-	
 	nase();
 	
+	setColor(0.7, 0.7, 0.3);
 	//Unterbau Rumpf
 	glPushMatrix();
 	glTranslatef(1.6, 0.75, 0);
@@ -599,12 +608,12 @@ void rumpf() {
 	myCube();
 	glPopMatrix();
 
-	/*//Trennwand Cockpit-Rumpf //nicht sichtbar
+	//Trennwand Cockpit-Rumpf nicht sichtbar, evtl. wichtig wenn scheibe transparent
 	glPushMatrix();
 	glTranslatef(0.95, 0.75, -0.425);
 	glScalef(0.1, 1, 0.85);
 	myCube();
-	glPopMatrix();*/
+	glPopMatrix();
 
 	//Dach
 	glPushMatrix();
@@ -615,12 +624,16 @@ void rumpf() {
 	glPopMatrix();
 
 	//Cockpit Scheibe
+	setColor(0.6, 0.8, 1);
 	glPushMatrix();
 	glTranslatef(1.25, 1.4, 0);
 	glScalef(0.75, 0.75, 0.7);
 	mySphere();
 	glPopMatrix();
+}
 
+void rotor() {
+	setColor(0.3, 0.3, 0.3);
 	//Rotorenaufsatz
 	glPushMatrix();
 	glTranslatef(-0.3, 1.875, -0.25);
@@ -637,6 +650,7 @@ void rumpf() {
 	static double alpha = 0;
 	alpha += 0.1;
 
+	setColor(0.1, 0.1, 0.1);
 	//Hauptrotoren
 	glPushMatrix();
 	glTranslatef(-0.15, 2.35, 0);
@@ -648,7 +662,7 @@ void rumpf() {
 		glScalef(3.5, 0.025, 0.1);
 		myCube();
 		glPopMatrix();
-	
+
 	glRotatef(90, 0, 1, 0);
 		glPushMatrix();
 		glTranslatef(0, 0, -0.05);
@@ -657,7 +671,7 @@ void rumpf() {
 		glScalef(3.5, 0.025, 0.1);
 		myCube();
 		glPopMatrix();
-	
+
 	glRotatef(90, 0, 1, 0);
 		glPushMatrix();
 		glTranslatef(0, 0, -0.05);
@@ -676,9 +690,61 @@ void rumpf() {
 		myCube();
 		glPopMatrix();
 	glPopMatrix();
+
+	//Heckrotor
+	glPushMatrix();
+	glTranslatef(-4.2, 1.55, 0);
+	setColor(0.3, 0.3, 0.3);
+		glPushMatrix();
+		glScalef(0.2, 0.2, 0.25);
+		glRotatef(180, 0, 1, 0);
+		myCylinder();
+		glPopMatrix();
+
+		setColor(0.1, 0.1, 0.1);
+		glPushMatrix();
+		glTranslatef(0, 0, -0.2);
+		glRotatef(alpha, 0, 0, 1);
+		glTranslatef(0.375, -0.05, 0);
+		glRotatef(35, 1, 0, 0);
+		glScalef(0.75, 0.1, 0.025);
+		myCube();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0, 0, -0.2);
+		glRotatef(alpha, 0, 0, 1);
+		glTranslatef(-0.375, -0.05, 0);
+		glRotatef(-35, 1, 0, 0);
+		glTranslatef(0, 0, 0.05);
+		glScalef(0.75, 0.1, 0.025);
+		myCube();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0, 0, -0.2);
+		glRotatef(alpha + 90, 0, 0, 1);
+		glTranslatef(-0.375, -0.05, 0);
+		glRotatef(-35, 1, 0, 0);
+		glTranslatef(0, 0, 0.05);
+		glScalef(0.75, 0.1, 0.025);
+		myCube();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0, 0, -0.2);
+		glRotatef(alpha + 90, 0, 0, 1);
+		glTranslatef(0.375, -0.05, 0);
+		glRotatef(35, 1, 0, 0);
+		glScalef(0.75, 0.1, 0.025);
+		myCube();
+		glPopMatrix();
+	glPopMatrix();
+
 }
 
 void heck() {
+	setColor(0.7, 0.7, 0.3);
 	//Übergang unten
 	glPushMatrix();
 	glScalef(0.5, 0.5, 0.6);
@@ -722,6 +788,7 @@ void heck() {
 	glPopMatrix();
 
 	//heck
+	setColor(0.7, 0.7, 0.3);
 	glPushMatrix();
 	glTranslatef(0, 0.8, 0);
 	glScalef(3, 0.4, 0.28);
@@ -729,6 +796,7 @@ void heck() {
 	myCylinder();
 	glPopMatrix();
 
+	//setColor(0.2, 0.2, 0.2);
 	glPushMatrix();
 	glTranslatef(-3.1, 0.9, 0);
 	glRotatef(45, 0, 0, 1);
@@ -759,6 +827,10 @@ void hubschrauber() {
 	glPushMatrix();
 	glTranslatef(-0.8, 0.75, 0);
 	heck();
+	glPopMatrix();
+
+	glPushMatrix();
+	rotor();
 	glPopMatrix();
 }
 
