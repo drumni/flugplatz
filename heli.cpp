@@ -1,10 +1,11 @@
 ﻿#include "heli.h"
+
 #include "geometry.h"
 #include "light.h"
+#include "input.h"
 
 void kufe()
 {
-
 	// Hauptstange
 	glPushMatrix();
 	glScalef(3, 0.1, 0.1);
@@ -325,8 +326,21 @@ void heck()
 	glPopMatrix();
 }
 
-void hubschrauber()
+void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 {
+
+	glPushMatrix();
+	// static GLfloat alpha = 0.00f;
+	// alpha += 0.01f;
+	// heli::rotation = heli::rotation + alpha;
+
+	pos[0] += acc;
+
+	glPushMatrix();
+	glRotatef(rotation, 0, 1, 0);
+	// alpha = 0;
+	// alpha += 0.01;
+	glTranslatef(pos[0], y + pos[1], pos[2]);
 	// Kufen zeichnen
 	glPushMatrix();
 	setColor(0, 0.75, 0.75);
@@ -344,5 +358,8 @@ void hubschrauber()
 
 	glPushMatrix();
 	rotor();
+	glPopMatrix();
+
+	glPopMatrix();
 	glPopMatrix();
 }

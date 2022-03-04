@@ -45,6 +45,12 @@
     <ClCompile Include="heli.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="laterne.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="help.h">
@@ -72,6 +78,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="heli.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="laterne.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

@@ -118,7 +118,9 @@
     <ClCompile Include="help.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="laterne.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="Template_PrakCG.cpp" />
     <ClCompile Include="vector.cpp" />
     <ClCompile Include="wavefront.cpp" />
@@ -130,6 +132,7 @@
     <ClInclude Include="help.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="laterne.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="wavefront.h" />
