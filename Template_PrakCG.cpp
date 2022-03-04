@@ -26,8 +26,8 @@
 #include "geometry.h"
 #pragma endregion
 
-void setCamera();		// Kamera platzieren, siehe Maus-Callbacks
-void drawScene();		// Zeichnet die Szene im Weltkoordinatensystem
+void setCamera(); // Kamera platzieren, siehe Maus-Callbacks
+void drawScene(); // Zeichnet die Szene im Weltkoordinatensystem
 
 void loadObjects();
 void initTextures();
@@ -36,7 +36,7 @@ void initTextures();
 //	Kamerafunktion
 /////////////////////////////////////////////////////////////////////////////////
 
-float tempPosition[] = { .0f, .0f };
+float tempPosition[] = {.0f, .0f};
 float tempRadius = .0f;
 
 void setCamera()
@@ -50,29 +50,31 @@ void setCamera()
 	// Maus abfragen
 	if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
 	{
-		cg_globState::cameraHelper[0] += mouse.moveX() * 16/6;
-		cg_globState::cameraHelper[1] += mouse.moveY() * 9/6;
+		cg_globState::cameraHelper[0] += mouse.moveX() * 16 / 6;
+		cg_globState::cameraHelper[1] += mouse.moveY() * 9 / 6;
 	}
-
 
 	if (key.specialKeyState(GLUT_KEY_SHIFT_L))
 	{
-		if (tempPosition[0] == .0f && tempPosition[1] == .0f) {
-			if (tempPosition[1] - mouse.moveX() + tempPosition[0] - mouse.moveY() > 20) {
-			tempPosition[1] = mouse.moveX();
-			tempPosition[0] = mouse.moveY();
+		if (tempPosition[0] == .0f && tempPosition[1] == .0f)
+		{
+			if (tempPosition[1] - mouse.moveX() + tempPosition[0] - mouse.moveY() > 20)
+			{
+				tempPosition[1] = mouse.moveX();
+				tempPosition[0] = mouse.moveY();
 			}
 		}
 
 		float d = sqrt(pow(tempPosition[0] - mouse.moveX(), 2) + pow(tempPosition[1] - mouse.moveY(), 2));
 		d *= (tempPosition[1] > mouse.moveY()) ? 1 : -1;
 		radius += 0.1 * d;
-		if (radius < 1.0) radius = 1.0;
+		if (radius < 1.0)
+			radius = 1.0;
 	}
-	else {
+	else
+	{
 		tempPosition[0] = .0f;
 		tempPosition[1] = .0f;
-
 	}
 
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
@@ -80,7 +82,8 @@ void setCamera()
 	x = radius * cos(Phi) * cos(The);
 	y = radius * sin(The);
 	z = radius * sin(Phi) * cos(The);
-	cg_globState::cameraPos[0] = x; cg_globState::cameraPos[1] = z;
+	cg_globState::cameraPos[0] = x;
+	cg_globState::cameraPos[1] = z;
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
@@ -90,7 +93,7 @@ void setCamera()
 /////////////////////////////////////////////////////////////////////////////////
 //	main : Anfang des OpenGL Programmes
 /////////////////////////////////////////////////////////////////////////////////
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	init(argc, argv);
 
@@ -116,22 +119,22 @@ void displayFunc()
 	cg_key key;
 
 	// Tastatur abfragen
-	// Achtung: einmaliges Betätigen funktioniert so nur mit glutIgnoreKeyRepeat(true) (siehe main())
+	// Achtung: einmaliges Betï¿½tigen funktioniert so nur mit glutIgnoreKeyRepeat(true) (siehe main())
 	if (key.keyState(27))
 	{
 		exit(0); // Escape -> Programm beenden
 	}
 	else if (1 == key.keyState('f') || 1 == key.keyState('F'))
 	{
-		help.toggleFps();	// Framecounter on/off
+		help.toggleFps(); // Framecounter on/off
 	}
 	else if (1 == key.keyState('h') || 1 == key.keyState('H') || 1 == key.specialKeyState(GLUT_KEY_F1))
 	{
-		help.toggle();	// Hilfetext on/off
+		help.toggle(); // Hilfetext on/off
 	}
 	else if (1 == key.keyState('k') || 1 == key.keyState('K'))
 	{
-		help.toggleKoordsystem();	// Koordinatensystem on/off
+		help.toggleKoordsystem(); // Koordinatensystem on/off
 	}
 	else if (1 == key.keyState('w') || 1 == key.keyState('W'))
 	{
@@ -139,11 +142,11 @@ void displayFunc()
 	}
 	else if (1 == key.keyState('l') || 1 == key.keyState('L'))
 	{
-		globState.lightMode = !globState.lightMode;	// Beleuchtung on/off
+		globState.lightMode = !globState.lightMode; // Beleuchtung on/off
 	}
 	else if (1 == key.keyState('i') || 1 == key.keyState('I'))
 	{
-		globState.cameraHelper[0] = 0;	// Initialisierung der Kamera
+		globState.cameraHelper[0] = 0; // Initialisierung der Kamera
 		globState.cameraHelper[1] = 0;
 	}
 
@@ -163,22 +166,24 @@ void displayFunc()
 	// Zeichenmodus einstellen (Wireframe on/off)
 	glPolygonMode(GL_FRONT_AND_BACK, globState.drawMode);
 
-	// Backface Culling on/off, Standardwert ist Entfernen der Rückseiten
+	// Backface Culling on/off, Standardwert ist Entfernen der Rï¿½ckseiten
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
-	if (globState.cullMode) glEnable(GL_CULL_FACE);
-	else glDisable(GL_CULL_FACE);
+	if (globState.cullMode)
+		glEnable(GL_CULL_FACE);
+	else
+		glDisable(GL_CULL_FACE);
 
 	// Farbmodus oder Beleuchtungsmodus ?
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
-		float m_amb[4] = { 0.2, 0.2, 0.2, 1.0 };
-		float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
-		float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
+		float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
+		float m_diff[4] = {0.2, 0.2, 0.6, 1.0};
+		float m_spec[4] = {0.8, 0.8, 0.8, 1.0};
 		float m_shine = 32.0;
-		float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
+		float m_emiss[4] = {0.0, 0.0, 0.0, 1.0};
 
 		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
 
@@ -186,7 +191,7 @@ void displayFunc()
 
 		glEnable(GL_LIGHTING);
 	}
-	else   // Zeichnen im Farbmodus
+	else // Zeichnen im Farbmodus
 	{
 		glDisable(GL_LIGHTING);
 		glColor4f(0.2, 0.2, 0.6, 1.0);
@@ -194,36 +199,36 @@ void displayFunc()
 
 	glEnable(GL_NORMALIZE);
 
-	// die Szene zeichnen 
+	// die Szene zeichnen
 	drawScene();
 
-	// den Hilfetext über die Szene zeichnen, wenn gefordert
+	// den Hilfetext ï¿½ber die Szene zeichnen, wenn gefordert
 	help.draw();
 
 	// Wireframe deaktivieren
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDisable(GL_CULL_FACE);
 
-	glFlush();				// Daten an Server (fuer die Darstellung) schicken
-	glutSwapBuffers();		// Buffers wechseln
+	glFlush();		   // Daten an Server (fuer die Darstellung) schicken
+	glutSwapBuffers(); // Buffers wechseln
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ÜBUNG 12 - Blending ////////////////////////////////////////////////////////////////////////////////////////
+// ï¿½BUNG 12 - Blending ////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	Texturdefinition
 #define NUM_TEXTURES 2
 
-const char* texture_files[NUM_TEXTURES] = {
-									"./textures/container.bmp",
-									"./textures/opengl.bmp"
-};
+const char *texture_files[NUM_TEXTURES] = {
+	"./textures/container.bmp",
+	"./textures/opengl.bmp"};
 
-cg_image textures[NUM_TEXTURES];		// die GL Texturobjekte
+cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
 // die Texturen laden und vorbereiten
-void initTextures() {
+void initTextures()
+{
 
 	for (int i = 0; i < NUM_TEXTURES; i++)
 	{
@@ -234,17 +239,19 @@ void initTextures() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		if (!success) printf("Can not load texture %s!\n", texture_files[i]);
+		if (!success)
+			printf("Can not load texture %s!\n", texture_files[i]);
 	}
 }
 
-#define num_objects 2	// wir haben 2 Wavefront Objekte
-const char* objects_dir = "./Scene/";	// ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = { "ground_concrete.obj", "ground_street.obj" };
+#define num_objects 2				  // wir haben 2 Wavefront Objekte
+const char *objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
+const char *objects_paths[num_objects] = {"ground_concrete.obj", "ground_street.obj"};
 
-    cg_object3D objects[num_objects];
-// Objektbezeichner für den Zugriff auf die Wavefront Objekte
-enum {
+cg_object3D objects[num_objects];
+// Objektbezeichner fï¿½r den Zugriff auf die Wavefront Objekte
+enum
+{
 	GROUND_OBJ1,
 	GROUND_OBJ2
 };
@@ -252,7 +259,7 @@ enum {
 void loadObjects()
 {
 
-	// alle Objekte Laden, wenn der Pfad verfügbar ist (Pfad != "")
+	// alle Objekte Laden, wenn der Pfad verfï¿½gbar ist (Pfad != "")
 	for (int i = 0; i < num_objects; i++)
 		if (strlen(objects_paths[i]) > 0)
 		{
@@ -261,24 +268,23 @@ void loadObjects()
 			strcat(file, ".");
 #endif // _MSC_VER
 			strcat(file, objects_dir);
-			strcat(file, objects_paths[i]);	// file enthält nun den vollständigen Dateinamen
+			strcat(file, objects_paths[i]); // file enthï¿½lt nun den vollstï¿½ndigen Dateinamen
 
 			// Hier das Objekt laden
-			// --> Aufruf von loadobject(file, false) für objects[i]
+			// --> Aufruf von loadobject(file, false) fï¿½r objects[i]
 			objects[i].load(file, true);
-}
-	// nun setzen wir die Materialeigenschaften für die Objekte
+		}
+	// nun setzen wir die Materialeigenschaften fï¿½r die Objekte
 
 	objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
 	objects[GROUND_OBJ2].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 128.0, 0.0);
-	
 }
 
 /*void drawAxis(bool doubleWheel) {
 	// eine Achse
 	objects[AXIS].draw();
 
-	// Aufruf für linkes Rad
+	// Aufruf fï¿½r linkes Rad
 	glPushMatrix();
 	glTranslatef(-0.9f, 0.0, 0.0);    // Versatz nach Links (-x)
 	objects[WHEEL_SCREWS].draw();
@@ -287,10 +293,10 @@ void loadObjects()
 	else objects[WHEEL_SINGLE].draw();
 	glPopMatrix();
 
-	// Aufruf für rechts Rad
+	// Aufruf fï¿½r rechts Rad
 	glPushMatrix();
 	glTranslatef(0.9, 0.0, 0.0);      // Versatz nach Rechts (+x)
-	glRotatef(180.0, 0.0, 1.0, 0.0);  // 180° Drehung um Hochachse (Y)
+	glRotatef(180.0, 0.0, 1.0, 0.0);  // 180ï¿½ Drehung um Hochachse (Y)
 	objects[WHEEL_SCREWS].draw();
 	if (doubleWheel)
 		objects[WHEEL_DOUBLE].draw();
@@ -300,11 +306,11 @@ void loadObjects()
 };
 
 #pragma region VEHICLE
-// Superklasse für die Fahrzeuge
+// Superklasse fï¿½r die Fahrzeuge
 class CVehicle {
 protected:
 	CVector _pos = CVector(0, 0, 0);	//  Position [m]
-	float _rot = 0;						//  Rotation [°]
+	float _rot = 0;						//  Rotation [ï¿½]
 public:
 	void setPos(CVector pos) { _pos = pos; }
 	void setPos(float posX, float posZ) { _pos = CVector(posX, 0, posZ); }
@@ -318,7 +324,7 @@ public:
 #pragma endregion
 
 #pragma region TRUCK
-// Klasse für den Truck
+// Klasse fï¿½r den Truck
 class CTruck : public CVehicle {
 
 public:
@@ -384,7 +390,7 @@ public:
 #pragma endregion // TRUCK
 
 #pragma region TRAILER
-// Klasse für die Verwaltung eines Trailers
+// Klasse fï¿½r die Verwaltung eines Trailers
 class CTrailer : public CVehicle {
 private:
 	cg_object3D* _geometry;
@@ -403,7 +409,7 @@ public:
 		glTranslatef(_pos.x(), 0.5, _pos.z());
 		glRotatef(_rot, 0, 1, 0);
 
-		{ // Fahrwerk und Rahmen 
+		{ // Fahrwerk und Rahmen
 		// Achse 1
 			glPushMatrix();
 			glTranslatef(0, 0, -9.0);
@@ -434,7 +440,7 @@ public:
 			//objects[TRAILER_CARGO].setMaterial(1,1,1,1,1,0,0);
 
 			// TODO U12.3: die Texturierung aktivieren und die Textur _texture binden,
-			// vorher den gewünschten Texturmodus einstellen, siehe Übung 11
+			// vorher den gewï¿½nschten Texturmodus einstellen, siehe ï¿½bung 11
 			if (globState.textureMode) {
 				glEnable(GL_TEXTURE_2D);
 
@@ -444,23 +450,23 @@ public:
 
 			// TODO U12:4: das CARGO-Objekt mittel Backface Culling korrekt darstellen
 
-			// Der Quader ist ein konvexes Objekt. Damit lassen sich Fehler in der 
+			// Der Quader ist ein konvexes Objekt. Damit lassen sich Fehler in der
 			// transparenten Darstellung mittels BackFace Culling adressieren.
-			// Prinzip: zuerst die Rückseiten zeichnen, damit werden nur die weiter 
-			// entfernten Flächen gerastert, danach die Vorderseiten. 
+			// Prinzip: zuerst die Rï¿½ckseiten zeichnen, damit werden nur die weiter
+			// entfernten Flï¿½chen gerastert, danach die Vorderseiten.
 
 			// wir merken uns den aktuellen Zustand des Cullings
 			GLboolean cullingIsEnabled = false;
 			glGetBooleanv(GL_CULL_FACE, &cullingIsEnabled);
 
-			// Culling aktivieren für Vorderseiten
+			// Culling aktivieren fï¿½r Vorderseiten
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 
-			// die Rückseiten zeichnen
+			// die Rï¿½ckseiten zeichnen
 			_geometry->draw();
 
-			// Culling umschalten auf Rückseiten
+			// Culling umschalten auf Rï¿½ckseiten
 			glCullFace(GL_BACK);
 
 			// die Vorderseiten zeichnen
@@ -488,25 +494,25 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // globale Instanzen
-//CTruck truck;
+// CTruck truck;
 
-// TODO U12.3: hier eine Textur wählen, Index 0 = container.bmp, index 1 = opengl.bmp
-//CTrailer trailer1(&objects[TRAILER_CARGO], &textures[0]);
-//CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
+// TODO U12.3: hier eine Textur wï¿½hlen, Index 0 = container.bmp, index 1 = opengl.bmp
+// CTrailer trailer1(&objects[TRAILER_CARGO], &textures[0]);
+// CTrailer trailer2(&objects[TRAILER_CARGO], &textures[0]);
 
-void kufe() {
+void kufe()
+{
 
-	//Hauptstange
+	// Hauptstange
 	glPushMatrix();
-	glScalef(3,0.1,0.1);
+	glScalef(3, 0.1, 0.1);
 	myCube();
 	glPopMatrix();
 
-
-	//Schräge vorn und hinten
+	// Schrï¿½ge vorn und hinten
 	glPushMatrix();
 	glTranslatef(1.5, 0, 0);
-	glRotatef(225,0,0,1);
+	glRotatef(225, 0, 0, 1);
 	glTranslatef(-0.15, -0.1, 0);
 	glScalef(0.3, 0.1, 0.1);
 	myCube();
@@ -520,8 +526,7 @@ void kufe() {
 	myCube();
 	glPopMatrix();
 
-
-	//Verbindung zum Hauptteil des Hubschraubers
+	// Verbindung zum Hauptteil des Hubschraubers
 	glPushMatrix();
 	glTranslatef(0.65, 0, 0);
 	glRotatef(-45, 1, 0, 0);
@@ -530,25 +535,27 @@ void kufe() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-0.65,0,0);
+	glTranslatef(-0.65, 0, 0);
 	glRotatef(-45, 1, 0, 0);
 	glScalef(0.1, 0.5, 0.1);
 	myCube();
 	glPopMatrix();
 }
 
-void kufen() {
+void kufen()
+{
 	setColor(0.4, 0.4, 0.4);
 	glPushMatrix();
-		glTranslatef(0, 0, 0.7);
-		kufe();
-		glTranslatef(0,0,-1.4);
-		glRotatef(180, 0, 1, 0);
-		kufe();
+	glTranslatef(0, 0, 0.7);
+	kufe();
+	glTranslatef(0, 0, -1.4);
+	glRotatef(180, 0, 1, 0);
+	kufe();
 	glPopMatrix();
 }
 
-void nase() {
+void nase()
+{
 	setColor(0.5, 0.5, 0.5);
 	glPushMatrix();
 	glTranslatef(2, 0.75, 0);
@@ -579,11 +586,13 @@ void nase() {
 	myPartialDisk(0, 2, 0, 360);
 	glPopMatrix();
 }
-void rumpf() {
+
+void rumpf()
+{
 	nase();
-	
+
 	setColor(0.7, 0.7, 0.3);
-	//Unterbau Rumpf
+	// Unterbau Rumpf
 	glPushMatrix();
 	glTranslatef(1.6, 0.75, 0);
 	glRotatef(-90, 0, 1, 0);
@@ -592,14 +601,14 @@ void rumpf() {
 	myCylinder();
 	glPopMatrix();
 
-	//Wände Rumpf
+	// Wï¿½nde Rumpf
 	glPushMatrix();
 	glTranslatef(0.1, 0.75, 0.5);
 	glRotatef(-10, 1, 0, 0);
 	glScalef(1.8, 1, 0.1);
 	myCube();
 	glPopMatrix();
-	
+
 	glPushMatrix();
 	glTranslatef(0.1, 0.75, -0.5);
 	glRotatef(180, 0, 1, 0);
@@ -608,14 +617,14 @@ void rumpf() {
 	myCube();
 	glPopMatrix();
 
-	//Trennwand Cockpit-Rumpf nicht sichtbar, evtl. wichtig wenn scheibe transparent
+	// Trennwand Cockpit-Rumpf nicht sichtbar, evtl. wichtig wenn scheibe transparent
 	glPushMatrix();
 	glTranslatef(0.95, 0.75, -0.425);
 	glScalef(0.1, 1, 0.85);
 	myCube();
 	glPopMatrix();
 
-	//Dach
+	// Dach
 	glPushMatrix();
 	glTranslatef(1, 1.75, 0);
 	glScalef(1.8, 0.5, 0.85);
@@ -623,7 +632,7 @@ void rumpf() {
 	myCylinder();
 	glPopMatrix();
 
-	//Cockpit Scheibe
+	// Cockpit Scheibe
 	setColor(0.6, 0.8, 1);
 	glPushMatrix();
 	glTranslatef(1.25, 1.4, 0);
@@ -632,9 +641,10 @@ void rumpf() {
 	glPopMatrix();
 }
 
-void rotor() {
+void rotor()
+{
 	setColor(0.3, 0.3, 0.3);
-	//Rotorenaufsatz
+	// Rotorenaufsatz
 	glPushMatrix();
 	glTranslatef(-0.3, 1.875, -0.25);
 	glScalef(1, 0.25, 0.5);
@@ -651,114 +661,114 @@ void rotor() {
 	alpha += 0.1;
 
 	setColor(0.1, 0.1, 0.1);
-	//Hauptrotoren
+	// Hauptrotoren
 	glPushMatrix();
 	glTranslatef(-0.15, 2.35, 0);
 	glRotatef(alpha, 0, 1, 0);
-		glPushMatrix();
-		glTranslatef(0, 0, -0.05);
-		glRotatef(35, 1, 0, 0);
-		glTranslatef(1.75, 0, 0);
-		glScalef(3.5, 0.025, 0.1);
-		myCube();
-		glPopMatrix();
-
-	glRotatef(90, 0, 1, 0);
-		glPushMatrix();
-		glTranslatef(0, 0, -0.05);
-		glRotatef(35, 1, 0, 0);
-		glTranslatef(1.75, 0, 0);
-		glScalef(3.5, 0.025, 0.1);
-		myCube();
-		glPopMatrix();
-
-	glRotatef(90, 0, 1, 0);
-		glPushMatrix();
-		glTranslatef(0, 0, -0.05);
-		glRotatef(35, 1, 0, 0);
-		glTranslatef(1.75, 0, 0);
-		glScalef(3.5, 0.025, 0.1);
-		myCube();
-		glPopMatrix();
-
-	glRotatef(90, 0, 1, 0);
-		glPushMatrix();
-		glTranslatef(0, 0, -0.05);
-		glRotatef(35, 1, 0, 0);
-		glTranslatef(1.75, 0, 0);
-		glScalef(3.5, 0.025, 0.1);
-		myCube();
-		glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, 0, -0.05);
+	glRotatef(35, 1, 0, 0);
+	glTranslatef(1.75, 0, 0);
+	glScalef(3.5, 0.025, 0.1);
+	myCube();
 	glPopMatrix();
 
-	//Heckrotor
+	glRotatef(90, 0, 1, 0);
+	glPushMatrix();
+	glTranslatef(0, 0, -0.05);
+	glRotatef(35, 1, 0, 0);
+	glTranslatef(1.75, 0, 0);
+	glScalef(3.5, 0.025, 0.1);
+	myCube();
+	glPopMatrix();
+
+	glRotatef(90, 0, 1, 0);
+	glPushMatrix();
+	glTranslatef(0, 0, -0.05);
+	glRotatef(35, 1, 0, 0);
+	glTranslatef(1.75, 0, 0);
+	glScalef(3.5, 0.025, 0.1);
+	myCube();
+	glPopMatrix();
+
+	glRotatef(90, 0, 1, 0);
+	glPushMatrix();
+	glTranslatef(0, 0, -0.05);
+	glRotatef(35, 1, 0, 0);
+	glTranslatef(1.75, 0, 0);
+	glScalef(3.5, 0.025, 0.1);
+	myCube();
+	glPopMatrix();
+	glPopMatrix();
+
+	// Heckrotor
 	glPushMatrix();
 	glTranslatef(-4.2, 1.55, 0);
 	setColor(0.3, 0.3, 0.3);
-		glPushMatrix();
-		glScalef(0.2, 0.2, 0.25);
-		glRotatef(180, 0, 1, 0);
-		myCylinder();
-		glPopMatrix();
-
-		setColor(0.1, 0.1, 0.1);
-		glPushMatrix();
-		glTranslatef(0, 0, -0.2);
-		glRotatef(alpha, 0, 0, 1);
-		glTranslatef(0.375, -0.05, 0);
-		glRotatef(35, 1, 0, 0);
-		glScalef(0.75, 0.1, 0.025);
-		myCube();
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(0, 0, -0.2);
-		glRotatef(alpha, 0, 0, 1);
-		glTranslatef(-0.375, -0.05, 0);
-		glRotatef(-35, 1, 0, 0);
-		glTranslatef(0, 0, 0.05);
-		glScalef(0.75, 0.1, 0.025);
-		myCube();
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(0, 0, -0.2);
-		glRotatef(alpha + 90, 0, 0, 1);
-		glTranslatef(-0.375, -0.05, 0);
-		glRotatef(-35, 1, 0, 0);
-		glTranslatef(0, 0, 0.05);
-		glScalef(0.75, 0.1, 0.025);
-		myCube();
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(0, 0, -0.2);
-		glRotatef(alpha + 90, 0, 0, 1);
-		glTranslatef(0.375, -0.05, 0);
-		glRotatef(35, 1, 0, 0);
-		glScalef(0.75, 0.1, 0.025);
-		myCube();
-		glPopMatrix();
+	glPushMatrix();
+	glScalef(0.2, 0.2, 0.25);
+	glRotatef(180, 0, 1, 0);
+	myCylinder();
 	glPopMatrix();
 
+	setColor(0.1, 0.1, 0.1);
+	glPushMatrix();
+	glTranslatef(0, 0, -0.2);
+	glRotatef(alpha, 0, 0, 1);
+	glTranslatef(0.375, -0.05, 0);
+	glRotatef(35, 1, 0, 0);
+	glScalef(0.75, 0.1, 0.025);
+	myCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -0.2);
+	glRotatef(alpha, 0, 0, 1);
+	glTranslatef(-0.375, -0.05, 0);
+	glRotatef(-35, 1, 0, 0);
+	glTranslatef(0, 0, 0.05);
+	glScalef(0.75, 0.1, 0.025);
+	myCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -0.2);
+	glRotatef(alpha + 90, 0, 0, 1);
+	glTranslatef(-0.375, -0.05, 0);
+	glRotatef(-35, 1, 0, 0);
+	glTranslatef(0, 0, 0.05);
+	glScalef(0.75, 0.1, 0.025);
+	myCube();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -0.2);
+	glRotatef(alpha + 90, 0, 0, 1);
+	glTranslatef(0.375, -0.05, 0);
+	glRotatef(35, 1, 0, 0);
+	glScalef(0.75, 0.1, 0.025);
+	myCube();
+	glPopMatrix();
+	glPopMatrix();
 }
 
-void heck() {
+void heck()
+{
 	setColor(0.7, 0.7, 0.3);
-	//Übergang unten
+	//ï¿½bergang unten
 	glPushMatrix();
 	glScalef(0.5, 0.5, 0.6);
 	mySphere();
 	glPopMatrix();
 
-	//Übergang oben
+	//ï¿½bergang oben
 	glPushMatrix();
 	glTranslatef(0, 1, 0);
 	glScalef(0.75, 0.25, 0.425);
 	mySphere();
 	glPopMatrix();
 
-	//Verbindungsstück
+	// Verbindungsstï¿½ck
 	glPushMatrix();
 	glTranslatef(-0.2, 0, 0);
 	glRotatef(-90, 1, 0, 0);
@@ -766,7 +776,7 @@ void heck() {
 	myCylinder();
 	glPopMatrix();
 
-	//Übergangswände
+	//ï¿½bergangswï¿½nde
 	glPushMatrix();
 	glTranslatef(-0.25, 0, 0.5);
 	glRotatef(-10, 1, 0, 0);
@@ -787,7 +797,7 @@ void heck() {
 	myCube();
 	glPopMatrix();
 
-	//heck
+	// heck
 	setColor(0.7, 0.7, 0.3);
 	glPushMatrix();
 	glTranslatef(0, 0.8, 0);
@@ -796,7 +806,7 @@ void heck() {
 	myCylinder();
 	glPopMatrix();
 
-	//setColor(0.2, 0.2, 0.2);
+	// setColor(0.2, 0.2, 0.2);
 	glPushMatrix();
 	glTranslatef(-3.1, 0.9, 0);
 	glRotatef(45, 0, 0, 1);
@@ -813,8 +823,9 @@ void heck() {
 	glPopMatrix();
 }
 
-void hubschrauber() {
-	//Kufen zeichnen
+void hubschrauber()
+{
+	// Kufen zeichnen
 	glPushMatrix();
 	setColor(0, 0.75, 0.75);
 	kufen();
@@ -823,7 +834,7 @@ void hubschrauber() {
 	glPushMatrix();
 	rumpf();
 	glPopMatrix();
-	
+
 	glPushMatrix();
 	glTranslatef(-0.8, 0.75, 0);
 	heck();
@@ -831,6 +842,70 @@ void hubschrauber() {
 
 	glPushMatrix();
 	rotor();
+	glPopMatrix();
+}
+
+void mast(GLfloat h)
+{
+	setColor(0.2, 0.2, 0.2);
+	glPushMatrix();
+	glRotatef(-90, 1, 0, 0);
+	glScalef(0.2f, 0.2f, h);
+	myCylinder();
+	glPopMatrix();
+};
+
+void lampe(GLfloat h)
+{
+	glPushMatrix();
+	glTranslatef(0, h, 0);
+	setColor(1, 0.3, 0.1);
+	glScalef(0.3, 0.25, 0.3);
+	mySphere();
+	glPopMatrix();
+};
+
+void deckel(GLfloat h)
+{
+	setColor(0.1, 0.1, 0.1);
+	glPushMatrix();
+	glTranslatef(0, h + 0.5f, 0);
+	glRotatef(90, 1, 0, 0);
+	glScalef(0.3, 0.25, 0.3);
+	myCone(1, 2.5f, 2);
+	glPopMatrix();
+};
+
+void anker(){
+	setColor(0.1, 0.1, 0.1);
+	glPushMatrix();
+	glTranslatef(0, 0.1, 0);
+	glRotatef(90, 1, 0, 0);
+	glScalef(0.3, 0.25, 0.3);
+	myCone(0.5f, 0.7f, 0.4);
+	glPopMatrix();
+};
+
+void laterne(GLfloat x, GLfloat y, GLfloat z, GLfloat h)
+{
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	mast(h);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	lampe(h);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	deckel(h);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	anker();
 	glPopMatrix();
 }
 
@@ -850,7 +925,7 @@ void drawScene()
 		globState.blendMode = !globState.blendMode; // Blending on/off
 	}
 
-	// Straße bei Y=0 zeichnen
+	// Straï¿½e bei Y=0 zeichnen
 	objects[GROUND_OBJ1].draw();
 	objects[GROUND_OBJ2].draw();
 
@@ -881,10 +956,10 @@ void drawScene()
 	vec_to_trailer1 = trailer1.getPos() - camPos;
 	vec_to_trailer2 = trailer2.getPos() - camPos;
 
-	// wir sortieren nun die Objekt-Indizes absteigend nach der Entfernung 
+	// wir sortieren nun die Objekt-Indizes absteigend nach der Entfernung
 	const int numObjects = 3;
 
-	// initial sind die Indizes der Objekte truck=0, trailer1=1 und trailer2=2 
+	// initial sind die Indizes der Objekte truck=0, trailer1=1 und trailer2=2
 	int objectIndexes[numObjects] = { 0,1,2 };
 
 	// die Entfernungen zwischen Kamera und den Objekten
@@ -911,7 +986,7 @@ void drawScene()
 	} while (switched);
 
 	// TODO U12.2 Schritt3 - Zeichnen in der richtigen Reihenfolge
-	// zunächst das unsortierte Zeichnen entfernen
+	// zunï¿½chst das unsortierte Zeichnen entfernen
 	truck.draw();
 	trailer1.draw();
 	trailer2.draw();
@@ -919,7 +994,7 @@ void drawScene()
 	// TODO U12.3: stattdessen sortiert zeichnen
 	for (int i = 0; i < numObjects; i++) {
 		switch (objectIndexes[i]) {
-		case 0: // den Truck zeichnen 
+		case 0: // den Truck zeichnen
 			truck.draw();
 			break;
 		case 1: // den Trailer1 zeichnen
@@ -934,9 +1009,14 @@ void drawScene()
 	// Texturierung und Blending global deaktivieren
 
 	hubschrauber();
+	for (size_t i = 0; i < 8; i++)
+	{
+		laterne(-(8.0f*i)+10, 0.0f, 6.5f, 4.7f);
+		laterne(-(8.0f*i)+10, 0.0f, -9.5f, 4.7f);
+	}
+	
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 }
-

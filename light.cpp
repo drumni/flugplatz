@@ -75,7 +75,7 @@ void setLights()
 	// Licht 0
 
 	// Paramaters fuer Lichtquelle 0
-	GLfloat l_pos[4] = { 1.00f, 10.0f, 10.0f, 1.0f };
+	GLfloat l_pos[4] = { 3.00f, 6.0f, 6.0f, 1.0f };
 	GLfloat l_amb[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
 	GLfloat l_diff[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat l_spec[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -104,7 +104,7 @@ void setLights()
 	glEnable(GL_NORMALIZE);
 }
 
-// Standardeinstellung für Farbe und Beleuchtung
+// Standardeinstellung fï¿½r Farbe und Beleuchtung
 void setDefaultLightAndMaterial(GLboolean lightMode) {
 	GLfloat color[4] = { 0.4, 0.4, 0.8, 1.0 };
 	if (lightMode == GL_TRUE) // Beleuchtung aktivieren
