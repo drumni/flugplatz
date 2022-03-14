@@ -336,8 +336,10 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 	if (angle > 45) {
 		angle = 45;
 	}
-	pos[0] += 0.001 * angle * cos(rotation);
-	pos[2] += 0.001 * angle * -sin(rotation);
+
+	double pi = 2 * acos(0.0);
+	pos[0] += 0.001 * angle * cos(rotation * pi / 180);
+	pos[2] += 0.001 * angle * -sin(rotation * pi / 180);
 
 	std::cout << "; rotation: " << rotation;
 
@@ -347,7 +349,7 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 		
 	//Heli zeichnen
 		glPushMatrix();
-			//glTranslatef(pos[0], pos[1], pos[2]);
+			glTranslatef(pos[0], pos[1], pos[2]);
 			glRotatef(rotation, 0, 1, 0);
 			glRotatef(-angle, 0, 0, 1);
 			// Kufen zeichnen
