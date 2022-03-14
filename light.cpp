@@ -1,6 +1,5 @@
 #include "light.h"
 
-#include <iostream>
 // Farbe setzen fuer Farb- und Beleuchtungsmodus
 void setColor(GLfloat r, GLfloat g, GLfloat b) {
 	glColor3f(r, g, b);
@@ -94,7 +93,6 @@ void setLights()
 	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l_spotdir);
 	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, l_spotcutoff);
 	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, l_spotexp);
-
 	// Abschwaechung
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, l_att[0]);
 	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, l_att[1]);
@@ -123,8 +121,6 @@ void setDefaultLightAndMaterial(GLboolean lightMode) {
 		glEnable(GL_NORMALIZE);
 
 		glEnable(GL_LIGHTING);
-
-
 	}
 	else   // Zeichnen im Farbmodus
 	{
@@ -267,7 +263,6 @@ void cg_light::markLightPosition() {
 		glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
 		glDisable(GL_LIGHTING);
 		glColor4fv(this->diff);
-		setColor(1, 0.1, 0.1);
 		glutSolidSphere(0.5, 30, 30);
 		glPopAttrib();
 		glPopMatrix();
