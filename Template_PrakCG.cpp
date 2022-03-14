@@ -26,6 +26,7 @@
 #include "image.h"
 #include "vector.h"
 #include "geometry.h"
+#include <iostream>
 #pragma endregion
 
 void setCamera(); // Kamera platzieren, siehe Maus-Callbacks
@@ -39,7 +40,7 @@ void initTextures();
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void setCamera(GLfloat pos[3])
+void setCamera(GLfloat pos[3], double xp, double yp, double zp)
 {
 	cg_mouse mouse;
 	cg_key key;
@@ -62,9 +63,9 @@ void setCamera(GLfloat pos[3])
 
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
 	The = 0.2 * cg_globState::cameraHelper[1] / cg_globState::screenSize[1] * M_PI;
-	x = radius * cos(Phi) * cos(The);
-	y = radius * sin(The);
-	z = radius * sin(Phi) * cos(The);
+	x = radius * cos(Phi) * cos(The) + xp;
+	y = radius * sin(The) + yp;
+	z = radius * sin(Phi) * cos(The) + zp;
 	cg_globState::cameraPos[0] = x;
 	cg_globState::cameraPos[1] = z;
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
@@ -266,16 +267,38 @@ void loadObjects()
 void drawScene()
 {
 	static heli helicopter;
-
-	// Kamera setzen (spherische Mausnavigation)
-	//setCamera(helicopter.pos);
+	cg_globState globState;
+	cg_key key;
 	GLfloat camerapos[] = { 0,0,0 };
-	setCamera(camerapos);
+	static int camerastate = 1;
+
+	
 
 	// Zeichnet die Szene 1x im Weltkoordinatensystem
 
-	cg_globState globState;
-	cg_key key;
+	// Kamera setzen (spherische Mausnavigation)
+	if (camerastate != 1 && 1 == key.keyState('1')) {
+		camerastate = 1;
+	}
+	else if (camerastate != 2 && 1 == key.keyState('2')) {
+		camerastate = 2;
+	}
+
+	switch (camerastate){
+	case 1:
+		
+		setCamera(camerapos, 0, 0, 0);
+		break;
+	case 2:
+
+		int xpc = 10 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
+		int zpc = 10 * sin(helicopter.rotation * M_PI / 180 + helicopter.pos[2]);
+		setCamera(helicopter.pos, xpc, helicopter.pos[1], zpc);
+		break;
+	//default:
+		//std::cout << "Fehler bei Camerastatewahl";
+	}
+
 
 	if (1 == key.keyState('t') || 1 == key.keyState('T'))
 	{
