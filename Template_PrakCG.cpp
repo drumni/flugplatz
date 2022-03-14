@@ -26,6 +26,7 @@
 #include "image.h"
 #include "vector.h"
 #include "geometry.h"
+#include <iostream>
 #pragma endregion
 
 void setCamera(); // Kamera platzieren, siehe Maus-Callbacks
@@ -39,7 +40,7 @@ void initTextures();
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void setCamera(GLfloat pos[3])
+void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable)
 {
 	cg_mouse mouse;
 	cg_key key;
@@ -62,15 +63,24 @@ void setCamera(GLfloat pos[3])
 
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
 	The = 0.2 * cg_globState::cameraHelper[1] / cg_globState::screenSize[1] * M_PI;
+	
+	if (radiusAdjustable) {
 	x = radius * cos(Phi) * cos(The);
 	y = radius * sin(The);
 	z = radius * sin(Phi) * cos(The);
+	}
+	else {
+		x = xp;
+		y = yp;
+		z = zp;
+	}
+	
 	cg_globState::cameraPos[0] = x;
 	cg_globState::cameraPos[1] = z;
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
-	gluLookAt(x, y, z, 0 + pos[0], 0 + pos[1], 0 + pos[2], 0, Oben, 0);
+	gluLookAt(x, y, z, 0+ pos[0], 0+ pos[1], 0+ pos[2], 0, Oben, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -266,16 +276,38 @@ void loadObjects()
 void drawScene()
 {
 	static heli helicopter;
+	cg_globState globState;
+	cg_key key;
+	GLfloat camerapos[] = { 0, 0, 0 };
+	static int camerastate = 1;
 
-	// Kamera setzen (spherische Mausnavigation)
-	//setCamera(helicopter.pos);
-	GLfloat camerapos[] = { 0,0,0 };
-	setCamera(camerapos);
+	
 
 	// Zeichnet die Szene 1x im Weltkoordinatensystem
 
-	cg_globState globState;
-	cg_key key;
+	// Kamera setzen (spherische Mausnavigation)
+	if (camerastate != 1 && 1 == key.keyState('1')) {
+		camerastate = 1;
+	}
+	else if (camerastate != 2 && 1 == key.keyState('2')) {
+		camerastate = 2;
+	}
+
+	switch (camerastate){
+	//Fester Standpunkt
+	case 1:
+		setCamera(camerapos, 0, 0, 0, 1);
+		break;
+	//Hinter dem Hubschrauber
+	case 2:
+		double xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
+		double zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
+		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
+		break;
+	//default:
+		//std::cout << "Fehler bei Camerastatewahl";
+	}
+
 
 	if (1 == key.keyState('t') || 1 == key.keyState('T'))
 	{
