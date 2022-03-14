@@ -14,6 +14,7 @@ void mast(GLfloat h)
 
 void lampe(GLfloat h)
 {
+
 	glPushMatrix();
 	glTranslatef(0, h, 0);
 	setColor(1, 0.3, 0.1);
@@ -43,8 +44,14 @@ void anker() {
 	glPopMatrix();
 };
 
-void laterne(GLfloat x, GLfloat y, GLfloat z, GLfloat h)
+void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h)
 {
+	cg_light lamp(id);
+	lamp.setPosition(x, y + 5, z, 1);
+
+	lamp.setDiffuse(.5f, .4f, .4f, 1.f);
+	lamp.enable();	lamp.draw();
+
 	glPushMatrix();
 	glTranslatef(x, y, z);
 	mast(h);

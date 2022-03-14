@@ -70,13 +70,13 @@ void setCamera(GLfloat pos[3])
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
-	gluLookAt(x, y, z, 0+ pos[0], 0+ pos[1], 0+ pos[2], 0, Oben, 0);
+	gluLookAt(x, y, z, 0 + pos[0], 0 + pos[1], 0 + pos[2], 0, Oben, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 //	main : Anfang des OpenGL Programmes
 /////////////////////////////////////////////////////////////////////////////////
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 	init(argc, argv);
 
@@ -162,11 +162,11 @@ void displayFunc()
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
-		float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
-		float m_diff[4] = {0.2, 0.2, 0.6, 1.0};
-		float m_spec[4] = {0.8, 0.8, 0.8, 1.0};
+		float m_amb[4] = { 0.2, 0.2, 0.2, 1.0 };
+		float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
+		float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
 		float m_shine = 32.0;
-		float m_emiss[4] = {0.0, 0.0, 0.0, 1.0};
+		float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
 
 		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
 
@@ -203,9 +203,9 @@ void displayFunc()
 //	Texturdefinition
 #define NUM_TEXTURES 2
 
-const char *texture_files[NUM_TEXTURES] = {
+const char* texture_files[NUM_TEXTURES] = {
 	"./textures/container.bmp",
-	"./textures/opengl.bmp"};
+	"./textures/opengl.bmp" };
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
@@ -228,8 +228,8 @@ void initTextures()
 }
 
 #define num_objects 2				  // wir haben 2 Wavefront Objekte
-const char *objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char *objects_paths[num_objects] = {"ground_concrete.obj", "ground_street.obj"};
+const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
+const char* objects_paths[num_objects] = { "ground_concrete.obj", "ground_street.obj" };
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -261,6 +261,9 @@ void loadObjects()
 
 	objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
 	objects[GROUND_OBJ2].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 128.0, 0.0);
+
+
+
 }
 
 void drawScene()
@@ -315,18 +318,21 @@ void drawScene()
 	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
 		helicopter.enginePower += helicopter.engineAcc;
 	}
-	if(2 == key. specialKeyState(GLUT_KEY_CTRL_L)){
+	if (2 == key.specialKeyState(GLUT_KEY_CTRL_L)) {
 		helicopter.enginePower -= helicopter.engineAcc;
 	}
 
-	
+	int counter = 1;
+	for (size_t i = 0; i < 2; i++)
+	{
+		laterne(counter, -(30.0f * i) + 10, 0.0f, 6.5f, 4.7f);
+		counter++;
+		laterne(counter, -(30.0f * i) + 10, 0.0f, -9.5f, 4.7f);
+		counter++;
+	}
 
 	// hubschrauber();
-	for (size_t i = 0; i < 8; i++)
-	{
-		laterne(-(8.0f * i) + 10, 0.0f, 6.5f, 4.7f);
-		laterne(-(8.0f * i) + 10, 0.0f, -9.5f, 4.7f);
-	}
+
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);

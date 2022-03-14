@@ -11,4 +11,4 @@
 #include "Include/freeglut.h"
 #endif
 
-void laterne(GLfloat x, GLfloat y, GLfloat z, GLfloat h);
+void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h);

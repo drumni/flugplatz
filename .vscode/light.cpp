@@ -1,12 +1,12 @@
 #include "light.h"
 
-#include <iostream>
 // Farbe setzen fuer Farb- und Beleuchtungsmodus
 void setColor(GLfloat r, GLfloat g, GLfloat b) {
 	glColor3f(r, g, b);
 	GLfloat amb_diff[4] = { r,g,b,1 };
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, amb_diff);
 };
+
 
 void setMaterial(GLenum face, GLfloat amb[4], GLfloat diff[4], GLfloat spec[4], GLfloat shine, GLfloat emis[4])
 // Aktualisierung des OpenGL Materials
@@ -21,7 +21,7 @@ void setMaterial(GLenum face, GLfloat amb[4], GLfloat diff[4], GLfloat spec[4], 
 
 void setMaterial(GLenum face, float red, float green, float blue, float alpha, float specular, float shininess, float emission)
 {
-	float color[4];
+	float color[4]; 
 	float amb[4];
 	float diff[4];
 	float spec[4];
@@ -32,7 +32,7 @@ void setMaterial(GLenum face, float red, float green, float blue, float alpha, f
 	color[1] = green;
 	color[2] = blue;
 	color[3] = alpha;
-
+	
 	// Material 
 	amb[0] = 0.1;
 	amb[1] = 0.1;
@@ -46,7 +46,7 @@ void setMaterial(GLenum face, float red, float green, float blue, float alpha, f
 	spec[1] = specular;
 	spec[2] = specular;
 	spec[3] = alpha;
-
+	
 	// Emission = r,g,b * emis
 	emis[0] = red * emission;
 	emis[1] = blue * emission;
@@ -62,6 +62,15 @@ void setMaterial(GLenum face, float red, float green, float blue, float alpha, f
 
 }
 
+void initLights() {
+	glEnable(GL_LIGHTING);
+}
+
+void createLamp(GLfloat x, GLfloat y, GLfloat z, GLfloat w) {
+	cg_light lamp;
+	lamp.setPosition(x, y, z, w);
+}
+
 void setLights()
 {
 	glEnable(GL_LIGHTING);
@@ -75,10 +84,10 @@ void setLights()
 	// Licht 0
 
 	// Paramaters fuer Lichtquelle 0
-	GLfloat l_pos[4] = { 1.00f, 10.0f, 10.0f, 1.0f };
-	GLfloat l_amb[4] = { 0.2f, 0.2f, 0.2f, 0.4f };
-	GLfloat l_diff[4] = { 1.0f, 1.0f, 1.0f, 0.4f };
-	GLfloat l_spec[4] = { 1.0f, 1.0f, 1.0f, 0.4f };
+	GLfloat l_pos[4] = { 3.00f, 6.0f, 6.0f, 1.0f };
+	GLfloat l_amb[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	GLfloat l_diff[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat l_spec[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat l_spotdir[3] = { 0.0f, 0.0f, 1.0f };
 	GLfloat l_spotcutoff = 180.0f;
 	GLfloat l_spotexp = 0.0f;
@@ -94,18 +103,17 @@ void setLights()
 	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l_spotdir);
 	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, l_spotcutoff);
 	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, l_spotexp);
-
 	// Abschwaechung
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, l_att[0]);
 	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, l_att[1]);
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, l_att[2]);
 	// Aktivieren
 	glEnable(GL_LIGHT0);
-
+ 
 	glEnable(GL_NORMALIZE);
 }
 
-// Standardeinstellung für Farbe und Beleuchtung
+// Standardeinstellung f�r Farbe und Beleuchtung
 void setDefaultLightAndMaterial(GLboolean lightMode) {
 	GLfloat color[4] = { 0.4, 0.4, 0.8, 1.0 };
 	if (lightMode == GL_TRUE) // Beleuchtung aktivieren
@@ -123,8 +131,6 @@ void setDefaultLightAndMaterial(GLboolean lightMode) {
 		glEnable(GL_NORMALIZE);
 
 		glEnable(GL_LIGHTING);
-
-
 	}
 	else   // Zeichnen im Farbmodus
 	{
@@ -147,7 +153,7 @@ cg_light::cg_light(int num)
 	this->disable();
 }
 
-// Position
+
 void cg_light::setPosition(float x, float y, float z, float w)
 {
 	this->pos[0] = x;
@@ -156,14 +162,13 @@ void cg_light::setPosition(float x, float y, float z, float w)
 	this->pos[3] = w;
 }
 
-// Rotation
 void cg_light::setRotation(float horizontal, float vertikal)
 {
 	this->rot[0] = horizontal;
 	this->rot[1] = vertikal;
 }
 
-// Ambient Farbe
+
 void cg_light::setAmbient(float r, float g, float b, float a)
 {
 	this->amb[0] = r;
@@ -172,7 +177,7 @@ void cg_light::setAmbient(float r, float g, float b, float a)
 	this->amb[3] = a;
 }
 
-// Diffuse Farbe
+
 void cg_light::setDiffuse(float r, float g, float b, float a)
 {
 	this->diff[0] = r;
@@ -182,7 +187,6 @@ void cg_light::setDiffuse(float r, float g, float b, float a)
 }
 
 
-// Spectrale Farbe
 void cg_light::setSpecular(float r, float g, float b, float a)
 {
 	this->spec[0] = r;
@@ -191,7 +195,7 @@ void cg_light::setSpecular(float r, float g, float b, float a)
 	this->spec[3] = a;
 }
 
-// Richtung
+
 void cg_light::setSpotlight(float directionX, float directionY, float directionZ, float cutoff, float exponent)
 {
 	this->spot[0] = directionX;
@@ -201,7 +205,7 @@ void cg_light::setSpotlight(float directionX, float directionY, float directionZ
 	this->spot[4] = exponent;
 }
 
-// Abschwächung
+
 void cg_light::setAttentuation(float constant, float linear, float quadric)
 {
 	this->att[0] = constant;
@@ -209,44 +213,43 @@ void cg_light::setAttentuation(float constant, float linear, float quadric)
 	this->att[2] = quadric;
 }
 
-// Aktualisieren
 void cg_light::draw()
 {
 	if (this->enabled)
 	{
 		glPushMatrix();
-		// rotation
-		glRotatef(this->rot[0], 0, 1, 0);
-		glRotatef(this->rot[1], 1, 0, 0);
-		// position
-		glLightfv(this->id, GL_POSITION, this->pos);
-		// color
-		glLightfv(this->id, GL_AMBIENT, this->amb);
-		glLightfv(this->id, GL_DIFFUSE, this->diff);
-		glLightfv(this->id, GL_SPECULAR, this->spec);
-		//spotlight
-		glLightfv(this->id, GL_SPOT_DIRECTION, this->spot);
-		glLightf(this->id, GL_SPOT_CUTOFF, this->spot[3]);
-		glLightf(this->id, GL_SPOT_EXPONENT, this->spot[4]);
-		// attentuation
-		glLightf(this->id, GL_CONSTANT_ATTENUATION, this->att[0]);
-		glLightf(this->id, GL_LINEAR_ATTENUATION, this->att[1]);
-		glLightf(this->id, GL_QUADRATIC_ATTENUATION, this->att[2]);
-		// enable
-		glEnable(this->id);
+			// rotation
+			glRotatef(this->rot[0], 0, 1, 0);
+			glRotatef(this->rot[1], 1, 0, 0);
+			// position
+			glLightfv(this->id, GL_POSITION, this->pos);
+			// color
+			glLightfv(this->id, GL_AMBIENT, this->amb);
+			glLightfv(this->id, GL_DIFFUSE, this->diff);
+			glLightfv(this->id, GL_SPECULAR, this->spec);
+			// spotlight
+			glLightfv(this->id, GL_SPOT_DIRECTION, this->spot);
+			glLightf(this->id, GL_SPOT_CUTOFF, this->spot[3]);
+			glLightf(this->id, GL_SPOT_EXPONENT, this->spot[4]);
+			// attentuation
+			glLightf(this->id, GL_CONSTANT_ATTENUATION, this->att[0]);
+			glLightf(this->id, GL_LINEAR_ATTENUATION, this->att[1]);
+			glLightf(this->id, GL_QUADRATIC_ATTENUATION, this->att[2]);
+			// enable
+			glEnable(this->id);
 		glPopMatrix();
 	}
 	else
 		glDisable(this->id);
 }
 
-// Aktivieren
+
 void cg_light::enable()
 {
 	this->enabled = true;
 }
 
-// Deaktivieren
+
 void cg_light::disable()
 {
 	this->enabled = false;
@@ -262,14 +265,13 @@ void cg_light::markLightPosition() {
 	if (this->enabled) {
 		// eine kleine Kugel an die Position der Lichtquelle zeichnen
 		glPushMatrix();
-		glTranslatef(this->pos[0], this->pos[1], this->pos[2]),
+			glTranslatef(this->pos[0], this->pos[1], this->pos[2]),
 			glScalef(0.2, 0.2, 0.2);
-		glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
-		glDisable(GL_LIGHTING);
-		glColor4fv(this->diff);
-		setColor(1, 0.1, 0.1);
-		glutSolidSphere(0.5, 30, 30);
-		glPopAttrib();
+			glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
+				glDisable(GL_LIGHTING);
+				glColor4fv(this->diff);
+				glutSolidSphere(0.5, 30, 30);
+			glPopAttrib();
 		glPopMatrix();
 	}
 }

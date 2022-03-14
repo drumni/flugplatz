@@ -21,6 +21,7 @@ void setMaterial(GLenum face, float red, float green, float blue, float alpha, f
 
 // Lichtquelle(n) setzen
 void setLights();
+void initLights();
 
 // Standardeinstellung für Farbe und Beleuchtung
 void setDefaultLightAndMaterial(GLboolean lightMode = false);
@@ -30,7 +31,7 @@ class cg_light
 {
 public:
 	// Konstructior, id zwischen 0-7 muss uebergeben werden
-	cg_light(int id);
+	cg_light(int num);
 
 	// wenn w=0 -> direktionales Licht, Richtung wird eingespeichert
 	// wenn w=1 -> Punktlichtquelle, Positon wird eingespeichert
