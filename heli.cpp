@@ -341,6 +341,8 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 	pos[0] += 0.001 * angle * cos(rotation * pi / 180);
 	pos[2] += 0.001 * angle * -sin(rotation * pi / 180);
 
+	pos[1] += 0.001 * enginePower;
+
 	std::cout << "; rotation: " << rotation;
 
 	// static GLfloat alpha = 0.00f;

@@ -312,6 +312,13 @@ void drawScene()
 		helicopter.angle -= helicopter.angleSpeed;
 	}
 
+	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
+		helicopter.enginePower += helicopter.engineAcc;
+	}
+	if(2 == key. specialKeyState(GLUT_KEY_CTRL_L)){
+		helicopter.enginePower -= helicopter.engineAcc;
+	}
+
 	
 
 	// hubschrauber();
