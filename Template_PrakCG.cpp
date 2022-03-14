@@ -239,14 +239,15 @@ void initTextures()
 
 #define num_objects 2				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = { "ground_concrete.obj", "ground_street.obj" };
+const char* objects_paths[num_objects] = { /*"ground_concrete.obj",*/ "ground_street.obj", "platform.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
 enum
 {
-	GROUND_OBJ1,
-	GROUND_OBJ2
+	//GROUND_OBJ1,
+	GROUND_OBJ2,
+	LANDSCAPE
 };
 
 void loadObjects()
@@ -269,8 +270,10 @@ void loadObjects()
 		}
 	// nun setzen wir die Materialeigenschaften f�r die Objekte
 
-	objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
-	objects[GROUND_OBJ2].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 128.0, 0.0);
+	//objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
+	objects[GROUND_OBJ2].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 32.0, 0.0);
+	objects[LANDSCAPE].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
+	objects[LANDSCAPE].setPosition(65, -0.001, -30);
 }
 
 void drawScene()
@@ -319,8 +322,12 @@ void drawScene()
 	}
 
 	// Stra�e bei Y=0 zeichnen
-	objects[GROUND_OBJ1].draw();
+	//objects[GROUND_OBJ1].draw();
 	objects[GROUND_OBJ2].draw();
+	glPushMatrix();
+	glRotatef(-90, 0, 1, 0);
+	objects[LANDSCAPE].draw();
+	glPopMatrix();
 
 	helicopter.animate(0.0f, 1.0f, 0.0f);
 
