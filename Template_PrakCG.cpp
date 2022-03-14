@@ -40,7 +40,7 @@ void initTextures();
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void setCamera(GLfloat pos[3], double xp, double yp, double zp)
+void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable)
 {
 	cg_mouse mouse;
 	cg_key key;
@@ -63,9 +63,18 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp)
 
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
 	The = 0.2 * cg_globState::cameraHelper[1] / cg_globState::screenSize[1] * M_PI;
-	x = radius * cos(Phi) * cos(The) + xp;
-	y = radius * sin(The) + yp;
-	z = radius * sin(Phi) * cos(The) + zp;
+	
+	if (radiusAdjustable) {
+	x = radius * cos(Phi) * cos(The);
+	y = radius * sin(The);
+	z = radius * sin(Phi) * cos(The);
+	}
+	else {
+		x = xp;
+		y = yp;
+		z = zp;
+	}
+	
 	cg_globState::cameraPos[0] = x;
 	cg_globState::cameraPos[1] = z;
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
@@ -269,7 +278,7 @@ void drawScene()
 	static heli helicopter;
 	cg_globState globState;
 	cg_key key;
-	GLfloat camerapos[] = { 0,0,0 };
+	GLfloat camerapos[] = { 0, 0, 0 };
 	static int camerastate = 1;
 
 	
@@ -287,13 +296,13 @@ void drawScene()
 	switch (camerastate){
 	case 1:
 		
-		setCamera(camerapos, 0, 0, 0);
+		setCamera(camerapos, 0, 0, 0, 1);
 		break;
 	case 2:
 
-		int xpc = 10 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
-		int zpc = 10 * sin(helicopter.rotation * M_PI / 180 + helicopter.pos[2]);
-		setCamera(helicopter.pos, xpc, helicopter.pos[1], zpc);
+		int xpc = 20 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
+		int zpc = 20 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
+		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5, zpc, 0);
 		break;
 	//default:
 		//std::cout << "Fehler bei Camerastatewahl";
