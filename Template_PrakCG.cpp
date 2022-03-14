@@ -294,12 +294,12 @@ void drawScene()
 	}
 
 	switch (camerastate){
+	//Fester Standpunkt
 	case 1:
-		
 		setCamera(camerapos, 0, 0, 0, 1);
 		break;
+	//Hinter dem Hubschrauber
 	case 2:
-
 		double xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
 		double zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
 		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
