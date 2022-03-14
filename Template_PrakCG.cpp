@@ -80,7 +80,7 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdj
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
-	gluLookAt(x, y, z, 0+ pos[0], 0+ pos[1], 0+ pos[2], 0, Oben, 0);
+	gluLookAt(x, y, z, pos[0], pos[1], pos[2], 0, Oben, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -300,9 +300,9 @@ void drawScene()
 		break;
 	case 2:
 
-		int xpc = 20 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
-		int zpc = 20 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
-		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5, zpc, 0);
+		double xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
+		double zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
+		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
 		break;
 	//default:
 		//std::cout << "Fehler bei Camerastatewahl";
