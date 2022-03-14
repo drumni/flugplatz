@@ -3,6 +3,8 @@
 #include "geometry.h"
 #include "light.h"
 #include "input.h"
+#include <math.h>
+#include <iostream>
 
 void kufe()
 {
@@ -328,38 +330,43 @@ void heck()
 
 void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 {
+	if (angle < -45) {
+		angle = -45;
+	}
+	if (angle > 45) {
+		angle = 45;
+	}
+	pos[0] += 0.001 * angle * cos(rotation);
+	pos[2] += 0.001 * angle * -sin(rotation);
 
-	glPushMatrix();
+	std::cout << "; rotation: " << rotation;
+
 	// static GLfloat alpha = 0.00f;
 	// alpha += 0.01f;
 	// heli::rotation = heli::rotation + alpha;
+		
+	//Heli zeichnen
+		glPushMatrix();
+			//glTranslatef(pos[0], pos[1], pos[2]);
+			glRotatef(rotation, 0, 1, 0);
+			glRotatef(-angle, 0, 0, 1);
+			// Kufen zeichnen
+			glPushMatrix();
+				setColor(0, 0.75, 0.75);
+				kufen();
+			glPopMatrix();
 
-	pos[0] += acc;
+			glPushMatrix();
+				rumpf();
+			glPopMatrix();
 
-	glPushMatrix();
-	glRotatef(rotation, 0, 1, 0);
-	// alpha = 0;
-	// alpha += 0.01;
-	glTranslatef(pos[0], y + pos[1], pos[2]);
-	// Kufen zeichnen
-	glPushMatrix();
-	setColor(0, 0.75, 0.75);
-	kufen();
-	glPopMatrix();
+			glPushMatrix();
+				glTranslatef(-0.8, 0.75, 0);
+				heck();
+			glPopMatrix();
 
-	glPushMatrix();
-	rumpf();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-0.8, 0.75, 0);
-	heck();
-	glPopMatrix();
-
-	glPushMatrix();
-	rotor();
-	glPopMatrix();
-
-	glPopMatrix();
-	glPopMatrix();
+			glPushMatrix();
+				rotor();
+			glPopMatrix();
+		glPopMatrix();
 }

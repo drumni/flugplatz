@@ -268,7 +268,9 @@ void drawScene()
 	static heli helicopter;
 
 	// Kamera setzen (spherische Mausnavigation)
-	setCamera(helicopter.pos);
+	//setCamera(helicopter.pos);
+	GLfloat camerapos[] = { 0,0,0 };
+	setCamera(camerapos);
 
 	// Zeichnet die Szene 1x im Weltkoordinatensystem
 
@@ -290,24 +292,24 @@ void drawScene()
 
 	helicopter.animate(0.0f, 1.0f, 0.0f);
 
-	if (1 == key.specialKeyState(GLUT_KEY_LEFT))
+	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 	{
 		helicopter.rotation += helicopter.rotationSpeed;
 	}
 
-	if (1 == key.specialKeyState(GLUT_KEY_RIGHT))
+	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
 	{
 		helicopter.rotation -= helicopter.rotationSpeed;
 	}
 
-	if (1 == key.specialKeyState(GLUT_KEY_UP))
+	if (2 == key.specialKeyState(GLUT_KEY_UP))
 	{
-		helicopter.acc = +0.01f;
+		helicopter.angle += helicopter.angleSpeed;
 	}
 
-	if (1 == key.specialKeyState(GLUT_KEY_DOWN))
+	if (2 == key.specialKeyState(GLUT_KEY_DOWN))
 	{
-		helicopter.acc = -0.01f;
+		helicopter.angle -= helicopter.angleSpeed;
 	}
 
 	

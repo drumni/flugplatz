@@ -20,9 +20,10 @@ public:
 	// TODO
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};
 
-	GLfloat rotation;
-	GLfloat rotationSpeed = 10.0f;
+	GLfloat rotation = 0.0f;
+	GLfloat rotationSpeed = 0.5f;
 
-	GLfloat acc = 0.0f;
+	GLfloat angle = 0.0f;
+	GLfloat angleSpeed = 0.2f;
 };
 
