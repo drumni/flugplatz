@@ -211,10 +211,10 @@ void displayFunc()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	Texturdefinition
-#define NUM_TEXTURES 1
+#define NUM_TEXTURES 2
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/plane.jpg" };
+	"./textures/container.bmp", "grass.bmp"};
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
@@ -236,9 +236,9 @@ void initTextures()
 	}
 }
 
-#define num_objects 3				  // wir haben 2 Wavefront Objekte
+#define num_objects 5				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = { /*"ground_concrete.obj",*/ "ground_street.obj", "platform.obj", "plane.obj"};
+const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -246,7 +246,9 @@ enum
 {
 	//GROUND_OBJ1,
 	GROUND_OBJ2,
-	LANDSCAPE,
+	BERGE,
+	H,
+	LANDEPLATZ,
 	PLANE
 };
 
@@ -271,10 +273,100 @@ void loadObjects()
 	// nun setzen wir die Materialeigenschaften f�r die Objekte
 
 	objects[GROUND_OBJ2].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 128.0f, 0.0);
-	objects[LANDSCAPE].setMaterial(0.17, 0.17, 0.15, 1.0, 0.0, 0.0, 0.0);
-	objects[LANDSCAPE].setPosition(65, -0.001, -30);
+	objects[BERGE].setMaterial(0.15, 0.15, 0.15, 1.0, 0.0, 0.0, 0.0);
+	objects[BERGE].setPosition(65, -0.001, -30);
+	objects[H].setMaterial(0.7, 0.7, 0.1, 1.0, 0.0, 0.0, 0.0);
+	objects[H].setPosition(65, -0.001, -30);
+	objects[LANDEPLATZ].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 0.0, 0.0);
+	objects[LANDEPLATZ].setPosition(65, -0.001, -30);
 	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 0.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
+}
+
+void drawUmgebung(int useTexturing, int useLinearFiltering, int useMipmapFiltering) {
+	// Stra�e bei Y=0 zeichnen
+	//objects[GROUND_OBJ1].draw();
+	
+	glPushMatrix();
+	glTranslatef(0, 0.01, 0);
+	objects[GROUND_OBJ2].draw();
+	glPopMatrix();
+	glPushMatrix();
+	glRotatef(-90, 0, 1, 0);
+	objects[BERGE].draw();
+	objects[H].draw();
+	objects[LANDEPLATZ].draw();
+	glPopMatrix();
+	
+
+	int currentTexture = 1;
+
+	// TODO U11.1: die Texturierung aktivieren, falls gewünscht
+	if (useTexturing)
+	{
+		glEnable(GL_TEXTURE_2D);
+	}
+	else {
+		glDisable(GL_TEXTURE_2D);
+	}
+
+	// TODO U11.4: die Texturfilter für Vergrößerung und Verkleinerung 
+	// entsprechend der interaktiven Auswahl festlegen
+
+	// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
+	if (useLinearFiltering)
+	{
+		textures[currentTexture].setMagFilter(useLinearFiltering);
+	}
+	else
+	{
+		textures[currentTexture].setMagFilter(GL_NEAREST);
+	}
+
+	// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
+	if (useLinearFiltering) {
+		textures[currentTexture].setMinFilter(useMipmapFiltering);
+	}
+	else {
+		textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+	}
+
+	textures[1].setEnvMode(GL_MODULATE);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();	// Modelview-Matrix
+		// Textur-Matrix
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+
+	glTranslatef(0.5, 0.5, 0);
+	//glRotatef(r,0,0,1);
+	glTranslatef(-0.5, -0.5, 0);
+
+	textures[0].bind();
+
+	setMaterial(GL_FRONT_AND_BACK, 1.0, 1.0, 1.0, 1.0, 0.9, 32.0, 0.0);	//Farbe der Leinwand
+	glBegin(GL_TRIANGLES);
+
+	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
+	glTexCoord2f(100, 0); glVertex3f(100, 0, -100);
+	glEdgeFlag(GL_FALSE);
+	glTexCoord2f(100, 100); glVertex3f(100, 0, 100);
+
+	// Dreieck 2
+	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
+	glEdgeFlag(GL_TRUE);
+	glTexCoord2f(100, 100); glVertex3f(100, 0, 100);
+	glTexCoord2f(0, 100); glVertex3f(-100, 0, 100);
+	glEnd();
+
+	glPopMatrix();  //Textur-Matrix
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix(); // Modelview-Matrix
+
+	// wir schalten die Texturierung generell wieder ab, 
+	// damit z.B. das KOS nicht betroffen ist
+	glDisable(GL_TEXTURE_2D);
 }
 
 void drawScene()
@@ -323,13 +415,7 @@ void drawScene()
 		globState.blendMode = !globState.blendMode; // Blending on/off
 	}
 
-	// Stra�e bei Y=0 zeichnen
-	//objects[GROUND_OBJ1].draw();
-	objects[GROUND_OBJ2].draw();
-	glPushMatrix();
-	glRotatef(-90, 0, 1, 0);
-	objects[LANDSCAPE].draw();
-	glPopMatrix();
+	drawUmgebung(1, 1, 1);
 	
 	static cg_image* _texture;
 	_texture = &textures[0];
