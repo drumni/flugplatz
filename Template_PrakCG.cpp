@@ -225,7 +225,7 @@ void initTextures()
 	for (int i = 0; i < NUM_TEXTURES; i++)
 	{
 		bool success = false;
-		success = textures[i].load(texture_files[i], false);
+		success = textures[i].load(texture_files[i], true);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -317,7 +317,7 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	}
 
 	// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
-	if (useLinearFiltering) {
+	if (useMipmapFiltering) {
 		textures[currentTexture].setMinFilter(GL_LINEAR);
 	}
 	else {
@@ -412,7 +412,7 @@ void drawScene()
 
 
 
-	drawUmgebung(0, 1);
+	drawUmgebung(0, 0);
 	static cg_image* _texture;
 	_texture = &textures[0];
 	
