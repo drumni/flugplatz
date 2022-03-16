@@ -172,13 +172,13 @@ void displayFunc()
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
-		float m_amb[4] = { 0.2, 0.2, 0.2, 1.0 };
+		/*float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
 		float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
 		float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
 		float m_shine = 32.0;
 		float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
 
-		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
+		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);*/
 
 		//setLights();
 
@@ -270,11 +270,10 @@ void loadObjects()
 		}
 	// nun setzen wir die Materialeigenschaften f�r die Objekte
 
-	//objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
 	objects[GROUND_OBJ2].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 128.0f, 0.0);
 	objects[LANDSCAPE].setMaterial(0.17, 0.17, 0.15, 1.0, 0.0, 0.0, 0.0);
 	objects[LANDSCAPE].setPosition(65, -0.001, -30);
-	objects[PLANE].setMaterial(0.4, 0.4, 0.2, 1.0, 0.0, 20.0f, 0.0);
+	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 0.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
 }
 

@@ -75,9 +75,9 @@ void setLights()
 
 	// Paramaters fuer Lichtquelle 0
 	GLfloat l_pos[4] = { 1.00f, 10.0f, 10.0f, 1.0f };
-	GLfloat l_amb[4] = { 0.2f, 0.2f, 0.2f, 0.4f };
-	GLfloat l_diff[4] = { 1.0f, 1.0f, 1.0f, 0.4f };
-	GLfloat l_spec[4] = { 1.0f, 1.0f, 1.0f, 0.4f };
+	GLfloat l_amb[4] = { 1,1, 1, 1 };
+	GLfloat l_diff[4] = { 0, 0, 0, 0 };
+	GLfloat l_spec[4] = { 0, 0, 0, 0 };
 	GLfloat l_spotdir[3] = { 0.0f, 0.0f, 1.0f };
 	GLfloat l_spotcutoff = 180.0f;
 	GLfloat l_spotexp = 0.0f;
@@ -258,14 +258,16 @@ void cg_light::markLightPosition() {
 	if (this->enabled) {
 		// eine kleine Kugel an die Position der Lichtquelle zeichnen
 		glPushMatrix();
-		glTranslatef(this->pos[0], this->pos[1], this->pos[2]),
-			glScalef(0.2, 0.2, 0.2);
-		glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
-		glDisable(GL_LIGHTING);
-		glColor4fv(this->diff);
-		glutSolidSphere(0.5, 30, 30);
-		glPopAttrib();
+			glTranslatef(this->pos[0], this->pos[1], this->pos[2]),
+				glScalef(0.2, 0.2, 0.2);
+			glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
+				glDisable(GL_LIGHTING);
+				glColor4fv(this->diff);
+				glutSolidSphere(1, 30, 30);
+
+			glPopAttrib();
 		glPopMatrix();
+
 	}
 }
 

@@ -2,9 +2,6 @@
 #include "geometry.h"
 #include "light.h"
 
-
-
-
 void mast(GLfloat h)
 {
 	setColor(0.2, 0.2, 0.2);
@@ -47,34 +44,33 @@ void anker() {
 	glPopMatrix();
 };
 
-void lichtquelle(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h) {
-
-	//glPushMatrix();
-	cg_light lamp(id);
-	lamp.setPosition(x, y + 5, z, 1);
-	glTranslatef(0, h, 0);
-	lamp.setDiffuse(.5f, .4f, .4f, 1.f);
-	lamp.enable();	lamp.draw();
-	//glPopMatrix();
-}
-
-
-void basis(GLfloat h) {
-	glPushMatrix();
-	deckel(h);
-	mast(h);
-	lampe(h);
-	glPopMatrix();
-}
-
 void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h)
 {
+	cg_light lamp(id);
+	lamp.setPosition(x, y + 5, z, 1);
+
+	lamp.setDiffuse(.7f, .5f, .5f, .1f);
+	lamp.setAmbient(.0f, .0f, .0f, 0.f);
+	lamp.setSpecular(.0f, .0f, .0f, 0.f);
+	lamp.enable();	lamp.draw();
+
 	glPushMatrix();
 	glTranslatef(x, y, z);
-	basis(h);
-	anker();
-	lichtquelle(id, x, y, z,h);
+	mast(h);
 	glPopMatrix();
 
-}
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	lampe(h);
+	glPopMatrix();
 
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	deckel(h);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	anker();
+	glPopMatrix();
+}
