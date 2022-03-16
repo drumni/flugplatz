@@ -343,15 +343,15 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	glBegin(GL_TRIANGLES);
 
 	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
-	glTexCoord2f(600, 0); glVertex3f(100, 0, -100);
+	glTexCoord2f(40, 0); glVertex3f(100, 0, -100);
 	glEdgeFlag(GL_FALSE);
-	glTexCoord2f(600, 600); glVertex3f(100, 0, 100);
+	glTexCoord2f(40, 40); glVertex3f(100, 0, 100);
 
 	// Dreieck 2
 	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
 	glEdgeFlag(GL_TRUE);
-	glTexCoord2f(600, 600); glVertex3f(100, 0, 100);
-	glTexCoord2f(0, 600); glVertex3f(-100, 0, 100);
+	glTexCoord2f(40, 40); glVertex3f(100, 0, 100);
+	glTexCoord2f(0, 40); glVertex3f(-100, 0, 100);
 	glEnd();
 
 	glPopMatrix();  //Textur-Matrix
@@ -359,8 +359,6 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix(); // Modelview-Matrix
 
-	// wir schalten die Texturierung generell wieder ab, 
-	// damit z.B. das KOS nicht betroffen ist
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -412,7 +410,7 @@ void drawScene()
 
 
 
-	drawUmgebung(0, 0);
+	drawUmgebung(1, 0);
 	static cg_image* _texture;
 	_texture = &textures[0];
 	
