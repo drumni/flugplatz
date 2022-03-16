@@ -75,6 +75,30 @@ void nase()
 	glRotatef(90, 0, 1, 0);
 	glScalef(0.2, 0.2, 0.2);
 	myCylinder();
+	
+	cg_light lamp(5);
+	lamp.setPosition(0, 1 , 0, 1);
+
+	lamp.setAttentuation(.5f, .0f, .0f);
+	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
+	lamp.setSpotlight(0.0f, -0.5f, 1.0f, 30.0f, 2.0f);
+	//lamp.setAmbient(.0f, .0f, .0f, 0.f);
+	//lamp.setSpecular(.9f, .3f, .3f, 1.f);
+
+	//lamp.setSpotlight(1, 1, 1, 20, 2);
+
+
+	lamp.enable();
+	lamp.draw();
+	/*lamp.markLightPosition();
+	cg_light spot(5);
+	spot.setSpotlight(.0f, -1.f, 0.f, 70, 1);
+	spot.setAttentuation(0.5f, .0f, .0f);
+	spot.enable();
+	spot.draw();
+	//spot.disable();*/
+	
+
 	glPopMatrix();
 
 	setColor(0.7, 0.7, 0.3);
