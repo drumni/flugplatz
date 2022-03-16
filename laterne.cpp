@@ -51,15 +51,13 @@ void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h)
 
 	lamp.setAttentuation( .5f, .0f, .0f );
 	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
+	//lamp.setDiffuse(.0f, .0f, .01f, 0.0f);
 	lamp.setSpotlight(0.0f, -1.0f, 0.0f, 70.0f, 1.0f);
-	//lamp.setAmbient(.0f, .0f, .0f, 0.f);
+	lamp.setAmbient(.2f, .1f, .1f, 1.f);
 	//lamp.setSpecular(.9f, .3f, .3f, 1.f);	
-
 	//lamp.setSpotlight(1, 1, 1, 20, 2);
-
-
 	lamp.enable();	lamp.draw();
-	lamp.markLightPosition();
+	//lamp.markLightPosition();
 
 
 	glPushMatrix();

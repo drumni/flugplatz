@@ -66,12 +66,12 @@ void setLights()
 	glEnable(GL_LIGHTING);
 
 	////// Parameter eines globalen Lichts
-	GLfloat g_amb[4] = { 0.05f, 0.05f, 0.2f, 0.0f };
+	GLfloat g_amb[4] = { 0.8f, 0.8f, 0.8f, 1.f };
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GLU_TRUE);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, g_amb);
 
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT0);
 	// Licht 0
 
 	// Paramaters fuer Lichtquelle 0
