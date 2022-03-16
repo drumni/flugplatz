@@ -214,7 +214,7 @@ void displayFunc()
 #define NUM_TEXTURES 1
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/plane.jpg" };
+	"./textures/container.bmp" };
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
@@ -330,7 +330,22 @@ void drawScene()
 	glRotatef(-90, 0, 1, 0);
 	objects[LANDSCAPE].draw();
 	glPopMatrix();
+	
+	static cg_image* _texture;
+	_texture = &textures[0];
+	
+	if (globState.textureMode) {
+		glEnable(GL_TEXTURE_2D);
+
+		_texture->setEnvMode(GL_DECAL);
+		_texture->bind();
+	}
+
 	objects[PLANE].draw();
+
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
 
 	helicopter.animate(0.0f, 1.0f, 0.0f);
 
@@ -369,11 +384,4 @@ void drawScene()
 		laterne(counter, -(30.0f * i) + 10, 0.0f, -9.5f, 4.7f);
 		counter++;
 	}
-
-	// hubschrauber();
-
-
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
-	glDisable(GL_CULL_FACE);
 }
