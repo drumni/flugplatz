@@ -172,15 +172,15 @@ void displayFunc()
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
-		/*float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
+		float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
 		float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
 		float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
 		float m_shine = 32.0;
 		float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
 
-		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);*/
+		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
 
-		//setLights();
+		setLights();
 
 		glEnable(GL_LIGHTING);
 	}

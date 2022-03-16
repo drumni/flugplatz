@@ -17,7 +17,7 @@ void lampe(GLfloat h)
 
 	glPushMatrix();
 	glTranslatef(0, h, 0);
-	setColor(1, 0.3, 0.1);
+	setColor(1, 0.85, 0.5);
 	glScalef(0.3, 0.25, 0.3);
 	mySphere();
 	glPopMatrix();
@@ -47,12 +47,20 @@ void anker() {
 void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h)
 {
 	cg_light lamp(id);
-	lamp.setPosition(x, y + 5, z, 1);
+	lamp.setPosition(x, y + h, z, 1);
 
-	lamp.setDiffuse(.7f, .5f, .5f, .1f);
-	lamp.setAmbient(.0f, .0f, .0f, 0.f);
-	lamp.setSpecular(.0f, .0f, .0f, 0.f);
+	lamp.setAttentuation( .5f, .0f, .0f );
+	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
+	lamp.setSpotlight(0.0f, -1.0f, 0.0f, 70.0f, 1.0f);
+	//lamp.setAmbient(.0f, .0f, .0f, 0.f);
+	//lamp.setSpecular(.9f, .3f, .3f, 1.f);	
+
+	//lamp.setSpotlight(1, 1, 1, 20, 2);
+
+
 	lamp.enable();	lamp.draw();
+	lamp.markLightPosition();
+
 
 	glPushMatrix();
 	glTranslatef(x, y, z);

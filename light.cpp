@@ -65,40 +65,41 @@ void setLights()
 {
 	glEnable(GL_LIGHTING);
 
-	// Parameter eines globalen Lichts
-	GLfloat g_amb[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	////// Parameter eines globalen Lichts
+	GLfloat g_amb[4] = { 0.05f, 0.05f, 0.2f, 0.0f };
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GLU_TRUE);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, g_amb);
 
+	glEnable(GL_LIGHT0);
 	// Licht 0
 
 	// Paramaters fuer Lichtquelle 0
-	GLfloat l_pos[4] = { 1.00f, 10.0f, 10.0f, 1.0f };
-	GLfloat l_amb[4] = { 1,1, 1, 1 };
-	GLfloat l_diff[4] = { 0, 0, 0, 0 };
-	GLfloat l_spec[4] = { 0, 0, 0, 0 };
-	GLfloat l_spotdir[3] = { 0.0f, 0.0f, 1.0f };
-	GLfloat l_spotcutoff = 180.0f;
-	GLfloat l_spotexp = 0.0f;
-	GLfloat l_att[3] = { 1.0f, 0.0f, 0.0f };
+	//GLfloat l_pos[4] = { 1.00f, 10.0f, 10.0f, 1.0f };
+	//GLfloat l_amb[4] = { 1,1, 1, 1 };
+	//GLfloat l_diff[4] = { 0, 0, 0, 0 };
+	//GLfloat l_spec[4] = { 0, 0, 0, 0 };
+	//GLfloat l_spotdir[3] = { 0.0f, 0.0f, 1.0f };
+	//GLfloat l_spotcutoff = 180.0f;
+	//GLfloat l_spotexp = 0.0f;
+	//GLfloat l_att[3] = { 1.0f, 0.0f, 0.0f };
 
-	// Position
-	glLightfv(GL_LIGHT0, GL_POSITION, l_pos);
-	// Farbe
-	glLightfv(GL_LIGHT0, GL_AMBIENT, l_amb);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, l_diff);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, l_spec);
-	// Spot
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l_spotdir);
-	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, l_spotcutoff);
-	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, l_spotexp);
-	// Abschwaechung
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, l_att[0]);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, l_att[1]);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, l_att[2]);
-	// Aktivieren
-	glEnable(GL_LIGHT0);
+	//// Position
+	//glLightfv(GL_LIGHT0, GL_POSITION, l_pos);
+	//// Farbe
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, l_amb);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, l_diff);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, l_spec);
+	//// Spot
+	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l_spotdir);
+	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, l_spotcutoff);
+	//glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, l_spotexp);
+	//// Abschwaechung
+	//glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, l_att[0]);
+	//glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, l_att[1]);
+	//glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, l_att[2]);
+	//// Aktivieren
+	//glEnable(GL_LIGHT0);
 
 	glEnable(GL_NORMALIZE);
 }
@@ -133,13 +134,20 @@ void setDefaultLightAndMaterial(GLboolean lightMode) {
 cg_light::cg_light(int num)
 {
 	this->id = GL_LIGHT0 + num;
-	setPosition(0.0f, 0.0f, 1.0f, 0.0f);
+	setPosition(0.0f, 0.0f, 0.0f, 0.0f);
 	setRotation(0.0f, 0.0f);
-	setAmbient(0.0f, 0.0f, 0.0f, 1.0f);
-	setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-	setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
-	setSpotlight(0.0f, -1.0f, 0.0f, 180.0f, 0.0f);
-	setAttentuation(1.0f, 0.0f, 0.0f);
+	setAmbient(0.0f, 0.0f, 0.0f, 0.0f);
+	setDiffuse(0.0f, 0.0f, 0.0f, 0.0f);
+	setSpecular(0.0f, 0.0f, 0.0f, 0.0f);
+	setSpotlight(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	setAttentuation(0.0f, 0.0f, 0.0f);
+	//setPosition(0.0f, 0.0f, 1.0f, 0.0f);
+	//setRotation(0.0f, 0.0f);
+	//setAmbient(0.0f, 0.0f, 0.0f, 1.0f);
+	//setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+	//setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+	//setSpotlight(0.0f, -1.0f, 0.0f, 180.0f, 0.0f);
+	//setAttentuation(1.0f, 0.0f, 0.0f);
 	this->disable();
 }
 
