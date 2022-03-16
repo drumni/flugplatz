@@ -21,12 +21,11 @@ public:
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};
 
 	GLfloat rotation = 0.0f;
-	GLfloat rotationSpeed = 0.5f;
-
 	GLfloat angle = 0.0f;
-	GLfloat angleSpeed = 0.2f;
-
 	GLfloat enginePower = 0.0f;
-	GLfloat engineAcc = 0.1f;
+
+	GLfloat rotationSpeed = 0.0001f;
+	GLfloat angleSpeed = 0.00002f;
+	GLfloat engineAcc = 0.00002f;
 };
 

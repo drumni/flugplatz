@@ -180,7 +180,7 @@ void displayFunc()
 
 		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
 
-		setLights();
+		//setLights();
 
 		glEnable(GL_LIGHTING);
 	}
@@ -271,10 +271,10 @@ void loadObjects()
 	// nun setzen wir die Materialeigenschaften f�r die Objekte
 
 	//objects[GROUND_OBJ1].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
-	objects[GROUND_OBJ2].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 128.0, 0.0);
-	objects[LANDSCAPE].setMaterial(0.4, 0.4, 0.4, 1.0, 0.0, 128.0, 0.0);
+	objects[GROUND_OBJ2].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 128.0f, 0.0);
+	objects[LANDSCAPE].setMaterial(0.17, 0.17, 0.15, 1.0, 0.0, 0.0, 0.0);
 	objects[LANDSCAPE].setPosition(65, -0.001, -30);
-	objects[PLANE].setMaterial(0.9, 0.9, 0.9, 1.0, 0.0, 128.0, 0.0);
+	objects[PLANE].setMaterial(0.4, 0.4, 0.2, 1.0, 0.0, 20.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
 }
 
@@ -283,6 +283,7 @@ void drawScene()
 	static heli helicopter;
 	cg_globState globState;
 	cg_key key;
+	cg_help help;
 	GLfloat camerapos[] = { 0, 0, 0 };
 	static int camerastate = 1;
 
@@ -336,29 +337,29 @@ void drawScene()
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 	{
-		helicopter.rotation += helicopter.rotationSpeed;
+		helicopter.rotation += helicopter.rotationSpeed * help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
 	{
-		helicopter.rotation -= helicopter.rotationSpeed;
+		helicopter.rotation -= helicopter.rotationSpeed * help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_UP))
 	{
-		helicopter.angle += helicopter.angleSpeed;
+		helicopter.angle += helicopter.angleSpeed * help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_DOWN))
 	{
-		helicopter.angle -= helicopter.angleSpeed;
+		helicopter.angle -= helicopter.angleSpeed * help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
-		helicopter.enginePower += helicopter.engineAcc;
+		helicopter.enginePower += helicopter.engineAcc * help.getFps();
 	}
 	if (2 == key.specialKeyState(GLUT_KEY_CTRL_L)) {
-		helicopter.enginePower -= helicopter.engineAcc;
+		helicopter.enginePower -= helicopter.engineAcc * help.getFps();
 	}
 
 	int counter = 1;

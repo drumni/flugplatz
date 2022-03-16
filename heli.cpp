@@ -5,6 +5,7 @@
 #include "input.h"
 #include <math.h>
 #include <iostream>
+#include "help.h"
 
 void kufe()
 {
@@ -163,7 +164,8 @@ void rotor()
 	glPopMatrix();
 
 	static double alpha = 0;
-	alpha += 0.1;
+	cg_help help;
+	alpha += 0.1 * help.getFps();
 
 	setColor(0.1, 0.1, 0.1);
 	// Hauptrotoren
@@ -337,6 +339,8 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 		angle = 45;
 	}
 
+	cg_help help;
+
 	double pi = 2 * acos(0.0);
 	pos[0] += 0.001 * angle * cos(rotation * pi / 180);
 	pos[2] += 0.001 * angle * -sin(rotation * pi / 180);
@@ -347,7 +351,7 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 
 	// static GLfloat alpha = 0.00f;
 	// alpha += 0.01f;
-	// heli::rotation = heli::rotation + alpha;
+	// heli::rotation = heli::rotation 6+ alpha;
 		
 	//Heli zeichnen
 		glPushMatrix();
