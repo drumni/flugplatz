@@ -324,6 +324,8 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 		textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
 	}
 
+	textures[currentTexture].setWrapMode(0);
+
 	textures[currentTexture].setEnvMode(GL_MODULATE);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();	// Modelview-Matrix
@@ -410,7 +412,7 @@ void drawScene()
 
 
 
-	drawUmgebung(1, 0);
+	drawUmgebung(0, 1);
 	static cg_image* _texture;
 	_texture = &textures[0];
 	
