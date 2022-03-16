@@ -211,11 +211,10 @@ void displayFunc()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	Texturdefinition
-#define NUM_TEXTURES 2
+#define NUM_TEXTURES 1
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/container.bmp",
-	"./textures/opengl.bmp" };
+	"./textures/plane.jpg" };
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
