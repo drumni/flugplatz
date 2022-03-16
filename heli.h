@@ -24,8 +24,8 @@ public:
 	GLfloat angle = 0.0f;
 	GLfloat enginePower = 0.0f;
 
-	GLfloat rotationSpeed = 0.0001f;
-	GLfloat angleSpeed = 0.00002f;
-	GLfloat engineAcc = 0.00002f;
+	GLfloat rotationSpeed = 60.0f;	
+	GLfloat angleSpeed = 60.0f;
+	GLfloat engineAcc = 3.0f;
 };
 

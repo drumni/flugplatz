@@ -352,29 +352,29 @@ void drawScene()
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 	{
-		helicopter.rotation += helicopter.rotationSpeed * help.getFps();
+		helicopter.rotation += helicopter.rotationSpeed / help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
 	{
-		helicopter.rotation -= helicopter.rotationSpeed * help.getFps();
+		helicopter.rotation -= helicopter.rotationSpeed / help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_UP))
 	{
-		helicopter.angle += helicopter.angleSpeed * help.getFps();
+		helicopter.angle += helicopter.angleSpeed / help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_DOWN))
 	{
-		helicopter.angle -= helicopter.angleSpeed * help.getFps();
+		helicopter.angle -= helicopter.angleSpeed / help.getFps();
 	}
 
 	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
-		helicopter.enginePower += helicopter.engineAcc * help.getFps();
+		helicopter.enginePower += helicopter.engineAcc / help.getFps();
 	}
 	if (2 == key.specialKeyState(GLUT_KEY_CTRL_L)) {
-		helicopter.enginePower -= helicopter.engineAcc * help.getFps();
+		helicopter.enginePower -= helicopter.engineAcc / help.getFps();
 	}
 
 	int counter = 1;
