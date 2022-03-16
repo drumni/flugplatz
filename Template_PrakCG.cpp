@@ -214,7 +214,7 @@ void displayFunc()
 #define NUM_TEXTURES 2
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/container.bmp", "grass.bmp"};
+	"./textures/container.bmp", "./textures/grass.bmp"};
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
@@ -283,7 +283,7 @@ void loadObjects()
 	objects[PLANE].setPosition(30, 0, 0);
 }
 
-void drawUmgebung(int useTexturing, int useLinearFiltering, int useMipmapFiltering) {
+void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	// Stra�e bei Y=0 zeichnen
 	//objects[GROUND_OBJ1].draw();
 	
@@ -301,14 +301,7 @@ void drawUmgebung(int useTexturing, int useLinearFiltering, int useMipmapFilteri
 
 	int currentTexture = 1;
 
-	// TODO U11.1: die Texturierung aktivieren, falls gewünscht
-	if (useTexturing)
-	{
-		glEnable(GL_TEXTURE_2D);
-	}
-	else {
-		glDisable(GL_TEXTURE_2D);
-	}
+	glEnable(GL_TEXTURE_2D);
 
 	// TODO U11.4: die Texturfilter für Vergrößerung und Verkleinerung 
 	// entsprechend der interaktiven Auswahl festlegen
@@ -316,7 +309,7 @@ void drawUmgebung(int useTexturing, int useLinearFiltering, int useMipmapFilteri
 	// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
 	if (useLinearFiltering)
 	{
-		textures[currentTexture].setMagFilter(useLinearFiltering);
+		textures[currentTexture].setMagFilter(GL_LINEAR);
 	}
 	else
 	{
@@ -325,13 +318,13 @@ void drawUmgebung(int useTexturing, int useLinearFiltering, int useMipmapFilteri
 
 	// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
 	if (useLinearFiltering) {
-		textures[currentTexture].setMinFilter(useMipmapFiltering);
+		textures[currentTexture].setMinFilter(GL_LINEAR);
 	}
 	else {
 		textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
 	}
 
-	textures[1].setEnvMode(GL_MODULATE);
+	textures[currentTexture].setEnvMode(GL_MODULATE);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();	// Modelview-Matrix
 		// Textur-Matrix
@@ -342,21 +335,21 @@ void drawUmgebung(int useTexturing, int useLinearFiltering, int useMipmapFilteri
 	//glRotatef(r,0,0,1);
 	glTranslatef(-0.5, -0.5, 0);
 
-	textures[0].bind();
+	textures[currentTexture].bind();
 
 	setMaterial(GL_FRONT_AND_BACK, 1.0, 1.0, 1.0, 1.0, 0.9, 32.0, 0.0);	//Farbe der Leinwand
 	glBegin(GL_TRIANGLES);
 
 	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
-	glTexCoord2f(100, 0); glVertex3f(100, 0, -100);
+	glTexCoord2f(600, 0); glVertex3f(100, 0, -100);
 	glEdgeFlag(GL_FALSE);
-	glTexCoord2f(100, 100); glVertex3f(100, 0, 100);
+	glTexCoord2f(600, 600); glVertex3f(100, 0, 100);
 
 	// Dreieck 2
 	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
 	glEdgeFlag(GL_TRUE);
-	glTexCoord2f(100, 100); glVertex3f(100, 0, 100);
-	glTexCoord2f(0, 100); glVertex3f(-100, 0, 100);
+	glTexCoord2f(600, 600); glVertex3f(100, 0, 100);
+	glTexCoord2f(0, 600); glVertex3f(-100, 0, 100);
 	glEnd();
 
 	glPopMatrix();  //Textur-Matrix
@@ -415,8 +408,9 @@ void drawScene()
 		globState.blendMode = !globState.blendMode; // Blending on/off
 	}
 
-	drawUmgebung(1, 1, 1);
-	
+
+
+	drawUmgebung(1, 0);
 	static cg_image* _texture;
 	_texture = &textures[0];
 	
