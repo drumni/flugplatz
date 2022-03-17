@@ -70,9 +70,9 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdj
 	z = radius * sin(Phi) * cos(The);
 	}
 	else {
-		x = xp;
-		y = yp;
-		z = zp;
+		x = radius * cos(Phi) * cos(The) + xp;
+		y = radius * sin(The) + yp;
+		z = radius * sin(Phi) * cos(The) + zp;
 	}
 	
 	cg_globState::cameraPos[0] = x;
@@ -213,7 +213,7 @@ void displayFunc()
 #define NUM_TEXTURES 2
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/plane.bmp", "./textures/grass.bmp"};
+	"./textures/plane.bmp", "./textures/grass2.bmp"};
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
@@ -237,7 +237,7 @@ void initTextures()
 
 #define num_objects 6				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden.obj"};
+const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -304,16 +304,29 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	glEnable(GL_TEXTURE_2D);
 	
 	// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
-	//textures[currentTexture].setMagFilter(GL_LINEAR);
-	textures[currentTexture].setMagFilter(GL_NEAREST);
+	textures[currentTexture].setMagFilter(GL_LINEAR);
+	//textures[currentTexture].setMagFilter(GL_NEAREST);
 	// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
 	//textures[currentTexture].setMinFilter(GL_LINEAR);
 	textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
 	textures[currentTexture].setEnvMode(GL_MODULATE);
 	textures[currentTexture].setWrapMode(GL_REPEAT);
 	textures[currentTexture].bind();
-
 	objects[BODEN].draw();
+	/*glPushMatrix();
+	glTranslatef(-50, 0, -50);
+	glScalef(2, 2, 2);
+	for (int i = 0; i < 50; i++) {
+		glPushMatrix();
+		for (int j = 0; j < 50; j++) {
+			glTranslatef(0, 0, 1);
+			objects[BODEN].draw();
+		}
+		glPopMatrix();
+		glTranslatef(1, 0, 0);
+	}*/
+	glPopMatrix();
+	
 
 	glDisable(GL_TEXTURE_2D);
 }
