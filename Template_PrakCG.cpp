@@ -80,7 +80,7 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdj
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
-	gluLookAt(x, y, z, 0+ pos[0], 0+ pos[1], 0+ pos[2], 0, Oben, 0);
+	gluLookAt(x, y, z, 0+ pos[0], 0 + pos[1], 0+ pos[2], 0, Oben, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,6 @@ void displayFunc()
 		float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
 
 		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
-
 		setLights();
 
 		glEnable(GL_LIGHTING);
@@ -236,9 +235,9 @@ void initTextures()
 	}
 }
 
-#define num_objects 5				  // wir haben 2 Wavefront Objekte
+#define num_objects 6				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj"};
+const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -249,7 +248,8 @@ enum
 	BERGE,
 	H,
 	LANDEPLATZ,
-	PLANE
+	PLANE,
+	BODEN
 };
 
 void loadObjects()
@@ -281,6 +281,7 @@ void loadObjects()
 	objects[LANDEPLATZ].setPosition(65, -0.001, -30);
 	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 0.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
+	objects[BODEN].setMaterial(1, 1, 1, 1, 0, 128, 0);
 }
 
 void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
@@ -300,64 +301,19 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	
 
 	int currentTexture = 1;
-
 	glEnable(GL_TEXTURE_2D);
-
-	// TODO U11.4: die Texturfilter für Vergrößerung und Verkleinerung 
-	// entsprechend der interaktiven Auswahl festlegen
-
+	
 	// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
-	if (useLinearFiltering)
-	{
-		textures[currentTexture].setMagFilter(GL_LINEAR);
-	}
-	else
-	{
-		textures[currentTexture].setMagFilter(GL_NEAREST);
-	}
-
+	//textures[currentTexture].setMagFilter(GL_LINEAR);
+	textures[currentTexture].setMagFilter(GL_NEAREST);
 	// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
-	if (useMipmapFiltering) {
-		textures[currentTexture].setMinFilter(GL_LINEAR);
-	}
-	else {
-		textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
-	}
-
-	textures[currentTexture].setWrapMode(0);
-
+	//textures[currentTexture].setMinFilter(GL_LINEAR);
+	textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
 	textures[currentTexture].setEnvMode(GL_MODULATE);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();	// Modelview-Matrix
-		// Textur-Matrix
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix();
-
-	glTranslatef(0.5, 0.5, 0);
-	//glRotatef(r,0,0,1);
-	glTranslatef(-0.5, -0.5, 0);
-
+	textures[currentTexture].setWrapMode(GL_REPEAT);
 	textures[currentTexture].bind();
 
-	setMaterial(GL_FRONT_AND_BACK, 1.0, 1.0, 1.0, 1.0, 0.9, 32.0, 0.0);	//Farbe der Leinwand
-	glBegin(GL_TRIANGLES);
-
-	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
-	glTexCoord2f(40, 0); glVertex3f(100, 0, -100);
-	glEdgeFlag(GL_FALSE);
-	glTexCoord2f(40, 40); glVertex3f(100, 0, 100);
-
-	// Dreieck 2
-	glTexCoord2f(0, 0); glVertex3f(-100, 0, -100);
-	glEdgeFlag(GL_TRUE);
-	glTexCoord2f(40, 40); glVertex3f(100, 0, 100);
-	glTexCoord2f(0, 40); glVertex3f(-100, 0, 100);
-	glEnd();
-
-	glPopMatrix();  //Textur-Matrix
-
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix(); // Modelview-Matrix
+	objects[BODEN].draw();
 
 	glDisable(GL_TEXTURE_2D);
 }
@@ -370,8 +326,6 @@ void drawScene()
 	cg_help help;
 	GLfloat camerapos[] = { 0, 0, 0 };
 	static int camerastate = 1;
-
-	
 
 	// Zeichnet die Szene 1x im Weltkoordinatensystem
 
@@ -407,8 +361,6 @@ void drawScene()
 	{
 		globState.blendMode = !globState.blendMode; // Blending on/off
 	}
-
-
 
 	drawUmgebung(1, 0);
 	static cg_image* _texture;

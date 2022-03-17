@@ -58,6 +58,7 @@ void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h)
 	//lamp.setSpotlight(1, 1, 1, 20, 2);
 	lamp.enable();	lamp.draw();
 	//lamp.markLightPosition();
+	lamp.disable();
 
 
 	glPushMatrix();
