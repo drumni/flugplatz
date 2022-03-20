@@ -92,6 +92,7 @@ void nase()
 
 	lamp.enable();
 	lamp.draw();
+	lamp.disable();
 	/*lamp.markLightPosition();
 	cg_light spot(5);
 	spot.setSpotlight(.0f, -1.f, 0.f, 70, 1);
