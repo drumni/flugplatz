@@ -7,6 +7,8 @@
 #include <iostream>
 #include "help.h"
 
+GLfloat light = 0.3;
+
 void kufe()
 {
 	// Hauptstange
@@ -50,7 +52,7 @@ void kufe()
 
 void kufen()
 {
-	setColor(0.4, 0.4, 0.4);
+	setColor(0.4 * light, 0.4 * light, 0.4 * light);
 	glPushMatrix();
 	glTranslatef(0, 0, 0.7);
 	kufe();
@@ -62,7 +64,7 @@ void kufen()
 
 void nase()
 {
-	setColor(0.5, 0.5, 0.5);
+	setColor(0.5 * light, 0.5 * light, 0.5 * light);
 	glPushMatrix();
 	glTranslatef(2, 0.75, 0);
 	glScalef(0.4, 0.3, 0.4);
@@ -75,13 +77,13 @@ void nase()
 	glRotatef(90, 0, 1, 0);
 	glScalef(0.2, 0.2, 0.2);
 	myCylinder();
-	
+
 	cg_light lamp(5);
-	lamp.setPosition(0, 1 , 0, 1);
+	lamp.setPosition(0, 1, 0, 1);
 
 	lamp.setAttentuation(.5f, .0f, .0f);
 	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
-	lamp.setSpotlight(0.0f, -0.5f, 1.0f, 30.0f, 2.0f);
+	lamp.setSpotlight(0.0f, -0.1f, 1.0f, 45.0f, 0.5f);
 	//lamp.setAmbient(.0f, .0f, .0f, 0.f);
 	//lamp.setSpecular(.9f, .3f, .3f, 1.f);
 
@@ -97,11 +99,11 @@ void nase()
 	spot.enable();
 	spot.draw();
 	//spot.disable();*/
-	
+
 
 	glPopMatrix();
 
-	setColor(0.7, 0.7, 0.3);
+	setColor(0.7 * light, 0.7 * light, 0.3 * light);
 	glPushMatrix();
 	glTranslatef(2.2, 0.75, 0);
 	glRotatef(-90, 0, 1, 0);
@@ -121,7 +123,7 @@ void rumpf()
 {
 	nase();
 
-	setColor(0.7, 0.7, 0.3);
+	setColor(0.7 * light, 0.7 * light, 0.3 * light);
 	// Unterbau Rumpf
 	glPushMatrix();
 	glTranslatef(1.6, 0.75, 0);
@@ -163,7 +165,7 @@ void rumpf()
 	glPopMatrix();
 
 	// Cockpit Scheibe
-	setColor(0.6, 0.8, 1);
+	setColor(0.6 * light, 0.8 * light, 1 * light);
 	glPushMatrix();
 	glTranslatef(1.25, 1.4, 0);
 	glScalef(0.75, 0.75, 0.7);
@@ -173,7 +175,7 @@ void rumpf()
 
 void rotor()
 {
-	setColor(0.3, 0.3, 0.3);
+	setColor(0.3 * light, 0.3 * light, 0.3 * light);
 	// Rotorenaufsatz
 	glPushMatrix();
 	glTranslatef(-0.3, 1.875, -0.25);
@@ -191,7 +193,7 @@ void rotor()
 	cg_help help;
 	alpha += 0.1 * help.getFps();
 
-	setColor(0.1, 0.1, 0.1);
+	setColor(0.1 * light, 0.1 * light, 0.1 * light);
 	// Hauptrotoren
 	glPushMatrix();
 	glTranslatef(-0.15, 2.35, 0);
@@ -235,14 +237,14 @@ void rotor()
 	// Heckrotor
 	glPushMatrix();
 	glTranslatef(-4.2, 1.55, 0);
-	setColor(0.3, 0.3, 0.3);
+	setColor(0.3 * light, 0.3 * light, 0.3 * light);
 	glPushMatrix();
 	glScalef(0.2, 0.2, 0.25);
 	glRotatef(180, 0, 1, 0);
 	myCylinder();
 	glPopMatrix();
 
-	setColor(0.1, 0.1, 0.1);
+	setColor(0.1 * light, 0.1 * light, 0.1 * light);
 	glPushMatrix();
 	glTranslatef(0, 0, -0.2);
 	glRotatef(alpha, 0, 0, 1);
@@ -285,7 +287,7 @@ void rotor()
 
 void heck()
 {
-	setColor(0.7, 0.7, 0.3);
+	setColor(0.7 * light, 0.7 * light, 0.3 * light);
 	//�bergang unten
 	glPushMatrix();
 	glScalef(0.5, 0.5, 0.6);
@@ -329,7 +331,7 @@ void heck()
 	glPopMatrix();
 
 	// heck
-	setColor(0.7, 0.7, 0.3);
+	setColor(0.7 * light, 0.7 * light, 0.3 * light);
 	glPushMatrix();
 	glTranslatef(0, 0.8, 0);
 	glScalef(3, 0.4, 0.28);
@@ -376,29 +378,39 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 	// static GLfloat alpha = 0.00f;
 	// alpha += 0.01f;
 	// heli::rotation = heli::rotation 6+ alpha;
-		
+
 	//Heli zeichnen
-		glPushMatrix();
-			glTranslatef(pos[0], pos[1], pos[2]);
-			glRotatef(rotation, 0, 1, 0);
-			glRotatef(-angle, 0, 0, 1);
-			// Kufen zeichnen
-			glPushMatrix();
-				setColor(0, 0.75, 0.75);
-				kufen();
-			glPopMatrix();
+	glPushMatrix();
 
-			glPushMatrix();
-				rumpf();
-			glPopMatrix();
 
-			glPushMatrix();
-				glTranslatef(-0.8, 0.75, 0);
-				heck();
-			glPopMatrix();
+	/*GLfloat diffuse[4] = { 0.2f,  0.2f,  0.2f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
 
-			glPushMatrix();
-				rotor();
-			glPopMatrix();
-		glPopMatrix();
+	GLfloat shininess[4] = { 0.0f,  0.0f,  0.0f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);*/
+
+
+
+	glTranslatef(pos[0], pos[1], pos[2]);
+	glRotatef(rotation, 0, 1, 0);
+	glRotatef(-angle, 0, 0, 1);
+	// Kufen zeichnen
+	glPushMatrix();
+	setColor(0 * light, 0.75 * light, 0.75 * light);
+	kufen();
+	glPopMatrix();
+
+	glPushMatrix();
+	rumpf();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-0.8, 0.75, 0);
+	heck();
+	glPopMatrix();
+
+	glPushMatrix();
+	rotor();
+	glPopMatrix();
+	glPopMatrix();
 }
