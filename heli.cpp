@@ -390,7 +390,8 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 	GLfloat shininess[4] = { 0.0f,  0.0f,  0.0f, 1.0f };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);*/
 
-
+	if (pos[1] < 0)
+		pos[1] = 0;
 
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glRotatef(rotation, 0, 1, 0);
