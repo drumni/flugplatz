@@ -283,7 +283,7 @@ void loadObjects()
 	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 1.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
 	objects[BODEN].setMaterial(1, 1, 1, 1.0, 0, 128, 0);
-	objects[GLASS].setMaterial(0.0, 0.0, 1, 0.5, 1, 128, 0);
+	objects[GLASS].setMaterial(0.3, 0.3, 1, 0.8, 0, 128, 0.1);
 }
 
 void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
@@ -398,12 +398,12 @@ void drawScene()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
-
 	glPushMatrix();
-	glTranslatef(1.25, 1.4, 0.0);
+	
 	glTranslatef(helicopter.pos[0], helicopter.pos[1], helicopter.pos[2]);
 	glRotatef(helicopter.rotation, 0, 1, 0);
 	glRotatef(-helicopter.angle, 0, 0, 1);
+	glTranslatef(1.25, 1.4, 0.0);
 	objects[GLASS].draw();
 	glPopMatrix();
 
