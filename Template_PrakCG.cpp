@@ -283,6 +283,7 @@ void loadObjects()
 	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 0.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
 	objects[BODEN].setMaterial(1, 1, 1, 1, 0, 128, 0);
+	objects[GLASS].setMaterial(0.6, 0.8, 1, 0.5, 0, 128, 0);
 }
 
 void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
@@ -390,11 +391,11 @@ void drawScene()
 	objects[PLANE].draw();
 
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 
 	helicopter.animate(0.0f, 1.0f, 0.0f);
-	objects[GLASS].setMaterial(0.6, 0.8, 1, 0.5, 0, 128, 0);
+	
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	objects[GLASS].draw();
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
@@ -432,4 +433,6 @@ void drawScene()
 		laterne(counter, -(30.0f * i) + 10, 0.0f, -9.5f, 4.7f);
 		counter++;
 	}
+
+	glDisable(GL_BLEND);
 }
