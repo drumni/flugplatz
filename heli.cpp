@@ -84,23 +84,10 @@ void nase()
 	lamp.setAttentuation(.5f, .0f, .0f);
 	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
 	lamp.setSpotlight(0.0f, -0.1f, 1.0f, 45.0f, 0.5f);
-	//lamp.setAmbient(.0f, .0f, .0f, 0.f);
-	//lamp.setSpecular(.9f, .3f, .3f, 1.f);
-
-	//lamp.setSpotlight(1, 1, 1, 20, 2);
-
 
 	lamp.enable();
 	lamp.draw();
 	lamp.disable();
-	/*lamp.markLightPosition();
-	cg_light spot(5);
-	spot.setSpotlight(.0f, -1.f, 0.f, 70, 1);
-	spot.setAttentuation(0.5f, .0f, .0f);
-	spot.enable();
-	spot.draw();
-	//spot.disable();*/
-
 
 	glPopMatrix();
 
@@ -166,12 +153,12 @@ void rumpf()
 	glPopMatrix();
 
 	// Cockpit Scheibe
-	setColor(0.6 * light, 0.8 * light, 1 * light);
+	/*setColor(0.6 * light, 0.8 * light, 1 * light);
 	glPushMatrix();
 	glTranslatef(1.25, 1.4, 0);
 	glScalef(0.75, 0.75, 0.7);
 	mySphere();
-	glPopMatrix();
+	glPopMatrix();*/
 }
 
 void rotor()

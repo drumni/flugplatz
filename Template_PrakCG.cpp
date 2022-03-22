@@ -235,9 +235,9 @@ void initTextures()
 	}
 }
 
-#define num_objects 6				  // wir haben 2 Wavefront Objekte
+#define num_objects 7				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj"};
+const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj", "glass.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -249,7 +249,8 @@ enum
 	H,
 	LANDEPLATZ,
 	PLANE,
-	BODEN
+	BODEN,
+	GLASS
 };
 
 void loadObjects()
@@ -393,6 +394,8 @@ void drawScene()
 	glDisable(GL_CULL_FACE);
 
 	helicopter.animate(0.0f, 1.0f, 0.0f);
+	objects[GLASS].setMaterial(0.6, 0.8, 1, 0.5, 0, 128, 0);
+	objects[GLASS].draw();
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 	{
