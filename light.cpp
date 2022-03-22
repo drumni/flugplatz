@@ -1,4 +1,5 @@
 #include "light.h"
+#include "math.h"
 
 // Farbe setzen fuer Farb- und Beleuchtungsmodus
 void setColor(GLfloat r, GLfloat g, GLfloat b) {
@@ -66,10 +67,12 @@ void setLights()
 	glEnable(GL_LIGHTING);
 
 	////// Parameter eines globalen Lichts
-	GLfloat g_amb[4] = { 0.8f, 0.8f, 0.8f, 1.f };
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GLU_TRUE);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, g_amb);
+	
+	cg_light moonlight(0);
+	moonlight.setPosition(10, 10, 10, 1);
+	moonlight.setDiffuse(0.2f, 0.2f, 0.7f, 1.0f);
 
 	//glEnable(GL_LIGHT0);
 	// Licht 0
@@ -266,14 +269,14 @@ void cg_light::markLightPosition() {
 	if (this->enabled) {
 		// eine kleine Kugel an die Position der Lichtquelle zeichnen
 		glPushMatrix();
-			glTranslatef(this->pos[0], this->pos[1], this->pos[2]),
-				glScalef(0.2, 0.2, 0.2);
-			glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
-				glDisable(GL_LIGHTING);
-				glColor4fv(this->diff);
-				glutSolidSphere(1, 30, 30);
+		glTranslatef(this->pos[0], this->pos[1], this->pos[2]),
+			glScalef(0.2, 0.2, 0.2);
+		glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT);
+		glDisable(GL_LIGHTING);
+		glColor4fv(this->diff);
+		glutSolidSphere(1, 30, 30);
 
-			glPopAttrib();
+		glPopAttrib();
 		glPopMatrix();
 
 	}

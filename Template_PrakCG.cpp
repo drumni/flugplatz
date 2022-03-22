@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include <cstdlib>
 
 #ifdef _WIN32
 #include "Include/glew.h"
@@ -63,24 +64,24 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdj
 
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
 	The = 0.2 * cg_globState::cameraHelper[1] / cg_globState::screenSize[1] * M_PI;
-	
+
 	if (radiusAdjustable) {
-	x = radius * cos(Phi) * cos(The);
-	y = radius * sin(The);
-	z = radius * sin(Phi) * cos(The);
+		x = radius * cos(Phi) * cos(The);
+		y = radius * sin(The);
+		z = radius * sin(Phi) * cos(The);
 	}
 	else {
 		x = radius * cos(Phi) * cos(The) + xp;
 		y = radius * sin(The) + yp;
 		z = radius * sin(Phi) * cos(The) + zp;
 	}
-	
+
 	cg_globState::cameraPos[0] = x;
 	cg_globState::cameraPos[1] = z;
 	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
-	gluLookAt(x, y, z, 0+ pos[0], 0 + pos[1], 0+ pos[2], 0, Oben, 0);
+	gluLookAt(x, y, z, 0 + pos[0], 0 + pos[1], 0 + pos[2], 0, Oben, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -172,13 +173,13 @@ void displayFunc()
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
-		float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
-		float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
-		float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
-		float m_shine = 32.0;
-		float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
+		//float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
+		//float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
+		//float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
+		//float m_shine = 32.0;
+		//float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
 
-		setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
+		//setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
 		setLights();
 
 		glEnable(GL_LIGHTING);
@@ -213,7 +214,7 @@ void displayFunc()
 #define NUM_TEXTURES 2
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/planetexture.bmp", "./textures/grass2.bmp"};
+	"./textures/planetexture.bmp", "./textures/grass2.bmp" };
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
@@ -237,7 +238,7 @@ void initTextures()
 
 #define num_objects 6				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj"};
+const char* objects_paths[num_objects] = { "ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj" };
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -287,7 +288,7 @@ void loadObjects()
 void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	// Stra�e bei Y=0 zeichnen
 	//objects[GROUND_OBJ1].draw();
-	
+
 	glPushMatrix();
 	glTranslatef(0, 0.01, 0);
 	objects[GROUND_OBJ2].draw();
@@ -298,11 +299,11 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	objects[H].draw();
 	objects[LANDEPLATZ].draw();
 	glPopMatrix();
-	
+
 
 	int currentTexture = 1;
 	glEnable(GL_TEXTURE_2D);
-	
+
 	// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
 	textures[currentTexture].setMagFilter(GL_LINEAR);
 	//textures[currentTexture].setMagFilter(GL_NEAREST);
@@ -326,13 +327,71 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 		glTranslatef(1, 0, 0);
 	}*/
 	glPopMatrix();
-	
+
 
 	glDisable(GL_TEXTURE_2D);
 }
 
+
+void setColorByTemp(GLfloat temp, GLfloat(*color)[4]) {
+	//GLfloat color[3];
+
+	if (temp <= 66) {
+		(*color)[2] = temp - 10;
+		(*color)[2] = 138.5177312231 * expl((*color)[2]) - 305.0447927307;
+		if ((*color)[2] < 0) (*color)[2] = 0;
+		if ((*color)[2] > 255) (*color)[2] = 255;
+
+		(*color)[0] = 255;
+
+		(*color)[1] = temp;
+		(*color)[1] = 99.4708025861 * expl((*color)[1]) - 161.1195681661;
+		if ((*color)[1] < 0) (*color)[1] = 0;
+		if ((*color)[1] > 255) (*color)[1] = 255;
+		if (temp <= 19) (*color)[2] = 0;
+	}
+	else {
+
+		(*color)[0] = temp - 60;
+		(*color)[1] = temp - 60;
+
+		(*color)[0] = 329.698727446 * powl((*color)[0], -0.1332047592);
+		(*color)[1] = 288.1221695283 * powl((*color)[1], -0.0755148492);
+
+		if ((*color)[0] < 0) (*color)[0] = 0;
+		if ((*color)[0] > 255) (*color)[0] = 255;
+
+		if ((*color)[1] < 0) (*color)[1] = 0;
+		if ((*color)[1] > 255) (*color)[1] = 255;
+
+		(*color)[2] = 255;
+	}
+
+
+	(*color)[0] = (*color)[0] / 255;
+	(*color)[1] = (*color)[1] / 255;
+	(*color)[2] = (*color)[2] / 255;
+	(*color)[3] = 1.0f;
+}
+
+
+static GLfloat temp = 100.0f; // Kelvin
 void drawScene()
 {
+	temp += ((rand() % 10000) / 1000);
+	temp -= ((rand() % 10000) / 1000);
+	if (temp <= 0)
+		temp = 10;
+	if (temp > 1000)
+		temp = 1000;
+
+	std::cout << temp << '\n';
+
+	GLfloat g_amb[4] = { 255.0f, 1.0f,  1.0f, 0.3f };
+	setColorByTemp(temp, &g_amb);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, g_amb);
+
+
 	static heli helicopter;
 	cg_globState globState;
 	cg_key key;
@@ -350,19 +409,19 @@ void drawScene()
 		camerastate = 2;
 	}
 
-	switch (camerastate){
-	//Fester Standpunkt
+	switch (camerastate) {
+		//Fester Standpunkt
 	case 1:
 		setCamera(camerapos, 0, 0, 0, 1);
 		break;
-	//Hinter dem Hubschrauber
+		//Hinter dem Hubschrauber
 	case 2:
 		double xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
 		double zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
 		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
 		break;
-	//default:
-		//std::cout << "Fehler bei Camerastatewahl";
+		//default:
+			//std::cout << "Fehler bei Camerastatewahl";
 	}
 
 
@@ -378,7 +437,7 @@ void drawScene()
 	drawUmgebung(1, 0);
 	static cg_image* _texture;
 	_texture = &textures[0];
-	
+
 	if (globState.textureMode) {
 		glEnable(GL_TEXTURE_2D);
 
