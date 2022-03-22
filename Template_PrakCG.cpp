@@ -315,18 +315,6 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	textures[currentTexture].setWrapMode(GL_REPEAT);
 	textures[currentTexture].bind();
 	objects[BODEN].draw();
-	/*glPushMatrix();
-	glTranslatef(-50, 0, -50);
-	glScalef(2, 2, 2);
-	for (int i = 0; i < 50; i++) {
-		glPushMatrix();
-		for (int j = 0; j < 50; j++) {
-			glTranslatef(0, 0, 1);
-			objects[BODEN].draw();
-		}
-		glPopMatrix();
-		glTranslatef(1, 0, 0);
-	}*/
 	glPopMatrix();
 	
 

@@ -346,11 +346,31 @@ void heck()
 
 void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 {
-	if (angle < -45) {
-		angle = -45;
+	if (angle < -30) {
+		angle = -30;
 	}
-	if (angle > 45) {
-		angle = 45;
+	if (angle > 30) {
+		angle = 30;
+	}
+
+	if (enginePower < 0) {
+		if (angle < 0.5 && angle > 0.5) {
+			angle = 0;
+		}
+		else {
+			if (angle < 0) {
+				angle += 1 / 500;
+			}
+			else {
+				angle -= 1 / 500;
+			}
+
+		}
+	}
+	else {
+		if (pos[1] < 2) {
+			angle = 0;
+		}
 	}
 
 	cg_help help;
