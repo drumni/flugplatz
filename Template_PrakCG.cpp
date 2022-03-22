@@ -213,7 +213,7 @@ void displayFunc()
 #define NUM_TEXTURES 2
 
 const char* texture_files[NUM_TEXTURES] = {
-	"./textures/plane.bmp", "./textures/grass2.bmp"};
+	"./textures/planetexture.bmp", "./textures/grass2.bmp"};
 
 cg_image textures[NUM_TEXTURES]; // die GL Texturobjekte
 
