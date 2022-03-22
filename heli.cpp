@@ -344,7 +344,7 @@ void heck()
 	glPopMatrix();
 }
 
-void heli::animate(GLfloat x, GLfloat y, GLfloat z)
+void heli::animate(GLfloat x, GLfloat y, GLfloat z, int fps)
 {
 	if (angle < -30) {
 		angle = -30;
@@ -353,22 +353,21 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 		angle = 30;
 	}
 
-	if (enginePower < 0) {
-		if (angle < 0.5 && angle > 0.5) {
+	if (enginePower <= 0 && pos[1] < 3) {
+		if (angle < 0.5 && angle > -0.5) {
 			angle = 0;
 		}
 		else {
 			if (angle < 0) {
-				angle += 1 / 500;
+				angle += 50.0/ fps;
 			}
 			else {
-				angle -= 1 / 500;
+				angle -= 50.0 / fps;
 			}
-
 		}
 	}
 	else {
-		if (pos[1] < 2) {
+		if (pos[1] < 3) {
 			angle = 0;
 		}
 	}
@@ -397,8 +396,10 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z)
 	GLfloat shininess[4] = { 0.0f,  0.0f,  0.0f, 1.0f };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);*/
 
-	if (pos[1] < 0)
+	if (pos[1] < 0) {
 		pos[1] = 0;
+		enginePower = 0;
+	}
 
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glRotatef(rotation, 0, 1, 0);

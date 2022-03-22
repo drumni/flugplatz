@@ -15,7 +15,7 @@
 class heli
 {
 public:
-	void animate(GLfloat x, GLfloat y, GLfloat z);
+	void animate(GLfloat x, GLfloat y, GLfloat z, int fps);
 	
 	// TODO
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};

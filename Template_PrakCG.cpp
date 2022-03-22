@@ -440,7 +440,7 @@ void drawScene()
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 
-	helicopter.animate(0.0f, 1.0f, 0.0f);
+	helicopter.animate(0.0f, 1.0f, 0.0f, help.getFps());
 	if (globState.blendMode) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -464,12 +464,12 @@ void drawScene()
 		helicopter.rotation -= helicopter.rotationSpeed / help.getFps();
 	}
 
-	if (2 == key.specialKeyState(GLUT_KEY_UP))
+	if (2 == key.specialKeyState(GLUT_KEY_UP) && helicopter.pos[1] > 3)
 	{
 		helicopter.angle += helicopter.angleSpeed / help.getFps();
 	}
 
-	if (2 == key.specialKeyState(GLUT_KEY_DOWN))
+	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && helicopter.pos[1] > 3)
 	{
 		helicopter.angle -= helicopter.angleSpeed / help.getFps();
 	}
