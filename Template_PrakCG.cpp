@@ -236,9 +236,9 @@ void initTextures()
 	}
 }
 
-#define num_objects 6				  // wir haben 2 Wavefront Objekte
+#define num_objects 7				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = { "ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj" };
+const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj", "glass.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -250,7 +250,8 @@ enum
 	H,
 	LANDEPLATZ,
 	PLANE,
-	BODEN
+	BODEN,
+	GLASS
 };
 
 void loadObjects()
@@ -280,9 +281,10 @@ void loadObjects()
 	objects[H].setPosition(65, -0.001, -30);
 	objects[LANDEPLATZ].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 0.0, 0.0);
 	objects[LANDEPLATZ].setPosition(65, -0.001, -30);
-	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 0.0, 0.0, 0.0f, 0.0);
+	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 1.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
-	objects[BODEN].setMaterial(1, 1, 1, 1, 0, 128, 0);
+	objects[BODEN].setMaterial(1, 1, 1, 1.0, 0, 128, 0);
+	objects[GLASS].setMaterial(0.3, 0.3, 1, 0.8, 0, 128, 0.1);
 }
 
 void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
@@ -314,20 +316,8 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	textures[currentTexture].setWrapMode(GL_REPEAT);
 	textures[currentTexture].bind();
 	objects[BODEN].draw();
-	/*glPushMatrix();
-	glTranslatef(-50, 0, -50);
-	glScalef(2, 2, 2);
-	for (int i = 0; i < 50; i++) {
-		glPushMatrix();
-		for (int j = 0; j < 50; j++) {
-			glTranslatef(0, 0, 1);
-			objects[BODEN].draw();
-		}
-		glPopMatrix();
-		glTranslatef(1, 0, 0);
-	}*/
 	glPopMatrix();
-
+	
 
 	glDisable(GL_TEXTURE_2D);
 }
@@ -444,7 +434,6 @@ void drawScene()
 		_texture->setEnvMode(GL_DECAL);
 		_texture->bind();
 	}
-
 	objects[PLANE].draw();
 
 	glDisable(GL_TEXTURE_2D);
@@ -452,6 +441,18 @@ void drawScene()
 	glDisable(GL_CULL_FACE);
 
 	helicopter.animate(0.0f, 1.0f, 0.0f);
+	if (globState.blendMode) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	glPushMatrix();
+	
+	glTranslatef(helicopter.pos[0], helicopter.pos[1], helicopter.pos[2]);
+	glRotatef(helicopter.rotation, 0, 1, 0);
+	glRotatef(-helicopter.angle, 0, 0, 1);
+	glTranslatef(1.25, 1.4, 0.0);
+	objects[GLASS].draw();
+	glPopMatrix();
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 	{
