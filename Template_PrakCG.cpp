@@ -236,9 +236,9 @@ void initTextures()
 	}
 }
 
-#define num_objects 7				  // wir haben 2 Wavefront Objekte
+#define num_objects 9				  // wir haben 2 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
-const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj", "glass.obj"};
+const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj", "glass.obj", "Windrad.obj", "Fluegel.obj"};
 
 cg_object3D objects[num_objects];
 // Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
@@ -251,7 +251,9 @@ enum
 	LANDEPLATZ,
 	PLANE,
 	BODEN,
-	GLASS
+	GLASS,
+	WINDRAD,
+	FLUEGEL
 };
 
 void loadObjects()
@@ -285,6 +287,10 @@ void loadObjects()
 	objects[PLANE].setPosition(30, 0, 0);
 	objects[BODEN].setMaterial(1, 1, 1, 1.0, 0, 128, 0);
 	objects[GLASS].setMaterial(0.3, 0.3, 1, 0.8, 0, 128, 0.1);
+	objects[WINDRAD].setMaterial(0.9, 0.9, 0.9, 1, 0, 128, 0);
+	objects[WINDRAD].setPosition(-60, 0, -60);
+	objects[FLUEGEL].setMaterial(0.9, 0.9, 0.9, 1, 0, 128, 0);
+	objects[FLUEGEL].setPosition(-60, 0, -60);
 }
 
 void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
@@ -301,6 +307,8 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	objects[H].draw();
 	objects[LANDEPLATZ].draw();
 	glPopMatrix();
+	objects[WINDRAD].draw();
+	objects[FLUEGEL].draw();
 
 
 	int currentTexture = 1;
@@ -318,6 +326,15 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	objects[BODEN].draw();
 	glPopMatrix();
 	
+
+	//licht geht noch nicht// soll auf dem Windrad stehen
+	static cg_light point(5);
+	point.setPosition(-60.0f, 23.802f, -62.7296f, 1.0f);
+	point.setAmbient(0.1f, 0.1f, 0.1f, 1.0f);
+	point.setDiffuse(0.9f, 0.0f, 0.0f, 1.0f);
+	point.setSpecular(0.9f, 0.9f, 0.0f, 1.0f);
+	point.enable();
+	point.draw();
 
 	glDisable(GL_TEXTURE_2D);
 }
