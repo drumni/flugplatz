@@ -327,7 +327,7 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	glPopMatrix();
 	
 
-	//licht geht noch nicht// soll auf dem Windrad stehen
+	//licht geht noch nicht// soll auf dem Windrad stehen 
 	static cg_light point(5);
 	point.setPosition(-60.0f, 23.802f, -62.7296f, 1.0f);
 	point.setAmbient(0.1f, 0.1f, 0.1f, 1.0f);
