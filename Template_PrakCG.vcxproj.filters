@@ -51,6 +51,9 @@
     <ClCompile Include="laterne.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="plane.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="help.h">
@@ -81,6 +84,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="laterne.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="plane.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

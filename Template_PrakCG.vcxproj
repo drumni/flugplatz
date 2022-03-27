@@ -120,6 +120,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="laterne.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="plane.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Template_PrakCG.cpp" />
     <ClCompile Include="vector.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="laterne.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="plane.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="wavefront.h" />
     <ClInclude Include="window.h" />

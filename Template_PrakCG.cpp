@@ -44,7 +44,7 @@ void initTextures();
 void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable)
 {
 	cg_mouse mouse;
-	cg_key key;
+	//cg_key key;
 	// Ansichtstransformationen setzen,
 	// SetCamera() zum Beginn der Zeichenfunktion aufrufen
 	double x, y, z, The, Phi;
