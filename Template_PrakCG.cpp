@@ -390,6 +390,7 @@ void drawScene()
 	GLfloat directionalLightDiffuse[4] = { 1.0f, 1.0f,  1.0f, 0.3f };
 
 	cg_light directionalLight(0);
+	GLfloat global_light_power = 0.25f;
 	static GLfloat global_temp = 100.0f; // Kelvin
 	global_temp += (10000 / help.getFps());
 	if (global_temp > 100000)
@@ -397,7 +398,7 @@ void drawScene()
 
 	setColorByTemp(global_temp, &directionalLightDiffuse);
 	directionalLight.setPosition(1, 10, 10, 0);
-	directionalLight.setDiffuse(directionalLightDiffuse[0], directionalLightDiffuse[1], directionalLightDiffuse[2], directionalLightDiffuse[3]);
+	directionalLight.setDiffuse(directionalLightDiffuse[0] * global_light_power, directionalLightDiffuse[1] * global_light_power, directionalLightDiffuse[2] * global_light_power, directionalLightDiffuse[3]);
 	directionalLight.setSpotlight(.0f, 1.f, 1.f, 180.0f, 0.0f);
 	directionalLight.setAttentuation(0.f, 0.f, 0.f);
 	directionalLight.enable();
