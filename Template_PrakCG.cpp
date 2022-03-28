@@ -328,7 +328,7 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	
 
 	//licht geht noch nicht// soll auf dem Windrad stehen 
-	static cg_light point(5);
+	static cg_light point(7);
 	point.setPosition(-60.0f, 23.802f, -62.7296f, 1.0f);
 	point.setAmbient(0.1f, 0.1f, 0.1f, 1.0f);
 	point.setDiffuse(0.9f, 0.0f, 0.0f, 1.0f);
