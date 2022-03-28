@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include "help.h"
+#include "wavefront.h"
 
 GLfloat light = 0.3;
 
@@ -344,8 +345,42 @@ void heck()
 	glPopMatrix();
 }
 
-void heli::animate(GLfloat x, GLfloat y, GLfloat z, int fps)
+void heli::calc() {
+	cg_key key;
+	cg_help help;
+
+	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
+	{
+		rotation += rotationSpeed / help.getFps();
+	}
+
+	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
+	{
+		rotation -= rotationSpeed / help.getFps();
+	}
+
+	if (2 == key.specialKeyState(GLUT_KEY_UP) && pos[1] > 3)
+	{
+		angle += angleSpeed / help.getFps();
+	}
+
+	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > 3)
+	{
+		angle -= angleSpeed / help.getFps();
+	}
+
+	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
+		enginePower += engineAcc / help.getFps();
+	}
+	if (2 == key.specialKeyState(GLUT_KEY_CTRL_L)) {
+		enginePower -= engineAcc / help.getFps();
+	}
+}
+
+void heli::animate()
 {
+	cg_help help;
+	
 	if (angle < -30) {
 		angle = -30;
 	}
@@ -359,10 +394,10 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z, int fps)
 		}
 		else {
 			if (angle < 0) {
-				angle += 50.0/ fps;
+				angle += 50.0/ help.getFps();
 			}
 			else {
-				angle -= 50.0 / fps;
+				angle -= 50.0 / help.getFps();
 			}
 		}
 	}
@@ -372,39 +407,29 @@ void heli::animate(GLfloat x, GLfloat y, GLfloat z, int fps)
 		}
 	}
 
-	cg_help help;
-
 	double pi = 2 * acos(0.0);
 	pos[0] += 0.001 * angle * cos(rotation * pi / 180);
 	pos[2] += 0.001 * angle * -sin(rotation * pi / 180);
 
 	pos[1] += 0.001 * enginePower;
 
-	//std::cout << "; rotation: " << rotation;
-
-	// static GLfloat alpha = 0.00f;
-	// alpha += 0.01f;
-	// heli::rotation = heli::rotation 6+ alpha;
-
-	//Heli zeichnen
-	glPushMatrix();
-
-
-	/*GLfloat diffuse[4] = { 0.2f,  0.2f,  0.2f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
-
-	GLfloat shininess[4] = { 0.0f,  0.0f,  0.0f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);*/
-
 	if (pos[1] < 0) {
 		pos[1] = 0;
 		enginePower = 0;
 	}
 
+}
+
+
+void heli::draw()
+{
+	//Heli zeichnen
+	glPushMatrix();
+
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glRotatef(rotation, 0, 1, 0);
 	glRotatef(-angle, 0, 0, 1);
-	// Kufen zeichnen
+
 	glPushMatrix();
 	setColor(0 * light, 0.75 * light, 0.75 * light);
 	kufen();

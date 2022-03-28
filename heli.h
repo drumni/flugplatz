@@ -1,5 +1,6 @@
 #pragma once
 
+#include "wavefront.h"
 #ifdef _WIN32
 #include "Include/glew.h"
 #include "Include/freeglut.h"
@@ -15,8 +16,10 @@
 class heli
 {
 public:
-	void animate(GLfloat x, GLfloat y, GLfloat z, int fps);
-	
+	void calc();
+	void draw();
+	void animate();
+
 	// TODO
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};
 

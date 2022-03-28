@@ -340,8 +340,17 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 }
 
 
-void setColorByTemp(GLfloat temp, GLfloat(*color)[4]) {
-	//GLfloat color[3];
+static GLfloat temp = 100.0f; // Kelvin
+void setColorByTemp(GLfloat(*color)[4]) {
+	temp += ((rand() % 10000) / 1000);
+	temp -= ((rand() % 10000) / 1000);
+
+	if (temp <= 0)
+		temp = 10;
+	if (temp > 1000)
+		temp = 1000;
+	
+	// -------------------
 
 	if (temp <= 66) {
 		(*color)[2] = temp - 10;
@@ -374,41 +383,29 @@ void setColorByTemp(GLfloat temp, GLfloat(*color)[4]) {
 		(*color)[2] = 255;
 	}
 
-
 	(*color)[0] = (*color)[0] / 255;
 	(*color)[1] = (*color)[1] / 255;
 	(*color)[2] = (*color)[2] / 255;
 	(*color)[3] = 1.0f;
 }
 
-
-static GLfloat temp = 100.0f; // Kelvin
 void drawScene()
 {
-	temp += ((rand() % 10000) / 1000);
-	temp -= ((rand() % 10000) / 1000);
-	if (temp <= 0)
-		temp = 10;
-	if (temp > 1000)
-		temp = 1000;
-
-	std::cout << temp << '\n';
-
-	GLfloat g_amb[4] = { 255.0f, 1.0f,  1.0f, 0.3f };
-	setColorByTemp(temp, &g_amb);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, g_amb);
-
-
 	static heli helicopter;
-	cg_globState globState;
+	static cg_image* _texture;
+
+
 	cg_key key;
 	cg_help help;
+	cg_globState globState;
 	GLfloat camerapos[] = { 0, 0, 0 };
-	static int camerastate = 1;
+	GLfloat directionalLightDiffuse[4] = { 255.0f, 1.0f,  1.0f, 0.3f };
 
-	// Zeichnet die Szene 1x im Weltkoordinatensystem
+	setColorByTemp(&directionalLightDiffuse);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, directionalLightDiffuse);
 
 	// Kamera setzen (spherische Mausnavigation)
+	static int camerastate = 1;
 	if (camerastate != 1 && 1 == key.keyState('1')) {
 		camerastate = 1;
 	}
@@ -417,32 +414,27 @@ void drawScene()
 	}
 
 	switch (camerastate) {
-		//Fester Standpunkt
 	case 1:
+		//Fester Standpunkt
 		setCamera(camerapos, 0, 0, 0, 1);
 		break;
-		//Hinter dem Hubschrauber
 	case 2:
+		//Hinter dem Hubschrauber
 		double xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
 		double zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
 		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
 		break;
-		//default:
-			//std::cout << "Fehler bei Camerastatewahl";
 	}
-
 
 	if (1 == key.keyState('t') || 1 == key.keyState('T'))
-	{
 		globState.textureMode = !globState.textureMode; // Texturierung on/off
-	}
 	else if (1 == key.keyState('b') || 1 == key.keyState('B'))
-	{
 		globState.blendMode = !globState.blendMode; // Blending on/off
-	}
+
+	// Rendering 
+
 
 	drawUmgebung(1, 0);
-	static cg_image* _texture;
 	_texture = &textures[0];
 
 	if (globState.textureMode) {
@@ -457,13 +449,15 @@ void drawScene()
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 
-	helicopter.animate(0.0f, 1.0f, 0.0f, help.getFps());
+	helicopter.animate();
+
 	if (globState.blendMode) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+	helicopter.draw();
 	glPushMatrix();
-	
+
 	glTranslatef(helicopter.pos[0], helicopter.pos[1], helicopter.pos[2]);
 	glRotatef(helicopter.rotation, 0, 1, 0);
 	glRotatef(-helicopter.angle, 0, 0, 1);
@@ -471,32 +465,7 @@ void drawScene()
 	objects[GLASS].draw();
 	glPopMatrix();
 
-	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
-	{
-		helicopter.rotation += helicopter.rotationSpeed / help.getFps();
-	}
-
-	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
-	{
-		helicopter.rotation -= helicopter.rotationSpeed / help.getFps();
-	}
-
-	if (2 == key.specialKeyState(GLUT_KEY_UP) && helicopter.pos[1] > 3)
-	{
-		helicopter.angle += helicopter.angleSpeed / help.getFps();
-	}
-
-	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && helicopter.pos[1] > 3)
-	{
-		helicopter.angle -= helicopter.angleSpeed / help.getFps();
-	}
-
-	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
-		helicopter.enginePower += helicopter.engineAcc / help.getFps();
-	}
-	if (2 == key.specialKeyState(GLUT_KEY_CTRL_L)) {
-		helicopter.enginePower -= helicopter.engineAcc / help.getFps();
-	}
+	helicopter.calc();
 
 	int counter = 1;
 	for (size_t i = 0; i < 2; i++)
