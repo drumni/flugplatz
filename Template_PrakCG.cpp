@@ -325,18 +325,23 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	textures[currentTexture].bind();
 	objects[BODEN].draw();
 	glPopMatrix();
-	
-
-	//licht geht noch nicht// soll auf dem Windrad stehen 
-	static cg_light point(0);
-	point.setPosition(-60.0f, 23.802f, -62.7296f, 1.0f);
-	point.setAmbient(0.1f, 0.1f, 0.1f, 1.0f);
-	point.setDiffuse(0.9f, 0.0f, 0.0f, 1.0f);
-	point.setSpecular(0.9f, 0.9f, 0.0f, 1.0f);
-	point.enable();
-	point.draw();
 
 	glDisable(GL_TEXTURE_2D);
+
+	static cg_light point(1);
+	
+	point.enable();
+	//licht geht noch nicht// soll auf dem Windrad stehen 
+	//point.setPosition(-60.0f, 23.802f, -62.7296f, 1.0f);
+	point.setPosition(-5, 3, -5, 1);
+	//point.setPosition(-5, 3, -5, 0);
+	point.setAttentuation(0.5, 0, 0);
+	point.setAmbient(0.9f, 0.1f, 0.1f, 1.0f);
+	point.setDiffuse(0.9f, 0.3f, 0.3f, 1.0f);
+	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
+	point.markLightPosition();
+	//point.draw();
+	//point.disable();
 }
 
 
@@ -469,7 +474,7 @@ void drawScene()
 	glPopMatrix();
 
 	helicopter.calc();
-	int counter = 1;
+	int counter = 2;
 	for (size_t i = 0; i < 3; i++)
 	{
 		//laterne(counter, -(30.0f * i) + 10, 0.0f, 6.5f, 4.7f);
