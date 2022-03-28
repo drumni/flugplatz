@@ -82,7 +82,7 @@ void nase()
 	cg_light lamp(5);
 	lamp.setPosition(0, 1, 0, 1);
 
-	lamp.setAttentuation(.5f, .01f, .001f);
+	lamp.setAttentuation(.5f, .0f, .0f);
 	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
 	lamp.setSpotlight(0.0f, -0.1f, 1.0f, 45.0f, 0.5f);
 
