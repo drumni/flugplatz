@@ -64,15 +64,15 @@ void setMaterial(GLenum face, float red, float green, float blue, float alpha, f
 
 void setLights()
 {
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 
 	////// Parameter eines globalen Lichts
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GLU_TRUE);
+	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GLU_TRUE);
 	
-	cg_light moonlight(0);
-	moonlight.setPosition(10, 10, 10, 1);
-	moonlight.setDiffuse(0.2f, 0.2f, 0.7f, 1.0f);
+	//cg_light moonlight(0);
+	//moonlight.setPosition(10, 10, 10, 1);
+	//moonlight.setDiffuse(0.2f, 0.2f, 0.7f, 1.0f);
 
 	//glEnable(GL_LIGHT0);
 	// Licht 0
@@ -104,7 +104,7 @@ void setLights()
 	//// Aktivieren
 	//glEnable(GL_LIGHT0);
 
-	glEnable(GL_NORMALIZE);
+	//glEnable(GL_NORMALIZE);
 }
 
 // Standardeinstellung für Farbe und Beleuchtung

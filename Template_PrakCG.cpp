@@ -340,18 +340,7 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 }
 
 
-static GLfloat temp = 100.0f; // Kelvin
-void setColorByTemp(GLfloat(*color)[4]) {
-	temp += ((rand() % 10000) / 1000);
-	temp -= ((rand() % 10000) / 1000);
-
-	if (temp <= 0)
-		temp = 10;
-	if (temp > 1000)
-		temp = 1000;
-	
-	// -------------------
-
+void setColorByTemp(int temp, GLfloat(*color)[4]) {
 	if (temp <= 66) {
 		(*color)[2] = temp - 10;
 		(*color)[2] = 138.5177312231 * expl((*color)[2]) - 305.0447927307;
@@ -394,15 +383,27 @@ void drawScene()
 	static heli helicopter;
 	static cg_image* _texture;
 
-
 	cg_key key;
 	cg_help help;
 	cg_globState globState;
 	GLfloat camerapos[] = { 0, 0, 0 };
-	GLfloat directionalLightDiffuse[4] = { 255.0f, 1.0f,  1.0f, 0.3f };
+	GLfloat directionalLightDiffuse[4] = { 1.0f, 1.0f,  1.0f, 0.3f };
 
-	setColorByTemp(&directionalLightDiffuse);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, directionalLightDiffuse);
+	cg_light directionalLight(0);
+	static GLfloat global_temp = 100.0f; // Kelvin
+	global_temp += (10000 / help.getFps());
+	if (global_temp > 100000)
+		global_temp = 0;
+
+	setColorByTemp(global_temp, &directionalLightDiffuse);
+	directionalLight.setPosition(1, 10, 10, 0);
+	directionalLight.setDiffuse(directionalLightDiffuse[0], directionalLightDiffuse[1], directionalLightDiffuse[2], directionalLightDiffuse[3]);
+	directionalLight.setSpotlight(.0f, 1.f, 1.f, 180.0f, 0.0f);
+	directionalLight.setAttentuation(0.f, 0.f, 0.f);
+	directionalLight.enable();
+	directionalLight.draw();
+
+	glEnable(GL_NORMALIZE);
 
 	// Kamera setzen (spherische Mausnavigation)
 	static int camerastate = 1;
@@ -435,13 +436,18 @@ void drawScene()
 
 
 	drawUmgebung(1, 0);
-	_texture = &textures[0];
 
+
+	_texture = &textures[0];
 	if (globState.textureMode) {
 		glEnable(GL_TEXTURE_2D);
 
 		_texture->setEnvMode(GL_DECAL);
 		_texture->bind();
+	}
+	if (globState.blendMode) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	objects[PLANE].draw();
 
@@ -451,10 +457,6 @@ void drawScene()
 
 	helicopter.animate();
 
-	if (globState.blendMode) {
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
 	helicopter.draw();
 	glPushMatrix();
 
@@ -466,7 +468,6 @@ void drawScene()
 	glPopMatrix();
 
 	helicopter.calc();
-
 	int counter = 1;
 	for (size_t i = 0; i < 2; i++)
 	{
