@@ -393,7 +393,7 @@ void drawScene()
 	GLfloat global_light_power = 0.25f;
 	static GLfloat global_temp = 100.0f; // Kelvin
 	global_temp += (10000 / help.getFps());
-	if (global_temp > 100000)
+	if (global_temp > 100000000)
 		global_temp = 0;
 
 	setColorByTemp(global_temp, &directionalLightDiffuse);
@@ -470,10 +470,10 @@ void drawScene()
 
 	helicopter.calc();
 	int counter = 1;
-	for (size_t i = 0; i < 2; i++)
+	for (size_t i = 0; i < 3; i++)
 	{
-		laterne(counter, -(30.0f * i) + 10, 0.0f, 6.5f, 4.7f);
-		counter++;
+		//laterne(counter, -(30.0f * i) + 10, 0.0f, 6.5f, 4.7f);
+		//counter++;
 		laterne(counter, -(30.0f * i) + 10, 0.0f, -9.5f, 4.7f);
 		counter++;
 	}
