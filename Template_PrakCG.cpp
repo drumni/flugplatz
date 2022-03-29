@@ -286,7 +286,7 @@ void loadObjects()
 	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 1.0, 0.0, 0.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
 	objects[BODEN].setMaterial(1, 1, 1, 1.0, 0, 128, 0);
-	objects[GLASS].setMaterial(0.3, 0.3, 1, 0.8, 0, 128, 0.1);
+	objects[GLASS].setMaterial(0.6, 0.6, 1, 0.4, 0, 128, 0.1);
 	objects[WINDRAD].setMaterial(0.9, 0.9, 0.9, 1, 0, 128, 0);
 	objects[WINDRAD].setPosition(-60, 0, -60);
 	objects[FLUEGEL].setMaterial(0.9, 0.9, 0.9, 1, 0, 128, 0);
@@ -328,7 +328,7 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 
 	glDisable(GL_TEXTURE_2D);
 
-	static cg_light point(1);
+	static cg_light point(5);
 	
 	point.enable();
 	//licht geht noch nicht// soll auf dem Windrad stehen 
@@ -340,7 +340,7 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	point.setDiffuse(0.9f, 0.3f, 0.3f, 1.0f);
 	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
 	point.markLightPosition();
-	//point.draw();
+	point.draw();
 	//point.disable();
 }
 
@@ -458,20 +458,19 @@ void drawScene()
 	objects[PLANE].draw();
 
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
-	glDisable(GL_CULL_FACE);
 
 	helicopter.animate();
-
 	helicopter.draw();
 	glPushMatrix();
-
 	glTranslatef(helicopter.pos[0], helicopter.pos[1], helicopter.pos[2]);
 	glRotatef(helicopter.rotation, 0, 1, 0);
 	glRotatef(-helicopter.angle, 0, 0, 1);
 	glTranslatef(1.25, 1.4, 0.0);
 	objects[GLASS].draw();
 	glPopMatrix();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
 
 	helicopter.calc();
 	int counter = 2;
