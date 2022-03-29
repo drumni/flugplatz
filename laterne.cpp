@@ -46,38 +46,29 @@ void anker() {
 
 void laterne(int id, GLfloat x, GLfloat y, GLfloat z, GLfloat h)
 {
-	cg_light lamp(id);
-	lamp.setPosition(x, y + h, z, 1);
-
-	lamp.setAttentuation( .5f, .0f, .0f );
-	lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
-	//lamp.setDiffuse(.0f, .0f, .01f, 0.0f);
-	lamp.setSpotlight(0.0f, -1.0f, 0.0f, 70.0f, 1.0f);
-	lamp.setAmbient(.2f, .1f, .1f, 1.f);
-	//lamp.setSpecular(.9f, .3f, .3f, 1.f);	
-	//lamp.setSpotlight(1, 1, 1, 20, 2);
-	lamp.enable();	lamp.draw();
-	//lamp.markLightPosition();
-	lamp.disable();
-
-
 	glPushMatrix();
-	glTranslatef(x, y, z);
-	mast(h);
-	glPopMatrix();
+		glPushMatrix();
+		cg_light lamp(id);
+		lamp.setPosition(x, y + h, z, 1);
 
-	glPushMatrix();
-	glTranslatef(x, y, z);
-	lampe(h);
-	glPopMatrix();
+		lamp.setAttentuation( .5f, .0f, .0f );
+		lamp.setDiffuse(.39f, .25f, .1f, 0.0f);
+		//lamp.setDiffuse(.0f, .0f, .01f, 0.0f);
+		lamp.setSpotlight(0.0f, -1.0f, 0.0f, 70.0f, 1.0f);
+		lamp.setAmbient(.2f, .1f, .1f, 1.f);
+		//lamp.setSpecular(.9f, .3f, .3f, 1.f);	
+		//lamp.setSpotlight(1, 1, 1, 20, 2);
+		lamp.enable();	lamp.draw();
+		//lamp.markLightPosition();
+		lamp.disable();
+		glPopMatrix();
 
-	glPushMatrix();
-	glTranslatef(x, y, z);
-	deckel(h);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(x, y, z);
-	anker();
+		glPushMatrix();
+		glTranslatef(x, y, z);
+		mast(h);
+		lampe(h);
+		deckel(h);
+		anker();
+		glPopMatrix();
 	glPopMatrix();
 }
