@@ -447,7 +447,6 @@ void drawScene()
 	_texture = &textures[0];
 	if (globState.textureMode) {
 		glEnable(GL_TEXTURE_2D);
-
 		_texture->setEnvMode(GL_DECAL);
 		_texture->bind();
 	}
@@ -473,12 +472,6 @@ void drawScene()
 	glDisable(GL_CULL_FACE);
 
 	helicopter.calc();
-	int counter = 2;
 	for (size_t i = 0; i < 3; i++)
-	{
-		//laterne(counter, -(30.0f * i) + 10, 0.0f, 6.5f, 4.7f);
-		//counter++;
-		laterne(counter, -(30.0f * i) + 10, 0.0f, -9.5f, 4.7f);
-		counter++;
-	}
+		laterne(i, -(30.0f * i) + 18, 0.0f, -10.5f, 4.7f);
 }
