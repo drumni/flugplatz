@@ -293,7 +293,7 @@ void loadObjects()
 	objects[FLUEGEL].setPosition(-60, 0, -60);
 }
 
-void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
+void drawUmgebung(int useLinearFiltering, int useMipmapFiltering, int fps) {
 	// Stra�e bei Y=0 zeichnen
 	//objects[GROUND_OBJ1].draw();
 
@@ -307,9 +307,30 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	objects[H].draw();
 	objects[LANDEPLATZ].draw();
 	glPopMatrix();
+	
+	
+	static cg_light point(5);
+	point.enable();
+	point.setPosition(-60.0f, 24.802f, -57.25f, 1.0f);
+	point.setSpotlight(1, 1, 1, 180, 0);
+	point.setAttentuation(0.8, 0.05, 0.01);
+	point.setAmbient(0.9f, 0.3f, 0.3f, 1.0f);
+	point.setDiffuse(0.9f, 0.3f, 0.3f, 1.0f);
+	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
+	static double timer = 0.0;
+	if (timer > 3) {
+		point.draw();
+		point.markLightPosition();
+	}
+	point.disable();
+	if (fps > 0) {
+		timer += 1.0 / fps;
+	}
+	if (timer >= 6.0) {
+		timer = 0.0;	
+	}
 	objects[WINDRAD].draw();
 	objects[FLUEGEL].draw();
-
 
 	int currentTexture = 1;
 	glEnable(GL_TEXTURE_2D);
@@ -327,21 +348,6 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering) {
 	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
-
-	static cg_light point(5);
-	
-	point.enable();
-	//licht geht noch nicht// soll auf dem Windrad stehen 
-	//point.setPosition(-60.0f, 23.802f, -62.7296f, 1.0f);
-	point.setPosition(-5, 3, -5, 1);
-	//point.setPosition(-5, 3, -5, 0);
-	point.setAttentuation(0.5, 0, 0);
-	point.setAmbient(0.9f, 0.1f, 0.1f, 1.0f);
-	point.setDiffuse(0.9f, 0.3f, 0.3f, 1.0f);
-	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
-	point.markLightPosition();
-	point.draw();
-	//point.disable();
 }
 
 
@@ -441,7 +447,7 @@ void drawScene()
 	// Rendering 
 
 
-	drawUmgebung(1, 0);
+	drawUmgebung(1, 0, help.getFps());
 
 
 	_texture = &textures[0];
@@ -472,6 +478,6 @@ void drawScene()
 	glDisable(GL_CULL_FACE);
 
 	helicopter.calc();
-	for (size_t i = 0; i < 3; i++)
-		laterne(i, -(30.0f * i) + 18, 0.0f, -10.5f, 4.7f);
+	//for (size_t i = 1; i < 4; i++)//mus bei 1 anfangen, weil 0 schon das direktionale Licht ist
+		//laterne(i, -(30.0f * (i-1)) + 18, 0.0f, -10.5f, 4.7f);
 }
