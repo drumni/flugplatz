@@ -79,7 +79,7 @@ void nase()
 	glScalef(0.2, 0.2, 0.2);
 	myCylinder();
 
-	cg_light lamp(5);
+	cg_light lamp(7);
 	lamp.setPosition(0, 1, 0, 1);
 
 	lamp.setAttentuation(.5f, .01f, .001f);

@@ -442,7 +442,6 @@ void drawScene()
 	_texture = &textures[0];
 	if (globState.textureMode) {
 		glEnable(GL_TEXTURE_2D);
-
 		_texture->setEnvMode(GL_DECAL);
 		_texture->bind();
 	}
@@ -450,17 +449,16 @@ void drawScene()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+
 	objects[PLANE].draw();
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 
-	helicopter.animate();
-
-	helicopter.draw();
 	glPushMatrix();
-
+	helicopter.animate();
+	helicopter.draw();
 	glTranslatef(helicopter.pos[0], helicopter.pos[1], helicopter.pos[2]);
 	glRotatef(helicopter.rotation, 0, 1, 0);
 	glRotatef(-helicopter.angle, 0, 0, 1);
@@ -469,12 +467,6 @@ void drawScene()
 	glPopMatrix();
 
 	helicopter.calc();
-	int counter = 1;
 	for (size_t i = 0; i < 3; i++)
-	{
-		//laterne(counter, -(30.0f * i) + 10, 0.0f, 6.5f, 4.7f);
-		//counter++;
-		laterne(counter, -(30.0f * i) + 10, 0.0f, -9.5f, 4.7f);
-		counter++;
-	}
+		laterne(i, -(30.0f * i) + 18, 0.0f, -10.5f, 4.7f);
 }

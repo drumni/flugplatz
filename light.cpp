@@ -64,47 +64,11 @@ void setMaterial(GLenum face, float red, float green, float blue, float alpha, f
 
 void setLights()
 {
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_NORMALIZE);
 
-	////// Parameter eines globalen Lichts
 	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GLU_TRUE);
-	
-	//cg_light moonlight(0);
-	//moonlight.setPosition(10, 10, 10, 1);
-	//moonlight.setDiffuse(0.2f, 0.2f, 0.7f, 1.0f);
-
-	//glEnable(GL_LIGHT0);
-	// Licht 0
-
-	// Paramaters fuer Lichtquelle 0
-	//GLfloat l_pos[4] = { 1.00f, 10.0f, 10.0f, 1.0f };
-	//GLfloat l_amb[4] = { 1,1, 1, 1 };
-	//GLfloat l_diff[4] = { 0, 0, 0, 0 };
-	//GLfloat l_spec[4] = { 0, 0, 0, 0 };
-	//GLfloat l_spotdir[3] = { 0.0f, 0.0f, 1.0f };
-	//GLfloat l_spotcutoff = 180.0f;
-	//GLfloat l_spotexp = 0.0f;
-	//GLfloat l_att[3] = { 1.0f, 0.0f, 0.0f };
-
-	//// Position
-	//glLightfv(GL_LIGHT0, GL_POSITION, l_pos);
-	//// Farbe
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, l_amb);
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, l_diff);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, l_spec);
-	//// Spot
-	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l_spotdir);
-	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, l_spotcutoff);
-	//glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, l_spotexp);
-	//// Abschwaechung
-	//glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, l_att[0]);
-	//glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, l_att[1]);
-	//glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, l_att[2]);
-	//// Aktivieren
-	//glEnable(GL_LIGHT0);
-
-	//glEnable(GL_NORMALIZE);
 }
 
 // Standardeinstellung für Farbe und Beleuchtung
