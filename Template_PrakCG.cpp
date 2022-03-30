@@ -283,7 +283,7 @@ void loadObjects()
 	objects[H].setPosition(65, -0.001, -30);
 	objects[LANDEPLATZ].setMaterial(0.3, 0.3, 0.3, 1.0, 0.0, 0.0, 0.0);
 	objects[LANDEPLATZ].setPosition(65, -0.001, -30);
-	objects[PLANE].setMaterial(0.2, 0.2, 0.1, 1.0, 0.0, 0.0f, 0.0);
+	objects[PLANE].setMaterial(1, 1, 1, 1.0, 1.0, 128.0f, 0.0);
 	objects[PLANE].setPosition(30, 0, 0);
 	objects[BODEN].setMaterial(1, 1, 1, 1.0, 0, 128, 0);
 	objects[GLASS].setMaterial(0.6, 0.6, 1, 0.4, 0, 128, 0.1);
@@ -293,7 +293,9 @@ void loadObjects()
 	objects[FLUEGEL].setPosition(-60, 0, -60);
 }
 
-void drawUmgebung(int useLinearFiltering, int useMipmapFiltering, int fps) {
+static cg_light point(5);
+
+void drawUmgebung(int fps, cg_globState globState) {
 	// Stra�e bei Y=0 zeichnen
 	//objects[GROUND_OBJ1].draw();
 
@@ -308,44 +310,35 @@ void drawUmgebung(int useLinearFiltering, int useMipmapFiltering, int fps) {
 	objects[LANDEPLATZ].draw();
 	glPopMatrix();
 	
-	
-	static cg_light point(5);
 	point.enable();
 	point.setPosition(-60.0f, 24.802f, -57.25f, 1.0f);
 	point.setSpotlight(1, 1, 1, 180, 0);
-	point.setAttentuation(0.8, 0.05, 0.01);
+	point.setAttentuation(0.8, 0.1, 0.3);
 	point.setAmbient(0.9f, 0.3f, 0.3f, 1.0f);
 	point.setDiffuse(0.9f, 0.3f, 0.3f, 1.0f);
 	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
-	static double timer = 0.0;
-	if (timer > 3) {
-		point.draw();
-		point.markLightPosition();
-	}
+	point.draw();
+	point.markLightPosition();
 	point.disable();
-	if (fps > 0) {
-		timer += 1.0 / fps;
-	}
-	if (timer >= 6.0) {
-		timer = 0.0;	
-	}
 	objects[WINDRAD].draw();
 	objects[FLUEGEL].draw();
 
 	int currentTexture = 1;
-	glEnable(GL_TEXTURE_2D);
+	if (globState.textureMode) {
+		glEnable(GL_TEXTURE_2D);
+		// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
+		textures[currentTexture].setMagFilter(GL_LINEAR);
+		//textures[currentTexture].setMagFilter(GL_NEAREST);
+		// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
+		//textures[currentTexture].setMinFilter(GL_LINEAR);
+		textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+		textures[currentTexture].setEnvMode(GL_MODULATE);
+		textures[currentTexture].setWrapMode(GL_REPEAT);
+		textures[currentTexture].bind();
+	}
 
-	// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
-	textures[currentTexture].setMagFilter(GL_LINEAR);
-	//textures[currentTexture].setMagFilter(GL_NEAREST);
-	// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
-	//textures[currentTexture].setMinFilter(GL_LINEAR);
-	textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
-	textures[currentTexture].setEnvMode(GL_MODULATE);
-	textures[currentTexture].setWrapMode(GL_REPEAT);
-	textures[currentTexture].bind();
 	objects[BODEN].draw();
-	glPopMatrix();
+	//glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 }
@@ -407,6 +400,11 @@ void drawScene()
 	if (global_temp > 100000000)
 		global_temp = 0;
 
+	if (globState.blendMode) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	setColorByTemp(global_temp, &directionalLightDiffuse);
 	directionalLight.setPosition(1, 10, 10, 0);
 	directionalLight.setDiffuse(directionalLightDiffuse[0] * global_light_power, directionalLightDiffuse[1] * global_light_power, directionalLightDiffuse[2] * global_light_power, directionalLightDiffuse[3]);
@@ -447,21 +445,17 @@ void drawScene()
 	// Rendering 
 
 
-	drawUmgebung(1, 0, help.getFps());
+	drawUmgebung(help.getFps(), globState);
 
-
-	_texture = &textures[0];
 	if (globState.textureMode) {
 		glEnable(GL_TEXTURE_2D);
-		_texture->setEnvMode(GL_DECAL);
-		_texture->bind();
-	}
-	if (globState.blendMode) {
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		textures[0].setMagFilter(GL_LINEAR);
+		textures[0].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+		textures[0].setEnvMode(GL_MODULATE);
+		textures[0].setWrapMode(GL_REPEAT);
+		textures[0].bind();
 	}
 	objects[PLANE].draw();
-
 	glDisable(GL_TEXTURE_2D);
 
 	helicopter.animate();
@@ -478,6 +472,6 @@ void drawScene()
 	glDisable(GL_CULL_FACE);
 
 	helicopter.calc();
-	//for (size_t i = 1; i < 4; i++)//mus bei 1 anfangen, weil 0 schon das direktionale Licht ist
-		//laterne(i, -(30.0f * (i-1)) + 18, 0.0f, -10.5f, 4.7f);
+	for (size_t i = 1; i < 4; i++)//mus bei 1 anfangen, weil 0 schon das direktionale Licht ist
+		laterne(i, -(30.0f * (i-1)) + 18, 0.0f, -10.5f, 4.7f);
 }
