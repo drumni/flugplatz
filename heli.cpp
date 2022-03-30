@@ -408,10 +408,10 @@ void heli::animate()
 	}
 
 	double pi = 2 * acos(0.0);
-	pos[0] += 0.001 * angle * cos(rotation * pi / 180);
-	pos[2] += 0.001 * angle * -sin(rotation * pi / 180);
+	pos[0] += 0.01 * angle * cos(rotation * pi / 180);
+	pos[2] += 0.01 * angle * -sin(rotation * pi / 180);
 
-	pos[1] += 0.001 * enginePower;
+	pos[1] += 0.01 * enginePower;
 
 	if (pos[1] < 0) {
 		pos[1] = 0;

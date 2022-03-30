@@ -31,7 +31,8 @@
 #include <iostream>
 #pragma endregion
 
-void setCamera(); // Kamera platzieren, siehe Maus-Callbacks
+
+void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable, bool canUseMouse); // Kamera platzieren, siehe Maus-Callbacks
 void drawScene(); // Zeichnet die Szene im Weltkoordinatensystem
 
 void loadObjects();
@@ -42,7 +43,7 @@ void initTextures();
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable)
+void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable, bool canUseMouse = true)
 {
 	cg_mouse mouse;
 	//cg_key key;
@@ -50,17 +51,21 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdj
 	// SetCamera() zum Beginn der Zeichenfunktion aufrufen
 	double x, y, z, The, Phi;
 	static double radius = 10;
-	// Maus abfragen
-	if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
-	{
-		cg_globState::cameraHelper[0] += mouse.moveX() * 16 / 6;
-		cg_globState::cameraHelper[1] += mouse.moveY() * 9 / 6;
-	}
 
-	if (cg_mouse::buttonState(GLUT_MIDDLE_BUTTON))
-	{
-		radius += 0.1 * mouse.moveY();
-		if (radius < 1.0) radius = 1.0;
+	if (canUseMouse) {
+		// Maus abfragen
+		if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
+		{
+			cg_globState::cameraHelper[0] += mouse.moveX() * 16 / 6;
+			cg_globState::cameraHelper[1] += mouse.moveY() * 9 / 6;
+		}
+
+		if (cg_mouse::buttonState(GLUT_MIDDLE_BUTTON))
+		{
+			radius += 0.1 * mouse.moveY();
+			if (radius < 1.0) radius = 1.0;
+
+		}
 	}
 
 	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
@@ -77,12 +82,76 @@ void setCamera(GLfloat pos[3], double xp, double yp, double zp, double radiusAdj
 		z = radius * sin(Phi) * cos(The) + zp;
 	}
 
-	cg_globState::cameraPos[0] = x;
-	cg_globState::cameraPos[1] = z;
-	int Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
+	if (!canUseMouse) {
+		x = xp;
+		y = yp;
+		z = zp;
+	}
+
+	int Oben;
+		cg_globState::cameraPos[0] = x;
+		cg_globState::cameraPos[1] = z;
+
+		Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
 
 	// globale, mausgesteuerte Sicht
 	gluLookAt(x, y, z, 0 + pos[0], 0 + pos[1], 0 + pos[2], 0, Oben, 0);
+}
+
+
+void setCameraReversed(GLfloat pos[3], double xp, double yp, double zp, double radiusAdjustable, bool canUseMouse = true)
+{
+	cg_mouse mouse;
+	//cg_key key;
+	// Ansichtstransformationen setzen,
+	// SetCamera() zum Beginn der Zeichenfunktion aufrufen
+	double x, y, z, The, Phi;
+	static double radius = 10;
+
+	if (canUseMouse) {
+		// Maus abfragen
+		if (cg_mouse::buttonState(GLUT_LEFT_BUTTON))
+		{
+			cg_globState::cameraHelper[0] += mouse.moveX() * 16 / 6;
+			cg_globState::cameraHelper[1] += mouse.moveY() * 9 / 6;
+		}
+
+		if (cg_mouse::buttonState(GLUT_MIDDLE_BUTTON))
+		{
+			radius += 0.1 * mouse.moveY();
+			if (radius < 1.0) radius = 1.0;
+
+		}
+	}
+
+	Phi = 0.2 * cg_globState::cameraHelper[0] / cg_globState::screenSize[0] * M_PI + M_PI * 0.5;
+	The = 0.2 * cg_globState::cameraHelper[1] / cg_globState::screenSize[1] * M_PI;
+
+	if (radiusAdjustable) {
+		x = radius * cos(Phi) * cos(The);
+		y = radius * sin(The);
+		z = radius * sin(Phi) * cos(The);
+	}
+	else {
+		x = radius * cos(Phi) * cos(The) + xp;
+		y = radius * sin(The) + yp;
+		z = radius * sin(Phi) * cos(The) + zp;
+	}
+
+	if (!canUseMouse) {
+		x = xp;
+		y = yp;
+		z = zp;
+	}
+
+	int Oben;
+	cg_globState::cameraPos[0] = x;
+	cg_globState::cameraPos[1] = z;
+
+	Oben = (The <= 0.5 * M_PI || The > 1.5 * M_PI) * 2 - 1;
+
+	// globale, mausgesteuerte Sicht
+	gluLookAt( 0 + pos[0], 0 + pos[1], 0 + pos[2], x, y, z, 0, Oben, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -450,11 +519,11 @@ void drawScene()
 	
 
 
-	double xpc, zpc;
+	double xpc, ypc, zpc;
 	switch (camerastate) {
 	case 1:
 		//Fester Standpunkt
-		setCamera(camerapos, 0, 0, 0, 1);
+		setCamera(camerapos, 0, 0, 1, 1);
 		break;
 	case 2:
 		//Hinter dem Hubschrauber
@@ -463,9 +532,33 @@ void drawScene()
 		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
 		break;
 	case 3:
-		setCamera(helicopter.pos, 100, helicopter.pos[1], 0, 0);
+		xpc = cos(-helicopter.rotation * M_PI / 180);
+		ypc = sin(-helicopter.angle * M_PI / 180);
+		zpc = sin(-helicopter.rotation * M_PI / 180);
+
+		GLfloat offset_cockpit[3] = { 1.25, 1.6, 1.25 };
+		GLfloat cockpit_position[3] = {
+			(helicopter.pos[0] + offset_cockpit[0] * xpc),
+			(helicopter.pos[1] + offset_cockpit[1] * ypc),
+			(helicopter.pos[2] + offset_cockpit[2] * zpc),
+		};
+
+		GLfloat look_at_position[3] = {
+			(helicopter.pos[0] + (offset_cockpit[0] + 1) * xpc),
+			(helicopter.pos[1] + (offset_cockpit[1]) * ypc),
+			(helicopter.pos[2] + (offset_cockpit[2] + 1) * zpc),
+		};
+
+		cg_globState::cameraPos[0] = cockpit_position[0];
+		cg_globState::cameraPos[1] = cockpit_position[2];
+
+		gluLookAt(cockpit_position[0], cockpit_position[1] + offset_cockpit[1], cockpit_position[2], look_at_position[0], look_at_position[1] + offset_cockpit[1], look_at_position[2], 0, 1, 0);
+
 		break;
 	}
+
+
+
 
 	if (1 == key.keyState('t') || 1 == key.keyState('T'))
 		globState.textureMode = !globState.textureMode; // Texturierung on/off
