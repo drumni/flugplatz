@@ -27,6 +27,7 @@
 #include "image.h"
 #include "vector.h"
 #include "geometry.h"
+#include <chrono>
 #include <iostream>
 #pragma endregion
 
@@ -295,6 +296,16 @@ void loadObjects()
 
 static cg_light point(5);
 
+auto start = std::chrono::steady_clock::now();
+
+template <class result_t = std::chrono::milliseconds,
+			class clock_t = std::chrono::steady_clock,
+			class duration_t = std::chrono::milliseconds >
+auto since(std::chrono::time_point<clock_t, duration_t> const& start)
+{
+	return std::chrono::duration_cast<result_t>(clock_t::now() - start);
+}
+
 void drawUmgebung(int fps, cg_globState globState) {
 	// Stra�e bei Y=0 zeichnen
 	//objects[GROUND_OBJ1].draw();
@@ -310,7 +321,19 @@ void drawUmgebung(int fps, cg_globState globState) {
 	objects[LANDEPLATZ].draw();
 	glPopMatrix();
 	
-	point.enable();
+	
+	static bool light_state = false;
+
+	if (since(start).count() > 1000) {
+		start = std::chrono::steady_clock::now(); // reset timer
+		light_state = !light_state; //Toogle Light
+	}
+
+	if (light_state)
+		point.enable();
+	else
+		point.disable();
+
 	point.setPosition(-60.0f, 24.802f, -57.25f, 1.0f);
 	point.setSpotlight(1, 1, 1, 180, 0);
 	point.setAttentuation(0.8, 0.1, 0.3);
@@ -320,6 +343,7 @@ void drawUmgebung(int fps, cg_globState globState) {
 	point.draw();
 	point.markLightPosition();
 	point.disable();
+
 	objects[WINDRAD].draw();
 	objects[FLUEGEL].draw();
 
@@ -417,13 +441,16 @@ void drawScene()
 
 	// Kamera setzen (spherische Mausnavigation)
 	static int camerastate = 1;
-	if (camerastate != 1 && 1 == key.keyState('1')) {
+	if (camerastate != 1 && 1 == key.keyState('1'))
 		camerastate = 1;
-	}
-	else if (camerastate != 2 && 1 == key.keyState('2')) {
+	else if (camerastate != 2 && 1 == key.keyState('2'))
 		camerastate = 2;
-	}
+	else if (camerastate != 3 && 1 == key.keyState('3')) 
+		camerastate = 3;
+	
 
+
+	double xpc, zpc;
 	switch (camerastate) {
 	case 1:
 		//Fester Standpunkt
@@ -431,9 +458,12 @@ void drawScene()
 		break;
 	case 2:
 		//Hinter dem Hubschrauber
-		double xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
-		double zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
+		xpc = 20.0 * -cos(helicopter.rotation * M_PI / 180) + helicopter.pos[0];
+		zpc = 20.0 * sin(helicopter.rotation * M_PI / 180) + helicopter.pos[2];
 		setCamera(helicopter.pos, xpc, helicopter.pos[1] + 5.0, zpc, 0);
+		break;
+	case 3:
+		setCamera(helicopter.pos, 100, helicopter.pos[1], 0, 0);
 		break;
 	}
 
@@ -460,6 +490,7 @@ void drawScene()
 
 	helicopter.animate();
 	helicopter.draw();
+
 	glPushMatrix();
 	glTranslatef(helicopter.pos[0], helicopter.pos[1], helicopter.pos[2]);
 	glRotatef(helicopter.rotation, 0, 1, 0);
