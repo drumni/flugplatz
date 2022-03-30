@@ -13,7 +13,7 @@
 #include "Include/freeglut.h"
 #endif
 
-// *** Help-Module, PrakCG Template
+// *** Help-Module, Flugplatz
 
 #ifdef __EXPORT_HELP
 
@@ -22,7 +22,7 @@ const char* spalte1[] =
 	"Maus",
 	"linke Taste      Kamerabewegung",
 	"mittlere Taste   Zoom",
-	"rechte Taste     Kontextmenü",
+	"rechte Taste     Kontextmenï¿½",
 	"",
 	"",
 	"",

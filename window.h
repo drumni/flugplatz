@@ -16,7 +16,7 @@
 //	Fenster Initialisierung
 /////////////////////////////////////////////////////////////////////////////////
 //! Fenstertitel
-#define PROG_NAME	"PrakCG-Template"
+#define PROG_NAME	"Flugplatz"
 
 //! Die Startposition des Fensters (linke, obere Ecke)
 #define WIN_POS_X	0
@@ -87,14 +87,14 @@ void init ( int argc, char **argv );
 /////////////////////////////////////////////////////////////////////////////////
 struct cg_globState
 {
-	static double screenSize[2];	// Fenstergröße in Pixel
-	static GLenum drawMode;			// Zeichenmodus für Flächen {GL_LINE || GL_FILL}
+	static double screenSize[2];	// Fenstergrï¿½ï¿½e in Pixel
+	static GLenum drawMode;			// Zeichenmodus fï¿½r Flï¿½chen {GL_LINE || GL_FILL}
 	static bool lightMode;			// Beleuchtung {an / aus}
 	static int normalMode;			// Normalennodus {none/ per surface/ per vertex}
 	static bool cullMode;			// Backface-Culling an / aus
 	static bool textureMode;		// Texturierung an / aus
 	static bool blendMode;			// Blending an / aus
-	static int cameraHelper[2];		// Mausposition, benoetigt für Kamera-Positionierung
+	static int cameraHelper[2];		// Mausposition, benoetigt fï¿½r Kamera-Positionierung
 	static float cameraPos[2];		// Kameraposition in Welt-Koordinaten
 	static int useVBOs;				// VBO Nutzung
 };

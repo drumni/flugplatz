@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Template_PrakCG", "Template_PrakCG.vcxproj", "{61D04787-7374-46FC-A4EB-86CFE79181F9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Flugplatz", "Flugplatz.vcxproj", "{61D04787-7374-46FC-A4EB-86CFE79181F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

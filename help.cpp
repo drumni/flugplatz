@@ -1,4 +1,4 @@
-// *** Help-Module, PrakCG Template
+// *** Help-Module, Flugplatz
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +12,7 @@ bool cg_help::showhelp = false, cg_help::showfps = true, cg_help::wireframe = fa
 int cg_help::frames = 0;
 float cg_help::fps = 60.0f;
 float cg_help::bg_size = 0.8f, cg_help::shadow = 0.003f;
-const char * cg_help::title = "PrakCG Template";
+const char * cg_help::title = "Flugplatz";
 
 void  cg_help::toggle()
 {
@@ -70,11 +70,11 @@ float cg_help::getFps()
 double cg_help::getDelta() {
 	cg_help help;
 	double fps = help.getFps();			// Lesen der aktuellen Framerate
-										// bei durchgängig gedrückter Taste verändert 
+										// bei durchgï¿½ngig gedrï¿½ckter Taste verï¿½ndert 
 										// sich eine Variable bei der Addition von 
 										// delta um den Wert von 1 pro Sekunde
 	if (fps < 1.0) fps = 1.0;			// vermeiden DIV by Zero
-	return 60.0 / fps;					// delta ist der Normierungsfaktor für 60fps
+	return 60.0 / fps;					// delta ist der Normierungsfaktor fï¿½r 60fps
 }
 void cg_help::drawBackground()
 {
