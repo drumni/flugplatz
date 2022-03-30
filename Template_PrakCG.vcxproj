@@ -12,8 +12,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61D04787-7374-46FC-A4EB-86CFE79181F9}</ProjectGuid>
-    <RootNamespace>Template_PrakCG</RootNamespace>
+    <RootNamespace>Flugplatz</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Flugplatz</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <Choose>
@@ -122,7 +123,7 @@
     <ClCompile Include="light.cpp" />
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Template_PrakCG.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="vector.cpp" />
     <ClCompile Include="wavefront.cpp" />
     <ClCompile Include="window.cpp" />
