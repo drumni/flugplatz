@@ -352,8 +352,6 @@ void heli::calc()
 	cg_help help;
 
 	GLfloat deltaTime = help.getDelta();
-
-	std::cout << deltaTime << '\n';
 	
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 		rotation += rotation_acc * deltaTime;
