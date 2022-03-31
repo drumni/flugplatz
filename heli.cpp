@@ -370,8 +370,6 @@ void heli::calc()
 		power += rotor_acc * deltaTime;
 	else if (2 == key.specialKeyState(GLUT_KEY_CTRL_L))
 		power -= rotor_acc * deltaTime;
-	else
-		power /= deltaTime;
 
 	if (angle < -max_angle)
 		angle = -max_angle;
@@ -396,10 +394,6 @@ void heli::calc()
 
 void heli::animate()
 {
-
-	
-
-
 	double pi = 2 * acos(0.0);
 	pos[0] += 0.01 * angle * cos(rotation * pi / 180);
 	pos[1] += power;
