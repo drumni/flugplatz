@@ -346,27 +346,24 @@ void heck()
 	glPopMatrix();
 }
 
-std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 void heli::calc()
 {
 	cg_key key;
 	cg_help help;
 
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	GLfloat deltaTime = help.getDelta();
 
-	long long deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
-
-	begin = std::chrono::steady_clock::now();
-
+	std::cout << deltaTime << '\n';
+	
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
 		rotation += rotation_acc * deltaTime;
 	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
 		rotation -= rotation_acc * deltaTime;
 
-	if (2 == key.specialKeyState(GLUT_KEY_UP) && pos[1] > 3)
+	if (2 == key.specialKeyState(GLUT_KEY_UP) && pos[1] > tilt_tthreshold)
 		angle += tilt_acc * deltaTime;
 
-	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > 3)
+	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > tilt_tthreshold)
 		angle -= tilt_acc * deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L))
@@ -374,19 +371,27 @@ void heli::calc()
 	else if (2 == key.specialKeyState(GLUT_KEY_CTRL_L))
 		power -= rotor_acc * deltaTime;
 	else
-		power *= 0.8;
+		power /= deltaTime;
 
-	if (angle < -30)
-		angle = -30;
-	if (angle > 30)
-		angle = 30;
+	if (angle < -max_angle)
+		angle = -max_angle;
+	if (angle > max_angle)
+		angle = max_angle;
 
-	if (power <= 0 && pos[1] < 3)
-		if (angle < 0.5 && angle > -0.5) angle = 0;
+	if (power < -max_power)
+		power = -max_power;
+	if (power > max_power)
+		power = max_power;
+
+	if (power < 0 && abs(angle) > 1)
+		angle *= 1 - (1/pos[1]);
+	if (pos[1] < tilt_tthreshold && abs(angle) > 0)
+		angle = 0;
+	/*	if (angle < 0.5 && angle > -0.5) angle = 0;
 		else if (angle < 0) angle += 50.0 * deltaTime;
 		else angle -= 50.0 * deltaTime;
-	else if (pos[1] < 3) angle = 0;
-
+	else if (pos[1] < 3) angle = 0; */
+	
 }
 
 void heli::animate()

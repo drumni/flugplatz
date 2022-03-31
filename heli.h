@@ -23,11 +23,16 @@ public:
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};
 
 	GLfloat rotation = 0.0f;
-	GLfloat angle = 0.0f;
-	GLfloat power = 0.0f;
+	GLfloat rotation_acc = 0.85f;	
 
-	GLfloat rotation_acc = 0.000085f;	
-	GLfloat tilt_acc = 0.00005f;
-	GLfloat rotor_acc = 0.00000005f;
+	GLfloat angle = 0.0f;
+	GLfloat tilt_acc = 0.5f;
+	GLfloat max_angle = 30.0f;
+	GLfloat tilt_tthreshold = 1;
+
+	GLfloat power = 0.0f;
+	GLfloat rotor_acc = 0.002f;
+	GLfloat max_power = 1;
+
 };
 
