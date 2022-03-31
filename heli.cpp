@@ -381,7 +381,7 @@ void heli::calc()
 	if (power > max_power)
 		power = max_power;
 
-	if (power < 0 && abs(angle) > 1)
+	if (power < 0 && abs(angle) > 1 && pos[1] < 5)
 		angle *= 1 - (1/pos[1]);
 	if (pos[1] < tilt_tthreshold && abs(angle) > 0)
 		angle = 0;
