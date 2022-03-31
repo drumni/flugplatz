@@ -359,20 +359,20 @@ void heli::calc()
 	begin = std::chrono::steady_clock::now();
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
-		rotation += rotation_acc / deltaTime;
+		rotation += rotation_acc * deltaTime;
 	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
-		rotation -= rotation_acc / deltaTime;
+		rotation -= rotation_acc * deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_UP) && pos[1] > 3)
-		angle += tilt_acc / deltaTime;
+		angle += tilt_acc * deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > 3)
-		angle -= tilt_acc / deltaTime;
+		angle -= tilt_acc * deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L))
-		power += rotor_acc / deltaTime;
+		power += rotor_acc * deltaTime;
 	else if (2 == key.specialKeyState(GLUT_KEY_CTRL_L))
-		power -= rotor_acc / deltaTime;
+		power -= rotor_acc * deltaTime;
 	else
 		power *= 0.8;
 
@@ -383,8 +383,8 @@ void heli::calc()
 
 	if (power <= 0 && pos[1] < 3)
 		if (angle < 0.5 && angle > -0.5) angle = 0;
-		else if (angle < 0) angle += 50.0 / deltaTime;
-		else angle -= 50.0 / deltaTime;
+		else if (angle < 0) angle += 50.0 * deltaTime;
+		else angle -= 50.0 * deltaTime;
 	else if (pos[1] < 3) angle = 0;
 
 }

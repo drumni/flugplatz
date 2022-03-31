@@ -26,8 +26,8 @@ public:
 	GLfloat angle = 0.0f;
 	GLfloat power = 0.0f;
 
-	GLfloat rotation_acc = 15000.0f;	
-	GLfloat tilt_acc = 6000.0f;
-	GLfloat rotor_acc = 5.0f;
+	GLfloat rotation_acc = 0.000085f;	
+	GLfloat tilt_acc = 0.00005f;
+	GLfloat rotor_acc = 0.00000005f;
 };
 
