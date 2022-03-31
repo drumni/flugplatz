@@ -225,7 +225,7 @@ void displayFunc()
 	// setCamera();
 
 	// Koordinatensystem zeichnen
-	help.drawKoordsystem(-8, 10, -8, 10, -8, 10);
+	//help.drawKoordsystem(-8, 10, -8, 10, -8, 10);
 
 	// Zeichenmodus einstellen (Wireframe on/off)
 	glPolygonMode(GL_FRONT_AND_BACK, globState.drawMode);

@@ -19,27 +19,31 @@
 
 const char* spalte1[] =
 {
-	"Maus",
+	"Maus:",
 	"linke Taste      Kamerabewegung",
 	"mittlere Taste   Zoom",
 	"rechte Taste     Kontextmen�",
 	"",
-	"",
-	"",
+	"Tastatur:",
 	"l,L              Licht global (An/Aus)",
 	"t,T              Texturierung (An/Aus)",
 	"b,B              Blending (An/Aus)",
-	"",
+	"f,F              Framerate (An/Aus)",
+	"h,H,F1           Hilfe (An/Aus)",
+	"w,W              WireFrame (An/Aus)",
+	"ESC              Beenden",
 
 	NULL
 };
 const char* spalte2[] =
-{
-	"f,F        Framerate (An/Aus)",
-	"h,H,F1     Hilfe (An/Aus)",
-	"w,W        WireFrame (An/Aus)",
-	"k,K        Koordinatensystem (An/Aus)",
-	"ESC        Beenden",
+{	"Helikoptersteuerung:",
+	"Shift             Steigen",
+	"Steuerung         Sinken",
+	"Pfeiltaste Oben   nach vorne fliegen",
+	"Pfeiltaste Unten  nach hinten fliegen",
+	"Pfeiltaste Links  nach links drehen",
+	"Pfeiltaste Rechts nach rechts drehen",
+	
 
 	NULL
 };
