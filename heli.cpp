@@ -346,6 +346,8 @@ void heck()
 	glPopMatrix();
 }
 
+
+
 void heli::calc()
 {
 	cg_key key;
@@ -360,10 +362,10 @@ void heli::calc()
 	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
 		rotation -= rotation_acc * deltaTime;
 
-	if (2 == key.specialKeyState(GLUT_KEY_UP) && pos[1] > tilt_tthreshold)
+	if (2 == key.specialKeyState(GLUT_KEY_UP) && (pos[1] > tilt_tthreshold || (isInsideHelipad() && pos[1] > tilt_tthreshold + helipad_h)))
 		angle += tilt_acc * deltaTime;
 
-	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > tilt_tthreshold)
+	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && (pos[1] > tilt_tthreshold || (isInsideHelipad() && pos[1] > tilt_tthreshold + helipad_h)))
 		angle -= tilt_acc * deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L))
@@ -382,14 +384,23 @@ void heli::calc()
 		power = max_power;
 
 	if (power < 0 && abs(angle) > 1)
-		angle *= 1 - (1/pos[1]);
-	if (pos[1] < tilt_tthreshold && abs(angle) > 0)
+		if(isInsideHelipad())
+			angle *= 1 - (1 / (pos[1] - helipad_h));
+		else
+			angle *= 1 - (1 / pos[1]);
+	if ((pos[1] < tilt_tthreshold || (isInsideHelipad() && pos[1] < tilt_tthreshold + helipad_h)) && abs(angle) > 0)
 		angle = 0;
 	/*	if (angle < 0.5 && angle > -0.5) angle = 0;
 		else if (angle < 0) angle += 50.0 * deltaTime;
 		else angle -= 50.0 * deltaTime;
 	else if (pos[1] < 3) angle = 0; */
 	
+}
+
+bool heli::isInsideHelipad() {
+	if (pos[0] > helipad[0] && helipad[2] > pos[0])
+		if (pos[2] < helipad[1] && helipad[3] < pos[2])
+				return true;
 }
 
 void heli::animate()
@@ -404,7 +415,15 @@ void heli::animate()
 		pos[1] = 0;
 		power = 0;
 	}
+
+	if (isInsideHelipad() && pos[1] < helipad_h) {
+		pos[1] = helipad_h;
+		power = 0;
+	}
+
 }
+
+
 
 void heli::draw()
 {

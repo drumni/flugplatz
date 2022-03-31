@@ -16,10 +16,12 @@
 class heli
 {
 public:
+	bool isInsideHelipad();
+
 	void calc();
 	void draw();
 	void animate();
-
+	
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};
 
 	GLfloat rotation = 0.0f;
@@ -33,6 +35,13 @@ public:
 	GLfloat power = 0.0f;
 	GLfloat rotor_acc = 0.002f;
 	GLfloat max_power = 1;
+	
+	GLfloat helipad[4] = {
+	27, 62,
+	37, 72
+	};
+
+	GLfloat helipad_h = 19.6;
 
 };
 
