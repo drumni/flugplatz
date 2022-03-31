@@ -347,6 +347,7 @@ void heck()
 }
 
 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+long long deltaTime = 0.0f;
 void heli::calc()
 {
 	cg_key key;
@@ -354,9 +355,9 @@ void heli::calc()
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-	long long deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+	deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 
-	std::cout<<"DeltaTime: " << deltaTime << "\n";
+	//std::cout<<"rotation_acc " << rotation_acc << "\n";
 
 	begin = std::chrono::steady_clock::now();
 
@@ -371,12 +372,12 @@ void heli::calc()
 	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > 3)
 		angle -= tilt_acc * deltaTime;
 
-	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L))
+	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L) && power < 0.05)
 		power += rotor_acc * deltaTime;
-	else if (2 == key.specialKeyState(GLUT_KEY_CTRL_L))
+	else if (2 == key.specialKeyState(GLUT_KEY_CTRL_L) && power > -0.05 && pos[1] > 0)
 		power -= rotor_acc * deltaTime;
-	else
-		power *= 0.8;
+	else if (power > -0.05 && pos[1] > 0)
+		power -= 0.00000003 * deltaTime;
 
 	if (angle < -30)
 		angle = -30;
@@ -385,22 +386,26 @@ void heli::calc()
 
 	if (power <= 0 && pos[1] < 3)
 		if (angle < 0.5 && angle > -0.5) angle = 0;
-		else if (angle < 0) angle += 50.0 * deltaTime;
-		else angle -= 50.0 * deltaTime;
+		else if (angle < 0) angle += 0.0001 * deltaTime;
+		else angle -= 0.0001 * deltaTime;
 	else if (pos[1] < 3) angle = 0;
 
+	if (pos[1] < 0)
+		pos[1] = 0;
+
+	//std::cout << rotation_acc << "\n";
+	//std::cout << tilt_acc << "\n";
+	std::cout << rotor_acc << "\n";
+	//std::cout << speed << "\n";
 }
 
 void heli::animate()
 {
 
-	
-
-
 	double pi = 2 * acos(0.0);
-	pos[0] += 0.01 * angle * cos(rotation * pi / 180);
+	pos[0] += speed * angle * cos(rotation * pi / 180) * deltaTime;
 	pos[1] += power;
-	pos[2] += 0.01 * angle * -sin(rotation * pi / 180);
+	pos[2] += speed * angle * -sin(rotation * pi / 180) * deltaTime;
 
 	if (pos[1] < 0)
 	{
