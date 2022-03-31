@@ -24,10 +24,10 @@ public:
 
 	GLfloat rotation = 0.0f;
 	GLfloat angle = 0.0f;
-	GLfloat enginePower = 0.0f;
+	GLfloat power = 0.0f;
 
-	GLfloat rotationSpeed = 60.0f;	
-	GLfloat angleSpeed = 120.0f;
-	GLfloat engineAcc = 10.0f;
+	GLfloat rotation_acc = 15000.0f;	
+	GLfloat tilt_acc = 6000.0f;
+	GLfloat rotor_acc = 5.0f;
 };
 

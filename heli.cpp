@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include "help.h"
+#include <chrono>
 #include "wavefront.h"
 
 GLfloat light = 0.3;
@@ -345,85 +346,70 @@ void heck()
 	glPopMatrix();
 }
 
-void heli::calc() {
+std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+void heli::calc()
+{
 	cg_key key;
 	cg_help help;
 
-	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
-	{
-		rotation += rotationSpeed / help.getFps();
-	}
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
+	long long deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+
+	begin = std::chrono::steady_clock::now();
+
+	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
+		rotation += rotation_acc / deltaTime;
 	if (2 == key.specialKeyState(GLUT_KEY_RIGHT))
-	{
-		rotation -= rotationSpeed / help.getFps();
-	}
+		rotation -= rotation_acc / deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_UP) && pos[1] > 3)
-	{
-		angle += angleSpeed / help.getFps();
-	}
+		angle += tilt_acc / deltaTime;
 
 	if (2 == key.specialKeyState(GLUT_KEY_DOWN) && pos[1] > 3)
-	{
-		angle -= angleSpeed / help.getFps();
-	}
+		angle -= tilt_acc / deltaTime;
 
-	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L)) {
-		enginePower += engineAcc / help.getFps();
-	}
-	if (2 == key.specialKeyState(GLUT_KEY_CTRL_L)) {
-		enginePower -= engineAcc / help.getFps();
-	}
+	if (2 == key.specialKeyState(GLUT_KEY_SHIFT_L))
+		power += rotor_acc / deltaTime;
+	else if (2 == key.specialKeyState(GLUT_KEY_CTRL_L))
+		power -= rotor_acc / deltaTime;
+	else
+		power *= 0.8;
+
+	if (angle < -30)
+		angle = -30;
+	if (angle > 30)
+		angle = 30;
+
+	if (power <= 0 && pos[1] < 3)
+		if (angle < 0.5 && angle > -0.5) angle = 0;
+		else if (angle < 0) angle += 50.0 / deltaTime;
+		else angle -= 50.0 / deltaTime;
+	else if (pos[1] < 3) angle = 0;
+
 }
 
 void heli::animate()
 {
-	cg_help help;
-	
-	if (angle < -30) {
-		angle = -30;
-	}
-	if (angle > 30) {
-		angle = 30;
-	}
 
-	if (enginePower <= 0 && pos[1] < 3) {
-		if (angle < 0.5 && angle > -0.5) {
-			angle = 0;
-		}
-		else {
-			if (angle < 0) {
-				angle += 50.0/ help.getFps();
-			}
-			else {
-				angle -= 50.0 / help.getFps();
-			}
-		}
-	}
-	else {
-		if (pos[1] < 3) {
-			angle = 0;
-		}
-	}
+	
+
 
 	double pi = 2 * acos(0.0);
 	pos[0] += 0.01 * angle * cos(rotation * pi / 180);
+	pos[1] += power;
 	pos[2] += 0.01 * angle * -sin(rotation * pi / 180);
 
-	pos[1] += 0.01 * enginePower;
-
-	if (pos[1] < 0) {
+	if (pos[1] < 0)
+	{
 		pos[1] = 0;
-		enginePower = 0;
+		power = 0;
 	}
-
 }
-
 
 void heli::draw()
 {
-	//Heli zeichnen
+	// Heli zeichnen
 	glPushMatrix();
 
 	glTranslatef(pos[0], pos[1], pos[2]);
