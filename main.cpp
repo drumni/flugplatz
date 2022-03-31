@@ -196,10 +196,10 @@ void displayFunc()
 	{
 		help.toggle(); // Hilfetext on/off
 	}
-	else if (1 == key.keyState('k') || 1 == key.keyState('K'))
+	/*else if (1 == key.keyState('k') || 1 == key.keyState('K'))
 	{
 		help.toggleKoordsystem(); // Koordinatensystem on/off
-	}
+	}*/
 	else if (1 == key.keyState('w') || 1 == key.keyState('W'))
 	{
 		globState.drawMode = (globState.drawMode == GL_FILL) ? GL_LINE : GL_FILL; // Wireframe on/off
@@ -389,32 +389,6 @@ void drawUmgebung(int fps, cg_globState globState) {
 	objects[H].draw();
 	objects[LANDEPLATZ].draw();
 	glPopMatrix();
-	
-	
-	static bool light_state = false;
-
-	if (since(start).count() > 1000) {
-		start = std::chrono::steady_clock::now(); // reset timer
-		light_state = !light_state; //Toogle Light
-	}
-
-	if (light_state)
-		point.enable();
-	else
-		point.disable();
-
-	point.setPosition(-60.0f, 24.802f, -57.25f, 1.0f);
-	point.setSpotlight(1, 1, 1, 180, 0);
-	point.setAttentuation(0.8, 0.1, 0.3);
-	point.setAmbient(0.9f, 0.3f, 0.3f, 1.0f);
-	point.setDiffuse(0.9f, 0.3f, 0.3f, 1.0f);
-	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
-	point.draw();
-	point.markLightPosition();
-	point.disable();
-
-	objects[WINDRAD].draw();
-	objects[FLUEGEL].draw();
 
 	int currentTexture = 1;
 	if (globState.textureMode) {
@@ -434,6 +408,37 @@ void drawUmgebung(int fps, cg_globState globState) {
 	//glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
+
+	static bool light_statet = false;
+
+	if (since(start).count() > 1000) {
+		start = std::chrono::steady_clock::now(); // reset timer
+		light_statet = !light_statet; //Toogle Light
+	}
+
+	if (light_statet)
+		point.enable();
+	else
+		point.disable();
+
+	/*point.setPosition(0.0f, 0.0f, 15.0f, 1.0f);
+	point.setAmbient(0.1f, 0.1f, 0.1f, 1.0f);
+	point.setDiffuse(0.9f, 0.9f, 0.0f, 1.0f);
+	point.setSpecular(0.9f, 0.9f, 0.0f, 1.0f);*/
+	point.setPosition(-60.0f, 24.802f, -57.25f, 1.0f);
+	point.setSpotlight(1, 1, 1, 180, 0);
+	point.setAttentuation(0.0, 0.0, 0.1);
+	point.setAmbient(0.1f, 0.0f, 0.0f, 1.0f);
+	point.setDiffuse(1.0f, 0.1f, 0.1f, 1.0f);
+	point.setSpecular(0.9f, 0.3f, 0.3f, 1.0f);
+	point.draw();
+	point.markLightPosition();
+	point.disable();
+
+
+
+	objects[WINDRAD].draw();
+	objects[FLUEGEL].draw();
 }
 
 

@@ -8,7 +8,7 @@
 #define __EXPORT_HELP
 #include "help.h"
 
-bool cg_help::showhelp = false, cg_help::showfps = true, cg_help::wireframe = false, cg_help::koordsystem = true;
+bool cg_help::showhelp = false, cg_help::showfps = true, cg_help::wireframe = false, cg_help::koordsystem = false;
 int cg_help::frames = 0;
 float cg_help::fps = 60.0f;
 float cg_help::bg_size = 0.8f, cg_help::shadow = 0.003f;
