@@ -20,7 +20,6 @@ public:
 	void draw();
 	void animate();
 
-	// TODO
 	GLfloat pos[3] = {0.0f, 0.0f, 0.0f};
 
 	GLfloat rotation = 0.0f;
