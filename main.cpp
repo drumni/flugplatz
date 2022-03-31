@@ -383,14 +383,14 @@ void drawUmgebung(int fps, cg_globState globState) {
 
 	glDisable(GL_TEXTURE_2D);
 
-	static bool light_statet = false;
+	static bool light_state = false;
 
 	if (since(start).count() > 1000) {
 		start = std::chrono::steady_clock::now(); // reset timer
-		light_statet = !light_statet; //Toogle Light
+		light_state = !light_state; //Toogle Light
 	}
 
-	if (light_statet)
+	if (light_state)
 		point.enable();
 	else
 		point.disable();
