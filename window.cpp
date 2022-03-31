@@ -40,9 +40,9 @@ void init ( int argc, char **argv )
 	MainMenu = glutCreateMenu ( menuFunc );
 	glutAddMenuEntry ( MENU_TEXT_WIREFRAME, ID_MENU_WIREFRAME );
 	glutAddMenuEntry ( MENU_TEXT_SHADE, ID_MENU_SHADE );
-	glutAddMenuEntry ( MENU_TEXT_NO_NORMALS, ID_MENU_NO_NORMALS );
-	glutAddMenuEntry ( MENU_TEXT_PER_SURFACE_NORMALS, ID_MENU_PER_SURFACE_NORMALS );
-	glutAddMenuEntry ( MENU_TEXT_PER_VERTEX_NORMALS, ID_MENU_PER_VERTEX_NORMALS );
+	//glutAddMenuEntry ( MENU_TEXT_NO_NORMALS, ID_MENU_NO_NORMALS );
+	//glutAddMenuEntry ( MENU_TEXT_PER_SURFACE_NORMALS, ID_MENU_PER_SURFACE_NORMALS );
+	//glutAddMenuEntry ( MENU_TEXT_PER_VERTEX_NORMALS, ID_MENU_PER_VERTEX_NORMALS );
 	glutAddMenuEntry ( MENU_TEXT_EXIT, ID_MENU_EXIT );
 	glutAttachMenu ( GLUT_RIGHT_BUTTON );		// Menue haengt an der rechten Maustaste
 
