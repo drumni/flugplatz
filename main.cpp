@@ -435,8 +435,6 @@ void drawUmgebung(int fps, cg_globState globState) {
 	point.markLightPosition();
 	point.disable();
 
-
-
 	objects[WINDRAD].draw();
 	objects[FLUEGEL].draw();
 }
