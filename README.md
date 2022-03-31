@@ -5,14 +5,15 @@ ___
 
 ## Szene Elemente
 
-### Helikopter
+### Hubschrauber
 
 #### 3D-Model
 
 > von Thoralf Teumer
+
 * Heck und Hauptrotoren
 * Kufen
-  * Kufe 
+  * Kufe
 * Rumpf
   * Nase & Wände
 * Heck
@@ -33,15 +34,26 @@ ___
     Pfeil-Oben: neigung nach vorne (vorwärts fliegen)
     Pfeil-Unten: neigung nach hinten (rückwärts fliegen)
 
-Die Neigung ist erst ab einer gewissen Höhe verfügbar! Sinkt man, setzt kurz über dem Boden eine Landeanimation ein.
+Die Neigung ist erst ab einer gewissen Höhe verfügbar!
+Sinkt man, setzt kurz über dem Boden eine Landeanimation ein.
 
-![Helicopter](https://i.imgur.com/9nOb6Hf.png)
+![Hubschrauber](https://i.imgur.com/unv1pUk.png)
 
 ### Laterne
 
 > von Robin Seerig
 
-![Laterne](https://i.imgur.com/fEnkXzI.png)
+#### 3D-Model
+
+* Mast
+* Lampe
+  * ausgehende Lichtquelle
+* Deckel
+  * Kuppe und Schirm
+* Anker
+* Glasscheibe (Transparent)
+
+![Laterne](https://i.imgur.com/BHEJZBg.png)
 
 ### Flugzeug
 
@@ -51,7 +63,7 @@ Das Flugzeug ist innerhalb des Programmes Blender entstanden,
 hier habe ich Beispiele aus dem Internet rausgesucht und dann
 Formen dazu erstellt.
 
-![Flugzeug](https://i.imgur.com/w7iYoVq.png)
+![Flugzeug](https://i.imgur.com/XgPUO1v.png)
 
 ### Windrad
 
@@ -59,7 +71,11 @@ Formen dazu erstellt.
 
 Ein rotes Punktlicht auf dem mit Blender erstellten Windrad warnt vor Kollisionen.
 
-![Windrad](https://i.imgur.com/By33yK1.png)
+> von Robin Seerig
+
+Blinken des Lichts
+
+![Windrad](https://i.imgur.com/vtgt7rm.png)
 
 ### Landschaft
 
@@ -67,7 +83,13 @@ Ein rotes Punktlicht auf dem mit Blender erstellten Windrad warnt vor Kollisione
 
 Die Landschaft wurde ebenfalls mit Blender gestaltet.
 
-![Landschaft](https://i.imgur.com/TwVL2jT.png)
+![Landschaft](https://i.imgur.com/Fa0jS34.png)
+
+#### Helipad Landefunktion
+
+> von Robin Seerig
+
+![Helipad](https://i.imgur.com/49YvShW.png)
 
 ### Direktionales Licht
 
@@ -82,18 +104,19 @@ Die Temperatur der Szene steigt stätig.
 
 Ein wechsel zwischen den Kameraperspektiven ist über die Tasten 1 bis 3 Möglich.
 
-#### Standartperspektive
+#### Standartperspektive (Taste `1`)
 
 Die Standartperspektive aus Übung 12.
 
-#### 3th Person
+#### 3th Person (Taste `2`)
 
 > von Thoralf Teumer
 
-Die Verfolgeransicht. Die Kamera folgt dem Hubschrauber mit einstellbarem Abstand. (Mit geringstem Abstand am schönsten)
+Die Verfolgeransicht. Die Kamera folgt dem Hubschrauber mit einstellbarem
+Abstand. (Mit geringstem Abstand am schönsten)
 
-#### 1st Person
+#### 1st Person (Taste `3`)
 
 > von Robin Seerig
 
-Cockpit perspektive aus dem Flugzeug herraus.
+Cockpit perspektive aus dem Hubschrauber herraus.
