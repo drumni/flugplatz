@@ -356,6 +356,8 @@ void heli::calc()
 
 	long long deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 
+	std::cout<<"DeltaTime: " << deltaTime << "\n";
+
 	begin = std::chrono::steady_clock::now();
 
 	if (2 == key.specialKeyState(GLUT_KEY_LEFT))
