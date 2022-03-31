@@ -196,10 +196,6 @@ void displayFunc()
 	{
 		help.toggle(); // Hilfetext on/off
 	}
-	/*else if (1 == key.keyState('k') || 1 == key.keyState('K'))
-	{
-		help.toggleKoordsystem(); // Koordinatensystem on/off
-	}*/
 	else if (1 == key.keyState('w') || 1 == key.keyState('W'))
 	{
 		globState.drawMode = (globState.drawMode == GL_FILL) ? GL_LINE : GL_FILL; // Wireframe on/off
@@ -224,9 +220,6 @@ void displayFunc()
 	// // Kamera setzen (spherische Mausnavigation)
 	// setCamera();
 
-	// Koordinatensystem zeichnen
-	//help.drawKoordsystem(-8, 10, -8, 10, -8, 10);
-
 	// Zeichenmodus einstellen (Wireframe on/off)
 	glPolygonMode(GL_FRONT_AND_BACK, globState.drawMode);
 
@@ -243,13 +236,6 @@ void displayFunc()
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
-		//float m_amb[4] = {0.2, 0.2, 0.2, 1.0};
-		//float m_diff[4] = { 0.2, 0.2, 0.6, 1.0 };
-		//float m_spec[4] = { 0.8, 0.8, 0.8, 1.0 };
-		//float m_shine = 32.0;
-		//float m_emiss[4] = { 0.0, 0.0, 0.0, 1.0 };
-
-		//setMaterial(GL_FRONT_AND_BACK, m_amb, m_diff, m_spec, m_shine, m_emiss);
 		setLights();
 
 		glEnable(GL_LIGHTING);
@@ -265,7 +251,7 @@ void displayFunc()
 	// die Szene zeichnen
 	drawScene();
 
-	// den Hilfetext �ber die Szene zeichnen, wenn gefordert
+	// den Hilfetext ueber die Szene zeichnen, wenn gefordert
 	help.draw();
 
 	// Wireframe deaktivieren
@@ -275,10 +261,6 @@ void displayFunc()
 	glFlush();		   // Daten an Server (fuer die Darstellung) schicken
 	glutSwapBuffers(); // Buffers wechseln
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// �BUNG 12 - Blending ////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	Texturdefinition
 #define NUM_TEXTURES 2
@@ -306,15 +288,14 @@ void initTextures()
 	}
 }
 
-#define num_objects 9				  // wir haben 2 Wavefront Objekte
+#define num_objects 9				  // wir haben 9 Wavefront Objekte
 const char* objects_dir = "./Scene/"; // ... im Verzeichnis ./Scene
 const char* objects_paths[num_objects] = {"ground_street.obj", "Berge.obj", "H.obj",  "Landeplatz.obj", "plane.obj", "boden50x50.obj", "glass.obj", "Windrad.obj", "Fluegel.obj"};
 
 cg_object3D objects[num_objects];
-// Objektbezeichner f�r den Zugriff auf die Wavefront Objekte
+// Objektbezeichner fuer den Zugriff auf die Wavefront Objekte
 enum
 {
-	//GROUND_OBJ1,
 	GROUND_OBJ2,
 	BERGE,
 	H,
@@ -329,7 +310,7 @@ enum
 void loadObjects()
 {
 
-	// alle Objekte Laden, wenn der Pfad verf�gbar ist (Pfad != "")
+	// alle Objekte Laden, wenn der Pfad verfuegbar ist (Pfad != "")
 	for (int i = 0; i < num_objects; i++)
 		if (strlen(objects_paths[i]) > 0)
 		{
@@ -338,13 +319,13 @@ void loadObjects()
 			strcat(file, ".");
 #endif // _MSC_VER
 			strcat(file, objects_dir);
-			strcat(file, objects_paths[i]); // file enth�lt nun den vollst�ndigen Dateinamen
+			strcat(file, objects_paths[i]); // file enthaelt nun den vollstaendigen Dateinamen
 
 			// Hier das Objekt laden
 			// --> Aufruf von loadobject(file, false) f�r objects[i]
 			objects[i].load(file, true);
 		}
-	// nun setzen wir die Materialeigenschaften f�r die Objekte
+	// nun setzen wir die Materialeigenschaften fuer die Objekte
 
 	objects[GROUND_OBJ2].setMaterial(0.2, 0.2, 0.2, 1.0, 0.0, 128.0f, 0.0);
 	objects[BERGE].setMaterial(0.15, 0.15, 0.15, 1.0, 0.0, 0.0, 0.0);
@@ -376,8 +357,6 @@ auto since(std::chrono::time_point<clock_t, duration_t> const& start)
 }
 
 void drawUmgebung(int fps, cg_globState globState) {
-	// Stra�e bei Y=0 zeichnen
-	//objects[GROUND_OBJ1].draw();
 
 	glPushMatrix();
 	glTranslatef(0, 0.01, 0);
@@ -393,11 +372,7 @@ void drawUmgebung(int fps, cg_globState globState) {
 	int currentTexture = 1;
 	if (globState.textureMode) {
 		glEnable(GL_TEXTURE_2D);
-		// der MAG-Filter kann GL_NEAREST (std) oder GL_LINEAR sein
 		textures[currentTexture].setMagFilter(GL_LINEAR);
-		//textures[currentTexture].setMagFilter(GL_NEAREST);
-		// der MIN-Filter ist sinnvoll entweder GL_LINEAR (std) oder GL_LINEAR_MIPMAP_LINEAR sein
-		//textures[currentTexture].setMinFilter(GL_LINEAR);
 		textures[currentTexture].setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
 		textures[currentTexture].setEnvMode(GL_MODULATE);
 		textures[currentTexture].setWrapMode(GL_REPEAT);
@@ -405,7 +380,6 @@ void drawUmgebung(int fps, cg_globState globState) {
 	}
 
 	objects[BODEN].draw();
-	//glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 
@@ -421,10 +395,6 @@ void drawUmgebung(int fps, cg_globState globState) {
 	else
 		point.disable();
 
-	/*point.setPosition(0.0f, 0.0f, 15.0f, 1.0f);
-	point.setAmbient(0.1f, 0.1f, 0.1f, 1.0f);
-	point.setDiffuse(0.9f, 0.9f, 0.0f, 1.0f);
-	point.setSpecular(0.9f, 0.9f, 0.0f, 1.0f);*/
 	point.setPosition(-60.0f, 24.802f, -57.25f, 1.0f);
 	point.setSpotlight(1, 1, 1, 180, 0);
 	point.setAttentuation(0.0, 0.0, 0.1);
@@ -560,17 +530,12 @@ void drawScene()
 		break;
 	}
 
-
-
-
 	if (1 == key.keyState('t') || 1 == key.keyState('T'))
 		globState.textureMode = !globState.textureMode; // Texturierung on/off
 	else if (1 == key.keyState('b') || 1 == key.keyState('B'))
 		globState.blendMode = !globState.blendMode; // Blending on/off
 
 	// Rendering 
-
-
 	drawUmgebung(help.getFps(), globState);
 
 	if (globState.textureMode) {
@@ -611,6 +576,4 @@ void drawScene()
 	glDisable(GL_CULL_FACE);
 
 	helicopter.calc();
-
-
 }
