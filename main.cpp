@@ -597,10 +597,22 @@ void drawScene()
 	objects[GLASS].draw();
 	glPopMatrix();
 
+	for (size_t i = 1; i < 4; i++) {
+		//mus bei 1 anfangen, weil 0 schon das direktionale Licht ist
+		laterne(i, -(30.0f * (i - 1)) + 18, 0.0f, -10.5f, 4.7f);
+
+		glPushMatrix();
+		glTranslatef(-(30.0f * (i - 1)) + 18, 4.7f, -10.5f);
+		glScalef(0.7f, 0.4f, 0.7f);
+		objects[GLASS].draw();
+		glPopMatrix();
+
+	}
+
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 
 	helicopter.calc();
-	for (size_t i = 1; i < 4; i++)//mus bei 1 anfangen, weil 0 schon das direktionale Licht ist
-		laterne(i, -(30.0f * (i-1)) + 18, 0.0f, -10.5f, 4.7f);
+
+
 }
