@@ -9,8 +9,6 @@ ___
 
 #### 3D-Model
 
-> von Thoralf Teumer
-
 * Heck und Hauptrotoren
 * Kufen
   * Kufe
