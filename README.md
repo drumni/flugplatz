@@ -1,98 +1,95 @@
-# Praxisorientierte Einführung in die Computergraphik
+# Practical Introduction to Computer Graphics
 
-Mit der verwendung von OpenGL.
+Using OpenGL.
 ___
 
-## Szene Elemente
+## Scene Elements
 
-### Hubschrauber
+### Helicopter
 
-#### 3D-Model
+#### 3D Model
 
-* Heck und Hauptrotoren
-* Kufen
-  * Kufe
-* Rumpf
-  * Nase & Wände
-* Heck
-* Cockpitscheibe (Transparent)
+* Tail and main rotors
+* Skids
+  * Skid
+* Fuselage
+  * Nose & walls
+* Tail
+* Cockpit window (Transparent)
 
 #### Spotlight
 
-#### Steuerung
+#### Controls
 
-    SHIFT: nach oben
-    STRG: nach unten
-    Pfeil-LINKS: drehung links
-    Pfeil-RECHTS: drehung rechts
-    Pfeil-Oben: neigung nach vorne (vorwärts fliegen)
-    Pfeil-Unten: neigung nach hinten (rückwärts fliegen)
+    SHIFT: Ascend
+    CTRL: Descend
+    Left Arrow: Turn left
+    Right Arrow: Turn right
+    Up Arrow: Tilt forward (move forward)
+    Down Arrow: Tilt backward (move backward)
 
-Die Neigung ist erst ab einer gewissen Höhe verfügbar!
-Sinkt man, setzt kurz über dem Boden eine Landeanimation ein.
+Tilting is only available at a certain height!
+When descending, a landing animation is triggered just above the ground.
 
-![Hubschrauber](https://i.imgur.com/unv1pUk.png)
+![Helicopter](https://i.imgur.com/unv1pUk.png)
 
-### Laterne
+### Lantern
 
-#### 3D-Model
+#### 3D Model
 
-* Mast
-* Lampe
-  * ausgehende Lichtquelle
-* Deckel
-  * Kuppe und Schirm
-* Anker
-* Glasscheibe (Transparent)
+* Pole
+* Lamp
+  * Emitting light source
+* Cover
+  * Top and shade
+* Anchor
+* Glass pane (Transparent)
 
-![Laterne](https://i.imgur.com/BHEJZBg.png)
+![Lantern](https://i.imgur.com/BHEJZBg.png)
 
-### Flugzeug
+### Airplane
 
-Das Flugzeug ist innerhalb des Programmes Blender entstanden,
-hier habe ich Beispiele aus dem Internet rausgesucht und dann
-Formen dazu erstellt.
+The airplane was created within the Blender program.
+I found examples on the internet and then added shapes to them.
 
-![Flugzeug](https://i.imgur.com/XgPUO1v.png)
+![Airplane](https://i.imgur.com/XgPUO1v.png)
 
-### Windrad
+### Wind Turbine
 
-Ein rotes Punktlicht auf dem mit Blender erstellten Windrad warnt vor Kollisionen.
+A red point light on the wind turbine created in Blender serves as a collision warning.
 
-Blinken des Lichts
+Blinking of the light
 
-![Windrad](https://i.imgur.com/vtgt7rm.png)
+![Wind Turbine](https://i.imgur.com/vtgt7rm.png)
 
-### Landschaft
+### Landscape
 
-Die Landschaft wurde ebenfalls mit Blender gestaltet.
+The landscape was also created with Blender.
 
-![Landschaft](https://i.imgur.com/Fa0jS34.png)
+![Landscape](https://i.imgur.com/Fa0jS34.png)
 
-#### Helipad Landefunktion
+#### Helipad Landing Function
 
 ![Helipad](https://i.imgur.com/49YvShW.png)
 
-### Direktionales Licht
+### Directional Light
 
-Eine Implementierte Funktion für die Berechnung des RGB-Wertes
-anhand einer Temperatur. Mit den Ziel einen Tagesrhytmus zu simulieren.
+An implemented function for calculating the RGB value based on temperature. The goal is to simulate a daily rhythm.
 
-Die Temperatur der Szene steigt stätig.
+The temperature of the scene continually increases.
 
-### Kameraeinstellungen
+### Camera Settings
 
-Ein wechsel zwischen den Kameraperspektiven ist über die Tasten 1 bis 3 Möglich.
+Switching between camera perspectives is possible using keys 1 to 3.
 
-#### Standartperspektive (Taste `1`)
+#### Default Perspective (Key `1`)
 
-Die Standartperspektive aus Übung 12.
+The default perspective from Exercise 12.
 
-#### 3th Person (Taste `2`)
+#### 3rd Person (Key `2`)
 
-Die Verfolgeransicht. Die Kamera folgt dem Hubschrauber mit einstellbarem
-Abstand. (Mit geringstem Abstand am schönsten)
+The chase view. The camera follows the helicopter with adjustable distance. (Closest distance looks the best)
 
-#### 1st Person (Taste `3`)
+#### 1st Person (Key `3`)
 
-Cockpit perspektive aus dem Hubschrauber herraus.
+Cockpit perspective from inside the helicopter.
